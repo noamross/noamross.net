@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <link href="https://gmpg.org/xfn/11" rel="profile">
+    <meta http-equiv="content-type" content="text/html; charset=utf-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+	<title>{{ .Title }}</title>
+	<!-- CSS -->
+	<link rel="stylesheet" href="{{ .Site.BaseURL }}/css/kube.css" />
+	<link rel="stylesheet" href="{{ .Site.BaseURL }}/css/custom.css" />
+	<link rel="stylesheet" href="{{ .Site.BaseURL }}/css/tufte.css" />
+ 	<link href='https://fonts.googleapis.com/css?family=Alegreya:400italic,400,700,700italic&subset=latin,latin-ext' rel='stylesheet' type='text/css'>
+ 	<link href='https://fonts.googleapis.com/css?family=Alegreya+SC:400&subset=latin,latin-ext' rel='stylesheet' type='text/css'>
+ 	<link href="https://fonts.googleapis.com/css?family=IM+Fell+English:400,400i&display=swap" rel="stylesheet">
+ 	<link href="https://fonts.googleapis.com/css?family=IM+Fell+English+SC&display=swap" rel="stylesheet">
+	<link href="https://maxcdn.bootstrapcdn.com/font-awesome/4.3.0/css/font-awesome.min.css" rel="stylesheet">
+	<link rel="stylesheet" href="//cdn.jsdelivr.net/npm/hack-font@3/build/web/hack-subset.css">
+
+    <!-- Icons -->
+    <link rel="apple-touch-icon-precomposed" href="{{ .Site.BaseURL }}/apple-touch-icon.png">
+ 	<link rel="shortcut icon" href="{{ .Site.BaseURL }}/favicon.ico" />
+     <!-- RSS -->
+{{ if .RSSLink }}
+  <link href="{{ .RSSLink }}" rel="alternate" type="application/rss+xml" title="{{ .Site.Title }}" />
+  <link href="{{ .RSSLink }}" rel="feed" type="application/rss+xml" title="{{ .Site.Title }}" />
+{{ end }}
+<!-- Twitter Card -->
+	<meta name="twitter:card" content="{{ if .Params.largeimage }}summary_large_image{{ else }}summary{{ end }}">
+	<meta name="twitter:url" content="{{ .Permalink }}">
+	<meta name="twitter:title" content="{{ .Title }}">
+	<meta name="twitter:description" content="{{ if .Description }}{{ .Description }}{{ else }}{{ if .Params.citation }}{{ .Params.citation }}{{ else }}{{if .IsPage}}{{ .Summary }}{{ end }}{{ end }}{{ end }}">
+	<meta name="twitter:image{{ if .Params.largeimage }}:src{{ end }}" content="{{ if .Params.image }}{{ .Site.BaseURL }}/{{ .Params.image }}{{ else }}{{ .Site.BaseURL }}/img/avatar2.jpg{{ end }}">
+    <meta name="twitter:site" content="@consequently">
+    <meta name="twitter:creator" content="@consequently">
+<!-- <script>(function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){(i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)})(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+  ga('create', 'UA-616836-1', 'auto');
+  ga('send', 'pageview');
+</script> -->
+<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-AMS-MML_HTMLorMML">
+</script>
+</head>

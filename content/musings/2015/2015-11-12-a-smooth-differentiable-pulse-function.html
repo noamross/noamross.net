@@ -1,0 +1,41 @@
+---
+title: A smooth, differentiable, pulse function
+author: Noam Ross
+date: '2015-11-12'
+slug: a-smooth-differentiable-pulse-function
+categories: []
+tags:
+  - dynamics
+---
+
+
+
+<p>This function feeds a high-amplitude sine function through a logit, offsetting so
+as to have the pulse start and stop at arbitrary times. It has an integral of
+one per period for large <span class="math inline">\(L\)</span>.</p>
+<p><span class="math display">\[f(t) = \frac{c}{a - b}
+  \frac{1}{1 + e^{L \left(sin(2\pi((t-a)/c + \xi)) - sin(2\pi\xi)\right)}
+}\]</span></p>
+<p>where</p>
+<p><span class="math display">\[\begin{aligned}
+t &amp;= \text{time} \\
+a &amp;= \text{time at start of pulse} \\
+b &amp;= \text{time at end of pulse} \\
+c &amp;= \text{period length} \\
+a &amp;&lt; b &lt; c \\
+L &amp;= \text{an arbitrarily large number} \\
+\xi &amp;= \frac{3}{4} - \frac{b - a}{2c} \\
+\end{aligned}\]</span></p>
+{{< highlight r >}}
+smooth_pulse = function(time, start, stop, cycle = 1,  steep = 1000) {
+  xi = 3/4 - (stop - start)/(2* cycle)
+  (cycle / (stop - start)) / 
+    (1 + exp(steep*(sin(2*pi*((time - start)/cycle + xi)) - sin(2*pi*xi))))
+}
+
+x = seq(0,5,by=0.001)
+plot(x, smooth_pulse(x, start = 0.2, stop = 0.3, cycle = 0.5), xlim = c(0,2),
+     type = "l", xlab = "t", ylab = "f(t)",
+     main = "a = 0.2, b = 0.3, c = 0.5, L = 1000")
+{{< /highlight >}}
+<p><img src="/musings/2015/2015-11-12-a-smooth-differentiable-pulse-function_files/figure-html/unnamed-chunk-1-1.png" width="672" /></p>

@@ -1,0 +1,44 @@
+{{ $baseurl := .Site.BaseURL }}
+{{ partial "head.html" . }}
+{{ partial "navbar.html" . }}
+
+<div class="wrapper">
+
+<h2>Class Archive</h2>
+<div class="units-row">
+<div class="unit-70">
+{{ range .Data.Pages.GroupByDate "2006" }}
+<div class="units-row">
+<div class="unit-10">
+<h3>{{ .Key }}</h3>
+</div>
+<div class="unit-90">
+<ul class="fa-ul">
+{{ range .Pages }}
+        <li><i class="fa-li fa {{ if eq .Params.host "Coursera" }}fa-laptop {{ else }}fa-mortar-board {{ end }}fa-fw" style="color:#b00;font-size:80%;padding-top:6px;"></i><a href="{{ .Permalink }}">
+          <a href="{{ .Permalink }}"><span class="caps">{{ .Title }}</span></a>, from <time>{{ .Date.Format "January 2006" }} to {{ .Params.enddate | dateFormat "January 2006" }}</time>, through {{ .Params.host }}.
+{{ partial "comingsoon.html" . }}{{ partial "nowon.html" . }}
+        </li>
+{{ end }}
+</ul>
+</div>
+</div>
+{{ end }}
+</div>
+<div class="unit-30">
+<p>I teach classes in logic and philosophy, through the <em><a href="http://unimelb.edu.au">University of Melbourne</a></em> and other institutions, such as <em><a href="http://coursera.org">Coursera</a></em>.</p>
+<p>
+This page is an archive of those classes, and pointers to upcoming classes, including resources, when they are available.</p>
+</div>
+</div>
+</div>
+
+</div>
+
+<hr class="separator">
+
+{{ partial "whatisthis.html" . }}
+
+{{ partial "foot.html" . }}
+</body>
+</html>

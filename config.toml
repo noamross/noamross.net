@@ -1,0 +1,14 @@
+baseurl = "https://noamross.net"
+languageCode = "en-us"
+title = "Noam Ross"
+RSSLink = "https://noamross.net/index.xml"
+enableEmoji = true
+enableRobotsTXT = true
+pygmentsCodefences = true
+pygmentsStyle = "lovelace"
+ignoreFiles = ["\\.Rmd$", "\\.Rmarkdown$", "_files$", "_cache$"]
+
+[params]
+   description = "Noam Ross"
+   author = "Noam Ross"
+   rssLimit = 50

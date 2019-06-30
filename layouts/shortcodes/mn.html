@@ -1,0 +1,4 @@
+{{ $uid := now.UnixNano }}
+<label for="mn-{{ $uid }}" class="margin-toggle">&#8853;</label>
+<input type="checkbox" id="mn-{{ $uid }}" class="margin-toggle"/>
+<span class="marginnote">{{ .Get 0 }}</span>

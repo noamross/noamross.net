@@ -1,0 +1,41 @@
+<rss version="2.0" 
+  xmlns:dc="https://purl.org/dc/elements/1.1/"
+  xmlns:sy="https://purl.org/rss/1.0/modules/syndication/"
+  xmlns:admin="https://webns.net/mvcb/"
+  xmlns:atom="https://www.w3.org/2005/Atom"
+  xmlns:rdf="https://www.w3.org/1999/02/22-rdf-syntax-ns#"
+  xmlns:itunes="https://www.itunes.com/dtds/podcast-1.0.dtd">
+
+<channel>
+      <title>{{ .Title }} in {{ .Site.Title }} </title>
+	  <itunes:subtitle>Greg Restall's publications on logic and philosophy</itunes:subtitle>
+	  <itunes:author>Greg Restall</itunes:author>
+	  <itunes:owner>
+	  <itunes:name>Greg Restall</itunes:name>
+	  <itunes:email>greg@consequently.org</itunes:email>
+	  </itunes:owner>
+	  <itunes:category text="Education">
+	  <itunes:category text="Higher Education"/>
+	  </itunes:category>
+	  <itunes:keywords>Philosophy, Logic, mathematics, pdf, research, University, Greg Restall, Melbourne, Australia, Victoria</itunes:keywords>
+	  <itunes:explicit>no</itunes:explicit>
+	  <itunes:image href="{{.Site.BaseURL}}/img/avatar2.jpg" />
+      <generator uri="https://gohugo.io">Hugo</generator>
+    <link>{{ .Permalink }}</link>
+    {{ with .Site.LanguageCode }}<language>{{.}}</language>{{end}}
+    {{ with .Site.Author.name }}<author>{{.}}</author>{{end}}
+    {{ with .Site.Copyright }}<copyright>{{.}}</copyright>{{end}}
+    <updated>{{ .Date.Format "Mon, 02 Jan 2006 15:04:05 MST" }}</updated>
+    {{ range .Data.Pages.ByDate.Reverse }}
+ 
+    <item>
+      <title>{{ .Title }}</title>
+      <link>{{ .Permalink }}</link>
+      <pubDate>{{ .Date.Format "Mon, 02 Jan 2006 15:04:05 MST" }}</pubDate>
+      {{with .Site.Author.name}}<author>{{.}}</author>{{end}}
+      <guid>{{ .Permalink }}</guid>
+      <description><![CDATA[{{ .Content | html }}]]></description>
+    </item>
+    {{ end }}
+  </channel>
+</rss>

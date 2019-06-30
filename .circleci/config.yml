@@ -1,0 +1,32 @@
+version: 2
+jobs:
+  build:
+    working_directory: ~/main
+    docker:
+      - image: rocker/verse:latest
+    steps:
+      - checkout
+      - restore_cache:
+          keys:
+            - deps1-$R_VERSION-{{ .Branch }}-{{ checksum "DESCRIPTION" }}-{{ checksum ".circleci/config.yml" }}
+            - deps1-$R_VERSION-{{ .Branch }}
+            - deps1-$R_VERSION
+      - run:
+          command: |
+            R -e "if [ -f DESCRIPTION ]; then R --quiet -e "devtools::install(dep = TRUE)"; fi"
+            Rscript -e "blogdown::install_hugo()"
+      - save_cache:
+          key: deps1-$R_VERSION-{{ .Branch }}-{{ checksum "DESCRIPTION" }}-{{ checksum ".circleci/config.yml" }}
+          paths:
+            - "/usr/local/lib/R/site-library"
+      - run:
+          command: |
+            Rscript -e "blogdown::build_site()"
+      - store_artifacts:
+          path: /root/main/artifacts/
+          destination: artifacts
+      - deploy:
+          name: "Deploy Shiny App"
+          command: |
+            Rscript /root/main/inst/shiny/preprocess.R
+            scp -r -P 22022 -o UserKnownHostsFile=/dev/null -o StrictHostKeyChecking=no /root/main/inst/shiny/* noamross@aegypti.ecohealthalliance.org:~/ShinyApps/lemisapp/

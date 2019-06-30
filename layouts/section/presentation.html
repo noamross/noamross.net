@@ -1,0 +1,42 @@
+{{ $baseurl := .Site.BaseURL }}
+{{ partial "head.html" . }}
+{{ partial "navbar.html" . }}
+
+<div class="wrapper">
+
+<h2>Presentation Archive</h2>
+<div class="units-row">
+<div class="unit-70">
+{{ range .Data.Pages.GroupByDate "2006" }}
+<div class="units-row">
+<div class="unit-10">
+<h3>{{ .Key }}</h3>
+</div>
+<div class="unit-90">
+<ul class="fa-ul">
+{{ range .Pages }}
+<li><i class="fa-li fa fa-comment-o fa-fw" style="color:#b00;font-size:80%;padding-top:6px;"></i><a href="{{ .Permalink }}">{{ .Title | safeHTML }}</a> {{ partial "comingsoon.html" . }}
+<br>
+<time><i>{{ .Date.Format "2 January 2006" }}</i></time>,
+{{ .Params.host | safeHTML }}
+</li>
+{{ end }}
+</ul>
+</div>
+</div>
+{{ end }}
+</div>
+<div class="unit-30">
+<p>I regularly give research seminars, conference sessions, workshop talks, and other kinds of presentations.</p>
+<p>This page is an archive of those talks, and pointers to upcoming presentations, including resources, when they are available.</p>
+</div>
+</div>
+</div>
+
+<hr class="separator">
+
+{{ partial "whatisthis.html" . }}
+
+{{ partial "foot.html" . }}
+</body>
+</html>

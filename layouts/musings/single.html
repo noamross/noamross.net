@@ -1,0 +1,58 @@
+{{ $baseurl := .Site.BaseURL }}
+{{ partial "headwithcard.html" . }}
+{{ partial "navbar.html" . }}
+
+<div class="wrapper">
+<div class="units-row">
+<div class="unit-10">&nbsp;</div>
+<div class="unit-80"><h2><a href="">{{ .Title }}</a></h2></div>
+</div>
+<div class="units-row">
+<div class="unit-10 dateblock">{{if not (isset .Params "grlog") }}<h4>{{ .Date.Format "January 2, 2006" }}</h4>{{ else }}&nbsp;{{ end }}</div>
+<div class="unit-60 story">
+{{ .Content }}
+
+{{ partial "tweetlink.html" . }}
+
+<hr>
+{{ if .PrevInSection }}
+<a href="{{.PrevInSection.Permalink}}"> &larr;&nbsp;{{.PrevInSection.Title}}</a> |
+{{ end }}
+<a href="{{ $baseurl }}/musings/#{{ .Date.Format "2006" }}">All posts</a>
+{{ if .NextInSection }}
+| <a href="{{.NextInSection.Permalink}}">{{.NextInSection.Title}}&nbsp;&rarr;</a>
+{{ end }}
+
+<script src="https://utteranc.es/client.js"
+        repo="noamross/utter-test"
+        issue-term="title"
+        label="site-comments"
+        theme="github-light"
+        crossorigin="anonymous"
+        async>
+</script>
+
+<script async>
+var frame = document.querySelector('.utterances-frame');
+    frame.onload = function () {
+        var body = frame.contentWindow.document.querySelector('body');
+        body.style.color = 'red';
+        body.style.fontSize = '20px';
+        body.style.lineHeight = '20px';
+    };
+</script>
+</div>
+
+
+</div>
+</div>
+
+<hr class="separator">
+
+{{ partial "whatisthis.html" . }}
+
+{{ partial "foot.html" . }}
+</body>
+</html>
+
+

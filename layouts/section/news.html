@@ -1,0 +1,40 @@
+{{ $baseurl := .Site.BaseURL }}
+{{ partial "head.html" . }}
+{{ partial "navbar.html" . }}
+
+<div class="wrapper">
+
+<h2>Musings</h2>
+<div class="units-row">
+<div class="unit-70">
+{{ range .Data.Pages.GroupByDate "2006" }}
+<div class="units-row">
+<div class="unit-10">
+<h3><a id="{{ .Key }}">{{ .Key }}</a></h3>
+</div>
+<div class="unit-90">
+<p>
+{{ range .Pages }}
+&para; {{if not (isset .Params "grlog") }}<time><em>{{ .Date.Format "January 2" }}</em></time>, {{ end }}<a href="{{ .Permalink }}">{{ .Title | safeHTML }}</a>
+{{ end }}
+</p>
+
+</div>
+</div>
+{{ end }}
+</div>
+<div class="unit-30">
+<p>This page is an archive of the posts from this site. </p>
+</div>
+</div>
+</div>
+
+<hr class="separator">
+
+{{ partial "whatisthis.html" . }}
+
+{{ partial "foot.html" . }}
+</body>
+</html>
+
+

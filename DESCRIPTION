@@ -1,19 +1,13 @@
-Package: noam
-Title: Noam Ross's Hugo Website
+Package: noamross
+Title: Noam Ross Hugo Website
 Version: 0.0.1
-Authors@R: 
-    person(given = "First",
-           family = "Last",
-           role = c("aut", "cre"),
-           email = "first.last@example.com",
-           comment = c(ORCID = "YOUR-ORCID-ID"))
 Author: Noam Ross
-Maintainer: Noam Ross <noam.ross@gmail.com>
-License: MIT + file LICENSE
-Encoding: UTF-8
-LazyData: true
 Imports:
   blogdown,
   rorcid,
   rcrossref,
   here
+Maintainer: Noam Ross <noam.ross@gmail.com>
+License: MIT + file LICENSE
+Encoding: UTF-8
+

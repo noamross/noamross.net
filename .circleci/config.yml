@@ -3,7 +3,7 @@ jobs:
   build:
     working_directory: ~/main
     docker:
-      - image: rocker/verse:latest
+      - image: noamross/noam:latest
     steps:
       - checkout
       - restore_cache:
@@ -18,7 +18,7 @@ jobs:
             if [ -f DESCRIPTION ]; then
               Rscript --vanilla -e "devtools::install_dev_deps(dependencies = TRUE, upgrade = 'always')"
             fi
-            Rscript --vanilla -e "if (inherits(blogdown::hugo_version(), "try-error")) blogdown::install_hugo()"
+            Rscript --vanilla -e "if (inherits(blogdown::hugo_version(), 'try-error')) blogdown::install_hugo()"
       - save_cache:
           key: deps1-$R_VERSION-{{ .Branch }}-{{ checksum "DESCRIPTION" }}-{{ checksum ".circleci/config.yml" }}
           paths:

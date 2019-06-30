@@ -12,7 +12,9 @@ jobs:
             - deps1-$R_VERSION-{{ .Branch }}
             - deps1-$R_VERSION
       - run:
+          name: "Install Dependencies"
           command: |
+            apt-get update -qq && apt-get install -y --no-install-recommends rsync
             if [ -f DESCRIPTION ]; then
               Rscript --vanilla -e "devtools::install_dev_deps(dependencies = TRUE, upgrade = 'always')"
             fi
@@ -22,17 +24,16 @@ jobs:
           paths:
             - "/usr/local/lib/R/site-library"
       - run:
+          name: "Build Site"
           command: |
             Rscript -e "blogdown::build_site()"
-      - store_artifacts:
-          path: /root/main/artifacts/
-          destination: artifacts
       - add_ssh_keys:
           fingerprints:
             - "7c:cf:69:c8:f8:86:24:81:66:70:a6:18:72:1f:ca:07"
       - deploy:
           name: "Rsync to site"
           command: |
-          if [ "${CIRCLE_BRANCH}" == "master" ]; then
-             rsync -avz --delete public/ noamross_noamross@ssh.phx.nearlyfreespeech.net:/home/public/test-site
-          fi
+            if [ "${CIRCLE_BRANCH}" == "master" ]; then
+               ssh-keyscan -t "ecdsa" ssh.phx.nearlyfreespeech.net >> ~/.ssh/known_hosts
+               rsync -avz --delete public/ noamross_noamross@ssh.phx.nearlyfreespeech.net:/home/public/test-site
+            fi

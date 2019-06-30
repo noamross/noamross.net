@@ -23,6 +23,7 @@ jobs:
           key: deps1-$R_VERSION-{{ .Branch }}-{{ checksum "DESCRIPTION" }}-{{ checksum ".circleci/config.yml" }}
           paths:
             - "/usr/local/lib/R/site-library"
+            - "blogdown"
       - run:
           name: "Build Site"
           command: |

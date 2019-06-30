@@ -28,7 +28,7 @@ L &= \text{an arbitrarily large number} \\
 \xi &= \frac{3}{4} - \frac{b - a}{2c} \\
 \end{aligned}$$ 
 
-```{r}
+```{r, cache = TRUE}
 smooth_pulse = function(time, start, stop, cycle = 1,  steep = 1000) {
   xi = 3/4 - (stop - start)/(2* cycle)
   (cycle / (stop - start)) / 

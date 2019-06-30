@@ -14,5 +14,4 @@ Sys.setenv(
   "HERE"=here::here()
 )
 
-knitr::opts_chunk$set(cache.path = file.path(here::here(), ".knitr_cache/"))
 # End .Rprofile

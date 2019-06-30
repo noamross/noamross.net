@@ -1,3032 +1,4026 @@
 /*
-	Accordion Tool
+	Kube UI Framework
+	Version 7.2.1
+	Updated: November 10, 2018
 
 	http://imperavi.com/kube/
 
-	Copyright (c) 2009-2014, Imperavi LLC.
+	Copyright (c) 2009-2018, Imperavi LLC.
+	License: MIT
 */
-(function($)
+(function() {
+var Ajax = {};
+
+Ajax.settings = {};
+Ajax.post = function(options) { return new AjaxRequest('post', options); };
+Ajax.get = function(options) { return new AjaxRequest('get', options); };
+
+var AjaxRequest = function(method, options)
 {
-	// Plugin
-	$.fn.accordion = function(options)
+    var defaults = {
+        method: method,
+        url: '',
+        before: function() {},
+        success: function() {},
+        error: function() {},
+        data: false,
+        async: true,
+        headers: {}
+    };
+
+    this.p = this.extend(defaults, options);
+    this.p = this.extend(this.p, Ajax.settings);
+    this.p.method = this.p.method.toUpperCase();
+
+    this.prepareData();
+
+    this.xhr = new XMLHttpRequest();
+    this.xhr.open(this.p.method, this.p.url, this.p.async);
+
+    this.setHeaders();
+
+    var before = (typeof this.p.before === 'function') ? this.p.before(this.xhr) : true;
+    if (before !== false)
+    {
+        this.send();
+    }
+};
+
+AjaxRequest.prototype = {
+    extend: function(obj1, obj2)
+    {
+        if (obj2) for (var name in obj2) { obj1[name] = obj2[name]; }
+        return obj1;
+    },
+    prepareData: function()
+    {
+        if (this.p.method === 'POST' && !this.isFormData()) this.p.headers['Content-Type'] = 'application/x-www-form-urlencoded';
+        if (typeof this.p.data === 'object' && !this.isFormData()) this.p.data = this.toParams(this.p.data);
+        if (this.p.method === 'GET') this.p.url = (this.p.data) ? this.p.url + '?' + this.p.data : this.p.url;
+    },
+    setHeaders: function()
+    {
+        this.xhr.setRequestHeader('X-Requested-With', this.p.headers['X-Requested-With'] || 'XMLHttpRequest');
+        for (var name in this.p.headers)
+        {
+            this.xhr.setRequestHeader(name, this.p.headers[name]);
+        }
+    },
+    isFormData: function()
+    {
+        return (typeof window.FormData !== 'undefined' && this.p.data instanceof window.FormData);
+    },
+    isComplete: function()
+    {
+        return !(this.xhr.status < 200 || this.xhr.status >= 300 && this.xhr.status !== 304);
+    },
+    send: function()
+    {
+        if (this.p.async)
+        {
+            this.xhr.onload = this.loaded.bind(this);
+            this.xhr.send(this.p.data);
+        }
+        else
+        {
+            this.xhr.send(this.p.data);
+            this.loaded.call(this);
+        }
+    },
+    loaded: function()
+    {
+        if (this.isComplete())
+        {
+            var response = this.xhr.response;
+            var json = this.parseJson(response);
+            response = (json) ? json : response;
+
+            if (typeof this.p.success === 'function') this.p.success(response, this.xhr);
+        }
+        else
+        {
+            if (typeof this.p.error === 'function') this.p.error(this.xhr.statusText);
+        }
+    },
+    parseJson: function(str)
+    {
+        try {
+            var o = JSON.parse(str);
+            if (o && typeof o === 'object')
+            {
+                return o;
+            }
+
+        } catch (e) {}
+
+        return false;
+    },
+    toParams: function (obj)
+    {
+        return Object.keys(obj).map(
+            function(k){ return encodeURIComponent(k) + '=' + encodeURIComponent(obj[k]); }
+        ).join('&');
+    }
+};
+var DomCache = [0];
+var DomExpando = 'data' + +new Date();
+var DomHClass = 'is-hidden';
+var DomHMClass = 'is-hidden-mobile';
+
+var Dom = function(selector, context)
+{
+    return this.parse(selector, context);
+};
+
+Dom.ready = function(fn)
+{
+    if (document.readyState != 'loading') fn();
+    else document.addEventListener('DOMContentLoaded', fn);
+};
+
+Dom.prototype = {
+    get dom()
+    {
+        return true;
+    },
+    get length()
+    {
+        return this.nodes.length;
+    },
+    parse: function(selector, context)
+    {
+        var nodes;
+        var reHtmlTest = /^\s*<(\w+|!)[^>]*>/;
+
+        if (!selector)
+        {
+            nodes = [];
+        }
+        else if (selector.dom)
+        {
+            this.nodes = selector.nodes;
+            return selector;
+        }
+        else if (typeof selector !== 'string')
+        {
+            if (selector.nodeType && selector.nodeType === 11)
+            {
+                nodes = selector.childNodes;
+            }
+            else
+            {
+                nodes = (selector.nodeType || selector === window) ? [selector] : selector;
+            }
+        }
+        else if (reHtmlTest.test(selector))
+        {
+            nodes = this.create(selector);
+        }
+        else
+        {
+            nodes = this._query(selector, context);
+        }
+
+        this.nodes = this._slice(nodes);
+    },
+    create: function(html)
+    {
+        if (/^<(\w+)\s*\/?>(?:<\/\1>|)$/.test(html))
+        {
+            return [document.createElement(RegExp.$1)];
+        }
+
+        var elements = [];
+        var container = document.createElement('div');
+        var children = container.childNodes;
+
+        container.innerHTML = html;
+
+        for (var i = 0, l = children.length; i < l; i++)
+        {
+            elements.push(children[i]);
+        }
+
+        return elements;
+    },
+
+    // add
+    add: function(nodes)
+    {
+        this.nodes = this.nodes.concat(this._toArray(nodes));
+    },
+
+    // get
+    get: function(index)
+    {
+        return this.nodes[(index || 0)] || false;
+    },
+    getAll: function()
+    {
+        return this.nodes;
+    },
+    eq: function(index)
+    {
+        return new Dom(this.nodes[index]);
+    },
+    first: function()
+    {
+        return new Dom(this.nodes[0]);
+    },
+    last: function()
+    {
+        return new Dom(this.nodes[this.nodes.length - 1]);
+    },
+    contents: function()
+    {
+        return this.get().childNodes;
+    },
+
+    // loop
+    each: function(callback)
+    {
+        var len = this.nodes.length;
+        for (var i = 0; i < len; i++)
+        {
+            callback.call(this, (this.nodes[i].dom) ? this.nodes[i].get() : this.nodes[i], i);
+        }
+
+        return this;
+    },
+
+    // traversing
+    is: function(selector)
+    {
+        return (this.filter(selector).length > 0);
+    },
+    filter: function (selector)
+    {
+        var callback;
+        if (selector === undefined)
+        {
+            return this;
+        }
+        else if (typeof selector === 'function')
+        {
+            callback = selector;
+        }
+        else
+        {
+            callback = function(node)
+            {
+                if (selector instanceof Node)
+                {
+                    return (selector === node);
+                }
+                else if (selector && selector.dom)
+                {
+                    return ((selector.nodes).indexOf(node) !== -1);
+                }
+                else
+                {
+                    node.matches = node.matches || node.msMatchesSelector || node.webkitMatchesSelector;
+                    return (node.nodeType === 1) ? node.matches(selector || '*') : false;
+                }
+            };
+        }
+
+        return new Dom(this.nodes.filter(callback));
+    },
+    not: function(filter)
+    {
+        return this.filter(function(node)
+        {
+            return !new Dom(node).is(filter || true);
+        });
+    },
+    find: function(selector)
+    {
+        var nodes = [];
+        this.each(function(node)
+        {
+            var ns = this._query(selector || '*', node);
+            for (var i = 0; i < ns.length; i++)
+            {
+                nodes.push(ns[i]);
+            }
+        });
+
+        return new Dom(nodes);
+    },
+    children: function(selector)
+    {
+        var nodes = [];
+        this.each(function(node)
+        {
+            if (node.children)
+            {
+                var ns = node.children;
+                for (var i = 0; i < ns.length; i++)
+                {
+                    nodes.push(ns[i]);
+                }
+            }
+        });
+
+        return new Dom(nodes).filter(selector);
+    },
+    parent: function(selector)
+    {
+        var nodes = [];
+        this.each(function(node)
+        {
+            if (node.parentNode) nodes.push(node.parentNode);
+        });
+
+        return new Dom(nodes).filter(selector);
+    },
+    parents: function(selector, context)
+    {
+        context = this._getContext(context);
+
+        var nodes = [];
+        this.each(function(node)
+        {
+            var parent = node.parentNode;
+            while (parent && parent !== context)
+            {
+                if (selector)
+                {
+                    if (new Dom(parent).is(selector)) { nodes.push(parent); }
+                }
+                else
+                {
+                    nodes.push(parent);
+                }
+
+                parent = parent.parentNode;
+            }
+        });
+
+        return new Dom(nodes);
+    },
+    closest: function(selector, context)
+    {
+        context = this._getContext(context);
+        selector = (selector.dom) ? selector.get() : selector;
+
+        var nodes = [];
+        var isNode = (selector && selector.nodeType);
+        this.each(function(node)
+        {
+            do {
+                if ((isNode && node === selector) || new Dom(node).is(selector)) return nodes.push(node);
+            } while ((node = node.parentNode) && node !== context);
+        });
+
+        return new Dom(nodes);
+    },
+    next: function(selector)
+    {
+         return this._getSibling(selector, 'nextSibling');
+    },
+    nextElement: function(selector)
+    {
+        return this._getSibling(selector, 'nextElementSibling');
+    },
+    prev: function(selector)
+    {
+        return this._getSibling(selector, 'previousSibling');
+    },
+    prevElement: function(selector)
+    {
+        return this._getSibling(selector, 'previousElementSibling');
+    },
+
+    // css
+    css: function(name, value)
+    {
+        if (value === undefined && (typeof name !== 'object'))
+        {
+            var node = this.get();
+            if (name === 'width' || name === 'height')
+            {
+                return (node.style) ? this._getHeightOrWidth(name, node, false) + 'px' : undefined;
+            }
+            else
+            {
+                return (node.style) ? getComputedStyle(node, null)[name] : undefined;
+            }
+        }
+
+        // set
+        return this.each(function(node)
+        {
+            var obj = {};
+            if (typeof name === 'object') obj = name;
+            else obj[name] = value;
+
+            for (var key in obj)
+            {
+                if (node.style) node.style[key] = obj[key];
+            }
+        });
+    },
+
+    // attr
+    attr: function(name, value, data)
+    {
+        data = (data) ? 'data-' : '';
+
+        if (value === undefined && (typeof name !== 'object'))
+        {
+            var node = this.get();
+            if (node && node.nodeType !== 3)
+            {
+                return (name === 'checked') ? node.checked : this._getBooleanFromStr(node.getAttribute(data + name));
+            }
+            else return;
+        }
+
+        // set
+        return this.each(function(node)
+        {
+            var obj = {};
+            if (typeof name === 'object') obj = name;
+            else obj[name] = value;
+
+            for (var key in obj)
+            {
+                if (node.nodeType !== 3)
+                {
+                    if (key === 'checked') node.checked = obj[key];
+                    else node.setAttribute(data + key, obj[key]);
+                }
+            }
+        });
+    },
+    data: function(name, value)
+    {
+        if (name === undefined)
+        {
+            var reDataAttr = /^data\-(.+)$/;
+            var attrs = this.get().attributes;
+
+            var data = {};
+            var replacer = function (g) { return g[1].toUpperCase(); };
+
+            for (var key in attrs)
+            {
+                if (attrs[key] && reDataAttr.test(attrs[key].nodeName))
+                {
+                    var dataName = attrs[key].nodeName.match(reDataAttr)[1];
+                    var val = attrs[key].value;
+                    dataName = dataName.replace(/-([a-z])/g, replacer);
+
+                    if (this._isObjectString(val)) val = this._toObject(val);
+                    else val = (this._isNumber(val)) ? parseFloat(val) : this._getBooleanFromStr(val);
+
+                    data[dataName] = val;
+                }
+            }
+
+            return data;
+        }
+
+        return this.attr(name, value, true);
+    },
+    val: function(value)
+    {
+        if (value === undefined)
+        {
+            var el = this.get();
+            if (el.type && el.type === 'checkbox') return el.checked;
+            else return el.value;
+        }
+
+        return this.each(function(node)
+        {
+            node.value = value;
+        });
+    },
+    removeAttr: function(value)
+    {
+        return this.each(function(node)
+        {
+            var rmAttr = function(name) { if (node.nodeType !== 3) node.removeAttribute(name); };
+            value.split(' ').forEach(rmAttr);
+        });
+    },
+    removeData: function(value)
+    {
+        return this.each(function(node)
+        {
+            var rmData = function(name) { if (node.nodeType !== 3) node.removeAttribute('data-' + name); };
+            value.split(' ').forEach(rmData);
+        });
+    },
+
+    // dataset/dataget
+    dataset: function(key, value)
+    {
+        return this.each(function(node)
+        {
+            DomCache[this.dataindex(node)][key] = value;
+        });
+    },
+    dataget: function(key)
+    {
+        return DomCache[this.dataindex(this.get())][key];
+    },
+    dataindex: function(el)
+    {
+        var cacheIndex = el[DomExpando];
+        var nextCacheIndex = DomCache.length;
+
+        if (!cacheIndex)
+        {
+            cacheIndex = el[DomExpando] = nextCacheIndex;
+            DomCache[cacheIndex] = {};
+        }
+
+        return cacheIndex;
+    },
+
+
+    // class
+    addClass: function(value)
+    {
+        return this._eachClass(value, 'add');
+    },
+    removeClass: function(value)
+    {
+        return this._eachClass(value, 'remove');
+    },
+    toggleClass: function(value)
+    {
+        return this._eachClass(value, 'toggle');
+    },
+    hasClass: function(value)
+    {
+        return this.nodes.some(function(node)
+        {
+            return (node.classList) ? node.classList.contains(value) : false;
+        });
+    },
+
+    // html & text
+    empty: function()
+    {
+        return this.each(function(node)
+        {
+            node.innerHTML = '';
+        });
+    },
+    html: function(html)
+    {
+        return (html === undefined) ? (this.get().innerHTML || '') : this.empty().append(html);
+    },
+    text: function(text)
+    {
+        return (text === undefined) ? (this.get().textContent || '') : this.each(function(node) { node.textContent = text; });
+    },
+
+    // manipulation
+    after: function(html)
+    {
+        return this._inject(html, function(frag, node)
+        {
+            if (typeof frag === 'string')
+            {
+                node.insertAdjacentHTML('afterend', frag);
+            }
+            else
+            {
+                var elms = (frag instanceof Node) ? [frag] : this._toArray(frag).reverse();
+                for (var i = 0; i < elms.length; i++)
+                {
+                    node.parentNode.insertBefore(elms[i], node.nextSibling);
+                }
+            }
+
+            return node;
+
+        });
+    },
+    before: function(html)
+    {
+        return this._inject(html, function(frag, node)
+        {
+            if (typeof frag === 'string')
+            {
+                node.insertAdjacentHTML('beforebegin', frag);
+            }
+            else
+            {
+                var elms = (frag instanceof Node) ? [frag] : this._toArray(frag);
+                for (var i = 0; i < elms.length; i++)
+                {
+                    node.parentNode.insertBefore(elms[i], node);
+                }
+            }
+
+            return node;
+        });
+    },
+    append: function(html)
+    {
+        return this._inject(html, function(frag, node)
+        {
+            if (typeof frag === 'string' || typeof frag === 'number')
+            {
+                node.insertAdjacentHTML('beforeend', frag);
+            }
+            else
+            {
+                var elms = (frag instanceof Node) ? [frag] : this._toArray(frag);
+                for (var i = 0; i < elms.length; i++)
+                {
+                    node.appendChild(elms[i]);
+                }
+            }
+
+            return node;
+        });
+    },
+    prepend: function(html)
+    {
+        return this._inject(html, function(frag, node)
+        {
+            if (typeof frag === 'string' || typeof frag === 'number')
+            {
+                node.insertAdjacentHTML('afterbegin', frag);
+            }
+            else
+            {
+                var elms = (frag instanceof Node) ? [frag] : this._toArray(frag).reverse();
+                for (var i = 0; i < elms.length; i++)
+                {
+                    node.insertBefore(elms[i], node.firstChild);
+                }
+            }
+
+            return node;
+        });
+    },
+    wrap: function(html)
+    {
+        return this._inject(html, function(frag, node)
+        {
+            var wrapper = (typeof frag === 'string' || typeof frag === 'number') ? this.create(frag)[0] : (frag instanceof Node) ? frag : this._toArray(frag)[0];
+
+            if (node.parentNode)
+            {
+                node.parentNode.insertBefore(wrapper, node);
+            }
+
+            wrapper.appendChild(node);
+
+            return new Dom(wrapper);
+
+        });
+    },
+    unwrap: function()
+    {
+        return this.each(function(node)
+        {
+            var $node = new Dom(node);
+
+            return $node.replaceWith($node.contents());
+        });
+    },
+    replaceWith: function(html)
+    {
+        return this._inject(html, function(frag, node)
+        {
+            var docFrag = document.createDocumentFragment();
+            var elms = (typeof frag === 'string' || typeof frag === 'number') ? this.create(frag) : (frag instanceof Node) ? [frag] : this._toArray(frag);
+
+            for (var i = 0; i < elms.length; i++)
+            {
+                docFrag.appendChild(elms[i]);
+            }
+
+            var result = docFrag.childNodes[0];
+            node.parentNode.replaceChild(docFrag, node);
+
+            return result;
+
+        });
+    },
+    remove: function()
+    {
+        return this.each(function(node)
+        {
+            if (node.parentNode) node.parentNode.removeChild(node);
+        });
+    },
+    clone: function(events)
+    {
+        var nodes = [];
+        this.each(function(node)
+        {
+            var copy = this._clone(node);
+            if (events) copy = this._cloneEvents(node, copy);
+            nodes.push(copy);
+        });
+
+        return new Dom(nodes);
+    },
+
+    // show/hide
+    show: function()
+    {
+        return this.each(function(node)
+        {
+            if (!node.style || !this._hasDisplayNone(node)) return;
+
+            var target = node.getAttribute('domTargetShow');
+            var isHidden = (node.classList) ? node.classList.contains(DomHClass) : false;
+            var isHiddenMobile = (node.classList) ? node.classList.contains(DomHMClass) : false;
+            var type;
+
+            if (isHidden)
+            {
+                type = DomHClass;
+                node.classList.remove(DomHClass);
+            }
+            else if (isHiddenMobile)
+            {
+                type = DomHMClass;
+                node.classList.remove(DomHMClass);
+            }
+            else
+            {
+                node.style.display = (target) ? target : 'block';
+            }
+
+            if (type) node.setAttribute('domTargetHide', type);
+            node.removeAttribute('domTargetShow');
+
+        }.bind(this));
+    },
+    hide: function()
+    {
+        return this.each(function(node)
+        {
+            if (!node.style || this._hasDisplayNone(node)) return;
+
+            var display = node.style.display;
+            var target = node.getAttribute('domTargetHide');
+
+            if (target === DomHClass)
+            {
+                node.classList.add(DomHClass);
+            }
+            else if (target === DomHMClass)
+            {
+                node.classList.add(DomHMClass);
+            }
+            else
+            {
+                if (display !== 'block') node.setAttribute('domTargetShow', display);
+                node.style.display = 'none';
+            }
+
+            node.removeAttribute('domTargetHide');
+
+        });
+    },
+
+    // dimensions
+    scrollTop: function(value)
+    {
+        var node = this.get();
+        var isWindow = (node === window);
+        var isDocument = (node.nodeType === 9);
+        var el = (isDocument) ? (document.scrollingElement || document.body.parentNode || document.body || document.documentElement) : node;
+
+        if (value !== undefined)
+        {
+            if (isWindow) window.scrollTo(0, value);
+            else el.scrollTop = value;
+            return;
+        }
+
+        if (isDocument)
+        {
+            return (typeof window.pageYOffset != 'undefined') ? window.pageYOffset : ((document.documentElement.scrollTop) ? document.documentElement.scrollTop : ((document.body.scrollTop) ? document.body.scrollTop : 0));
+        }
+        else
+        {
+            return (isWindow) ? window.pageYOffset : el.scrollTop;
+        }
+    },
+    offset: function()
+    {
+        return this._getDim('Offset');
+    },
+    position: function()
+    {
+        return this._getDim('Position');
+    },
+    width: function(value, adjust)
+    {
+        return this._getSize('width', 'Width', value, adjust);
+    },
+    height: function(value, adjust)
+    {
+        return this._getSize('height', 'Height', value, adjust);
+    },
+    outerWidth: function()
+    {
+        return this._getInnerOrOuter('width', 'outer');
+    },
+    outerHeight: function()
+    {
+        return this._getInnerOrOuter('height', 'outer');
+    },
+    innerWidth: function()
+    {
+        return this._getInnerOrOuter('width', 'inner');
+    },
+    innerHeight: function()
+    {
+        return this._getInnerOrOuter('height', 'inner');
+    },
+
+    // events
+    click: function()
+    {
+        return this._triggerEvent('click');
+    },
+    focus: function()
+    {
+        return this._triggerEvent('focus');
+    },
+    trigger: function(names)
+    {
+        return this.each(function(node)
+        {
+            var events = names.split(' ');
+            for (var i = 0; i < events.length; i++)
+            {
+                var ev;
+                var opts = { bubbles: true, cancelable: true };
+
+                try {
+                    ev = new window.CustomEvent(events[i], opts);
+                } catch(e) {
+                    ev = document.createEvent('CustomEvent');
+                    ev.initCustomEvent(events[i], true, true);
+                }
+
+                node.dispatchEvent(ev);
+            }
+        });
+    },
+    on: function(names, handler, one)
+    {
+        return this.each(function(node)
+        {
+            var events = names.split(' ');
+            for (var i = 0; i < events.length; i++)
+            {
+                var event = this._getEventName(events[i]);
+                var namespace = this._getEventNamespace(events[i]);
+
+                handler = (one) ? this._getOneHandler(handler, names) : handler;
+                node.addEventListener(event, handler);
+
+                node._e = node._e || {};
+                node._e[namespace] = node._e[namespace] || {};
+                node._e[namespace][event] = node._e[namespace][event] || [];
+                node._e[namespace][event].push(handler);
+            }
+
+        });
+    },
+    one: function(events, handler)
+    {
+        return this.on(events, handler, true);
+    },
+    off: function(names, handler)
+    {
+        var testEvent = function(name, key, event) { return (name === event); };
+        var testNamespace = function(name, key, event, namespace) { return (key === namespace); };
+        var testEventNamespace = function(name, key, event, namespace) { return (name === event && key === namespace); };
+        var testPositive = function() { return true; };
+
+        if (names === undefined)
+        {
+            // ALL
+            return this.each(function(node)
+            {
+                this._offEvent(node, false, false, handler, testPositive);
+            });
+        }
+
+        return this.each(function(node)
+        {
+            var events = names.split(' ');
+
+            for (var i = 0; i < events.length; i++)
+            {
+                var event = this._getEventName(events[i]);
+                var namespace = this._getEventNamespace(events[i]);
+
+                // 1) event without namespace
+                if (namespace === '_events') this._offEvent(node, event, namespace, handler, testEvent);
+                // 2) only namespace
+                else if (!event && namespace !== '_events') this._offEvent(node, event, namespace, handler, testNamespace);
+                // 3) event + namespace
+                else this._offEvent(node, event, namespace, handler, testEventNamespace);
+            }
+        });
+    },
+
+    // form
+    serialize: function(asObject)
+    {
+        var obj = {};
+        var elms = this.get().elements;
+        for (var i = 0; i < elms.length; i++)
+        {
+            var el = elms[i];
+            if (/(checkbox|radio)/.test(el.type) && !el.checked) continue;
+            if (!el.name || el.disabled || el.type === 'file') continue;
+
+            if (el.type === 'select-multiple')
+            {
+                for (var z = 0; z < el.options.length; z++)
+                {
+                    var opt = el.options[z];
+                    if (opt.selected) obj[el.name] = opt.value;
+                }
+            }
+
+            obj[el.name] = (this._isNumber(el.value)) ? parseFloat(el.value) : this._getBooleanFromStr(el.value);
+        }
+
+        return (asObject) ? obj : this._toParams(obj);
+    },
+    ajax: function(success, error)
+    {
+        if (typeof AjaxRequest !== 'undefined')
+        {
+            var method = this.attr('method') || 'post';
+            var options = {
+                url: this.attr('action'),
+                data: this.serialize(),
+                success: success,
+                error: error
+            };
+
+            return new AjaxRequest(method, options);
+        }
+    },
+
+    // private
+    _queryContext: function(selector, context)
+    {
+        context = this._getContext(context);
+
+        return (context.nodeType !== 3 && typeof context.querySelectorAll === 'function') ? context.querySelectorAll(selector) : [];
+    },
+    _query: function(selector, context)
+    {
+        if (context)
+        {
+            return this._queryContext(selector, context);
+        }
+        else if (/^[.#]?[\w-]*$/.test(selector))
+        {
+            if (selector[0] === '#')
+            {
+                var element = document.getElementById(selector.slice(1));
+                return element ? [element] : [];
+            }
+
+            if (selector[0] === '.')
+            {
+                return document.getElementsByClassName(selector.slice(1));
+            }
+
+            return document.getElementsByTagName(selector);
+        }
+
+        return document.querySelectorAll(selector);
+    },
+    _getContext: function(context)
+    {
+        context = (typeof context === 'string') ? document.querySelector(context) : context;
+
+        return (context && context.dom) ? context.get() : (context || document);
+    },
+    _inject: function(html, fn)
+    {
+        var len = this.nodes.length;
+        var nodes = [];
+        while (len--)
+        {
+            var res = (typeof html === 'function') ? html.call(this, this.nodes[len]) : html;
+            var el = (len === 0) ? res : this._clone(res);
+            var node = fn.call(this, el, this.nodes[len]);
+
+            if (node)
+            {
+                if (node.dom) nodes.push(node.get());
+                else nodes.push(node);
+            }
+        }
+
+        return new Dom(nodes);
+    },
+    _cloneEvents: function(node, copy)
+    {
+        var events = node._e;
+        if (events)
+        {
+            copy._e = events;
+            for (var name in events._events)
+            {
+                for (var i = 0; i < events._events[name].length; i++)
+                {
+                    copy.addEventListener(name, events._events[name][i]);
+                }
+            }
+        }
+
+        return copy;
+    },
+    _clone: function(node)
+    {
+        if (typeof node === 'undefined') return;
+        if (typeof node === 'string') return node;
+        else if (node instanceof Node || node.nodeType) return node.cloneNode(true);
+        else if ('length' in node)
+        {
+            return [].map.call(this._toArray(node), function(el) { return el.cloneNode(true); });
+        }
+    },
+    _slice: function(obj)
+    {
+        return (!obj || obj.length === 0) ? [] : (obj.length) ? [].slice.call(obj.nodes || obj) : [obj];
+    },
+    _eachClass: function(value, type)
+    {
+        return this.each(function(node)
+        {
+            if (value)
+            {
+                var setClass = function(name) { if (node.classList) node.classList[type](name); };
+                value.split(' ').forEach(setClass);
+            }
+        });
+    },
+    _triggerEvent: function(name)
+    {
+        var node = this.get();
+        if (node && node.nodeType !== 3) node[name]();
+        return this;
+    },
+    _getOneHandler: function(handler, events)
+    {
+        var self = this;
+        return function()
+        {
+            handler.apply(this, arguments);
+            self.off(events);
+        };
+    },
+    _getEventNamespace: function(event)
+    {
+        var arr = event.split('.');
+        var namespace = (arr[1]) ? arr[1] : '_events';
+        return (arr[2]) ? namespace + arr[2] : namespace;
+    },
+    _getEventName: function(event)
+    {
+        return event.split('.')[0];
+    },
+    _offEvent: function(node, event, namespace, handler, condition)
+    {
+        for (var key in node._e)
+        {
+            for (var name in node._e[key])
+            {
+                if (condition(name, key, event, namespace))
+                {
+                    var handlers = node._e[key][name];
+                    for (var i = 0; i < handlers.length; i++)
+                    {
+                        if (typeof handler !== 'undefined' && handlers[i].toString() !== handler.toString())
+                        {
+                            continue;
+                        }
+
+                        node.removeEventListener(name, handlers[i]);
+                        node._e[key][name].splice(i, 1);
+
+                        if (node._e[key][name].length === 0) delete node._e[key][name];
+                        if (Object.keys(node._e[key]).length === 0) delete node._e[key];
+                    }
+                }
+            }
+        }
+    },
+    _getInnerOrOuter: function(method, type)
+    {
+        return this[method](undefined, type);
+    },
+    _getDocSize: function(node, type)
+    {
+        var body = node.body, html = node.documentElement;
+        return Math.max(body['scroll' + type], body['offset' + type], html['client' + type], html['scroll' + type], html['offset' + type]);
+    },
+    _getSize: function(type, captype, value, adjust)
+    {
+        if (value === undefined)
+        {
+            var el = this.get();
+            if (el.nodeType === 3)      value = 0;
+            else if (el.nodeType === 9) value = this._getDocSize(el, captype);
+            else if (el === window)     value = window['inner' + captype];
+            else                        value = this._getHeightOrWidth(type, el, adjust || 'normal');
+
+            return Math.round(value);
+        }
+
+        return this.each(function(node)
+        {
+            value = parseFloat(value);
+            value = value + this._adjustResultHeightOrWidth(type, node, adjust || 'normal');
+
+            new Dom(node).css(type, value + 'px');
+
+        }.bind(this));
+    },
+    _getHeightOrWidth: function(type, el, adjust)
+    {
+        if (!el) return 0;
+
+        var name = type.charAt(0).toUpperCase() + type.slice(1);
+        var result = 0;
+        var style = getComputedStyle(el, null);
+        var $el = new Dom(el);
+        var $targets = $el.parents().filter(function(node)
+        {
+            return (node.nodeType === 1 && getComputedStyle(node, null).display === 'none') ? node : false;
+        });
+
+        if (style.display === 'none') $targets.add(el);
+        if ($targets.length !== 0)
+        {
+            var fixStyle = 'visibility: hidden !important; display: block !important;';
+            var tmp = [];
+
+            $targets.each(function(node)
+            {
+                var $node = new Dom(node);
+                var thisStyle = $node.attr('style');
+                if (thisStyle !== null) tmp.push(thisStyle);
+                $node.attr('style', (thisStyle !== null) ? thisStyle + ';' + fixStyle : fixStyle);
+            });
+
+            result = $el.get()['offset' + name] - this._adjustResultHeightOrWidth(type, el, adjust);
+
+            $targets.each(function(node, i)
+            {
+                var $node = new Dom(node);
+                if (tmp[i] === undefined) $node.removeAttr('style');
+                else $node.attr('style', tmp[i]);
+            });
+        }
+        else
+        {
+            result = el['offset' + name] - this._adjustResultHeightOrWidth(type, el, adjust);
+        }
+
+        return result;
+    },
+    _adjustResultHeightOrWidth: function(type, el, adjust)
+    {
+        if (!el || adjust === false) return 0;
+
+        var fix = 0;
+        var style = getComputedStyle(el, null);
+        var isBorderBox = (style.boxSizing === "border-box");
+
+        if (type === 'height')
+        {
+            if (adjust === 'inner' || (adjust === 'normal' && isBorderBox))
+            {
+                fix += (parseFloat(style.borderTopWidth) || 0) + (parseFloat(style.borderBottomWidth) || 0);
+            }
+
+            if (adjust === 'outer') fix -= (parseFloat(style.marginTop) || 0) + (parseFloat(style.marginBottom) || 0);
+        }
+        else
+        {
+            if (adjust === 'inner' || (adjust === 'normal' && isBorderBox))
+            {
+                fix += (parseFloat(style.borderLeftWidth) || 0) + (parseFloat(style.borderRightWidth) || 0);
+            }
+
+            if (adjust === 'outer') fix -= (parseFloat(style.marginLeft) || 0) + (parseFloat(style.marginRight) || 0);
+        }
+
+        return fix;
+    },
+    _getDim: function(type)
+    {
+        var node = this.get();
+        return (node.nodeType === 3) ? { top: 0, left: 0 } : this['_get' + type](node);
+    },
+    _getPosition: function(node)
+    {
+        return { top: node.offsetTop, left: node.offsetLeft };
+    },
+    _getOffset: function(node)
+    {
+        var rect = node.getBoundingClientRect();
+        var doc = node.ownerDocument;
+		var docElem = doc.documentElement;
+		var win = doc.defaultView;
+
+		return {
+			top: rect.top + win.pageYOffset - docElem.clientTop,
+			left: rect.left + win.pageXOffset - docElem.clientLeft
+		};
+    },
+    _getSibling: function(selector, method)
+    {
+        selector = (selector && selector.dom) ? selector.get() : selector;
+
+        var isNode = (selector && selector.nodeType);
+        var sibling;
+
+        this.each(function(node)
+        {
+            while (node = node[method])
+            {
+                if ((isNode && node === selector) || new Dom(node).is(selector))
+                {
+                    sibling = node;
+                    return;
+                }
+            }
+        });
+
+        return new Dom(sibling);
+    },
+    _toArray: function(obj)
+    {
+        if (obj instanceof NodeList)
+        {
+            var arr = [];
+            for (var i = 0; i < obj.length; i++)
+            {
+                arr[i] = obj[i];
+            }
+
+            return arr;
+        }
+        else if (obj === undefined) return [];
+        else
+        {
+            return (obj.dom) ? obj.nodes : obj;
+        }
+    },
+    _toParams: function(obj)
+    {
+        var params = '';
+        for (var key in obj)
+        {
+            params += '&' + this._encodeUri(key) + '=' + this._encodeUri(obj[key]);
+        }
+
+        return params.replace(/^&/, '');
+    },
+    _toObject: function(str)
+    {
+        return (new Function("return " + str))();
+    },
+    _encodeUri: function(str)
+    {
+        return encodeURIComponent(str).replace(/!/g, '%21').replace(/'/g, '%27').replace(/\(/g, '%28').replace(/\)/g, '%29').replace(/\*/g, '%2A').replace(/%20/g, '+');
+    },
+    _isNumber: function(str)
+    {
+        return !isNaN(str) && !isNaN(parseFloat(str));
+    },
+    _isObjectString: function(str)
+    {
+        return (str.search(/^{/) !== -1);
+    },
+    _getBooleanFromStr: function(str)
+    {
+        if (str === 'true') return true;
+        else if (str === 'false') return false;
+
+        return str;
+    },
+    _hasDisplayNone: function(el)
+    {
+        return (el.style.display === 'none') || ((el.currentStyle) ? el.currentStyle.display : getComputedStyle(el, null).display) === 'none';
+    }
+};
+// Wrapper
+var $K = {};
+
+// Globals
+$K.app = [];
+$K.version = '7.2.1';
+$K.options = {};
+$K.modules = {};
+$K.services = {};
+$K.plugins = {};
+$K.classes = {};
+$K.extends = {};
+$K.lang = {};
+$K.dom = function(selector, context) { return new Dom(selector, context); };
+$K.ajax = Ajax;
+$K.Dom = Dom;
+$K.env = {
+    'module': 'modules',
+    'service': 'services',
+    'plugin': 'plugins',
+    'class': 'classes',
+    'extend': 'extends'
+};
+
+// init class
+var KubeApp = function(options, args)
+{
+    return ($K.app = new App(options));
+};
+
+// init
+$K.init = function(options)
+{
+    return new KubeApp(options, [].slice.call(arguments, 1));
+};
+
+// api
+$K.api = function(name)
+{
+    var app = $K.app;
+    var args = [].slice.call(arguments, 1);
+
+    if (app)
+    {
+        args.unshift(name);
+        app.api.apply(app, args);
+    }
+};
+
+// add
+$K.add = function(type, name, obj)
+{
+    if (typeof $K.env[type] === 'undefined') return;
+
+    // translations
+    if (obj.translations)
+    {
+        $K.lang = $K.extend(true, {}, $K.lang, obj.translations);
+    }
+
+    // extend
+    if (type === 'extend')
+    {
+        $K[$K.env[type]][name] = obj;
+    }
+    else
+    {
+        // prototype
+        var F = function() {};
+        F.prototype = obj;
+
+        // extends
+        if (obj.extends)
+        {
+            for (var i = 0; i < obj.extends.length; i++)
+            {
+                $K.inherit(F, $K.extends[obj.extends[i]]);
+            }
+        }
+
+        $K[$K.env[type]][name] = F;
+    }
+};
+
+// add lang
+$K.addLang = function(lang, obj)
+{
+    if (typeof $K.lang[lang] === 'undefined')
+    {
+        $K.lang[lang] = {};
+    }
+
+    $K.lang[lang] = $K.extend($K.lang[lang], obj);
+};
+
+// create
+$K.create = function(name)
+{
+    var arr = name.split('.');
+    var args = [].slice.call(arguments, 1);
+
+    var type = 'classes';
+    if (typeof $K.env[arr[0]] !== 'undefined')
+    {
+        type = $K.env[arr[0]];
+        name = arr.slice(1).join('.');
+    }
+
+    // construct
+    var instance = new $K[type][name]();
+
+    instance._type = arr[0];
+    instance._name = name;
+
+    // init
+    if (instance.init)
+    {
+        var res = instance.init.apply(instance, args);
+
+        return (res) ? res : instance;
+    }
+
+    return instance;
+};
+
+// inherit
+$K.inherit = function(current, parent)
+{
+    var F = function () {};
+    F.prototype = parent;
+    var f = new F();
+
+    for (var prop in current.prototype)
+    {
+        if (current.prototype.__lookupGetter__(prop)) f.__defineGetter__(prop, current.prototype.__lookupGetter__(prop));
+        else f[prop] = current.prototype[prop];
+    }
+
+    current.prototype = f;
+    current.prototype.super = parent;
+
+    return current;
+};
+
+// error
+$K.error = function(exception)
+{
+    throw exception;
+};
+
+// extend
+$K.extend = function()
+{
+    var extended = {};
+    var deep = false;
+    var i = 0;
+    var length = arguments.length;
+
+    if (Object.prototype.toString.call( arguments[0] ) === '[object Boolean]')
+    {
+        deep = arguments[0];
+        i++;
+    }
+
+    var merge = function(obj)
+    {
+        for (var prop in obj)
+        {
+            if (Object.prototype.hasOwnProperty.call(obj, prop))
+            {
+                if (deep && Object.prototype.toString.call(obj[prop]) === '[object Object]') extended[prop] = $K.extend(true, extended[prop], obj[prop]);
+                else extended[prop] = obj[prop];
+            }
+        }
+    };
+
+    for (; i < length; i++ )
+    {
+        var obj = arguments[i];
+        merge(obj);
+    }
+
+    return extended;
+};
+var App = function(options)
+{
+    this.modules = {};
+    this.services = [];
+    this.queueStart = { 'service': {}, 'module': {} };
+    this.queueStop = { 'service': {}, 'module': {} };
+    this.started = false;
+    this.stopped = false;
+
+    // environment
+    this.namespace = 'kube';
+    this.dataNamespace = 'data-kube';
+    this.instancePrefix = 'kube-instance-';
+    this.rootOpts = options;
+    this.$win = $K.dom(window);
+    this.$doc = $K.dom(document);
+    this.$body = $K.dom('body');
+
+    // core services
+    this.coreServices = ['options', 'lang', 'utils'];
+    this.bindableServices = ['opts', 'lang', 'utils', '$win', '$doc', '$body']
+
+    this.utils = $K.create('service.utils', this);
+    this.opts = $K.create('service.options', this, 'global', options);
+    this.lang = $K.create('service.lang', this);
+
+    this.appcallback = new App.Callback(this);
+    this.appstarter = new App.Starter(this);
+    this.appbuilder = new App.Builder(this);
+    this.appbroadcast = new App.Broadcast(this);
+    this.appapi = new App.Api(this);
+
+    this.build();
+    this.start();
+};
+
+App.prototype = {
+
+    // build
+    build: function()
+    {
+        this.appbuilder.build();
+    },
+
+    // start & stop
+    start: function()
+    {
+        // start
+        this.stopped = false;
+        this.broadcast('start', this);
+
+        // starter
+        this.appstarter.start();
+
+        // started
+        this.broadcast('started', this);
+        this.started = true;
+    },
+    stop: function()
+    {
+        this.started = false;
+        this.stopped = true;
+
+        // stop
+        this.broadcast('stop', this);
+
+        // stopper
+        this.appstarter.stop();
+
+        // stopped
+        this.broadcast('stopped', this);
+    },
+
+    // starter & stopper
+    starter: function(instance, priority)
+    {
+        var type = (instance._type !== 'service') ? 'module' : instance._type;
+        this.queueStart[type][priority] = instance._name;
+    },
+    stopper: function(instance, priority)
+    {
+        var type = (instance._type !== 'service') ? 'module' : instance._type;
+        this.queueStop[type][priority] = instance._name;
+    },
+
+    // started & stopped
+    isStarted: function()
+    {
+        return this.started;
+    },
+    isStopped: function()
+    {
+        return this.stopped;
+    },
+
+    // broadcast
+    broadcast: function(name, sender)
+    {
+        this.appbroadcast.trigger(name, sender, [].slice.call(arguments, 2));
+    },
+
+    // callback
+    on: function(name, func)
+    {
+        this.appcallback.add(name, func);
+    },
+    off: function(name, func)
+    {
+        this.appcallback.remove(name, func);
+    },
+
+    // api
+    api: function(name)
+    {
+        return this.appapi.trigger(name, [].slice.call(arguments, 1));
+    }
+};
+App.Module = function(app, $el, name, id)
+{
+    this.app = app;
+    this.instancePrefix = app.instancePrefix;
+
+    // local
+    this.eventTypes = ['click', 'mouseover', 'mouseout', 'mousedown', 'mouseup', 'mousemove',
+                       'keydown', 'keyup', 'focus', 'submit', 'change', 'contextmenu', 'input'];
+
+    // build
+    return this._build($el, name, id);
+};
+
+App.Module.prototype = {
+    _build: function($el, name, id)
+    {
+        var instance = $el.dataget(this.instancePrefix + name);
+        if (!instance && typeof $K.modules[name] !== 'undefined')
+        {
+            var context = new App.Context(this.app, $el, id);
+            var $target = context.getTarget();
+
+            instance = $K.create('module.' + name, this.app, context);
+            instance._id = id;
+
+            $el.dataset(this.instancePrefix + name, instance);
+            $el.attr('data-loaded', true);
+
+            // delegate events
+            this._delegateModuleEvents(instance, $el, name);
+
+            // delegate commands
+            this._delegateModuleCommands(instance, $el);
+
+            if ($target.is())
+            {
+                this._delegateModuleCommands(instance, $target);
+            }
+        }
+
+        return instance;
+    },
+
+    _delegateModuleCommands: function(instance, $el)
+    {
+        $el.find('[data-command]').each(function(node)
+        {
+            this._delegateCommand(instance, node, node.getAttribute('data-command'));
+
+        }.bind(this));
+    },
+    _delegateCommand: function(instance, node, command)
+    {
+        if (typeof instance._eventCommands === 'undefined') instance._eventCommands = [];
+
+        var self = this;
+        var $node = $K.dom(node);
+
+        instance._eventCommands.push($node);
+
+        $node.on('click.generatedcommand', function(e)
+        {
+            e.preventDefault();
+
+            var args = $node.data();
+            args.event = e;
+
+            self.app.broadcast(command, instance, $node, args);
+        });
+    },
+    _delegateModuleEvents: function(instance, $el, name)
+    {
+        $el.find('[data-type]').each(function(node)
+        {
+            var arr = node.getAttribute('data-type').split('.');
+            var type = arr[0];
+            var scope = name;
+
+            if (arr.length === 2)
+            {
+                scope = arr[0];
+                type = arr[1];
+            }
+
+            if (scope === name)
+            {
+                this._delegateEvent(instance, name, node, type);
+            }
+
+        }.bind(this));
+    },
+    _delegateEvent: function(instance, name, node, type)
+    {
+        if (typeof instance._eventNodes === 'undefined') instance._eventNodes = [];
+
+        var $node = $K.dom(node);
+        var callback = function(e, eventType, element, type, args)
+        {
+            return instance['on' + eventType].call(instance, e, element, type, args);
+        };
+
+        instance._eventNodes.push($node);
+
+        for (var i = 0; i < this.eventTypes.length; i++)
+        {
+            var event = 'on' + this.eventTypes[i];
+            if (typeof instance[event] === 'function')
+            {
+                $node.on(this.eventTypes[i] + '.generatedevent', function(e)
+                {
+                    var args = $node.data();
+                    callback(e, e.type, this, type, args);
+                });
+            }
+        }
+    }
+};
+App.Context = function(app, $el, name)
+{
+    this.app = app;
+    this.opts = app.opts;
+
+    // build
+    this.$element = this._buildElement($el);
+    this.params = this._buildParams();
+    this.name = this._buildName(name);
+    this.$target = this._buildTarget();
+};
+
+App.Context.prototype = {
+
+    // public
+    getElement: function()
+    {
+        return this.$element;
+    },
+    getTarget: function()
+    {
+        return this.$target;
+    },
+    getParams: function(defaults)
+    {
+        return (defaults) ? $K.extend({}, defaults, this.params) : this.params;
+    },
+    getName: function()
+    {
+        return this.name;
+    },
+
+    // private
+    _buildName: function(name)
+    {
+        return (this.params.name) ? this.params.name : name;
+    },
+    _buildParams: function()
+    {
+        return $K.create('service.options', this.app, 'element', this.$element);
+    },
+    _buildElement: function($el)
+    {
+        return new App.Element(this.app, $el);
+    },
+    _buildTarget: function()
+    {
+        return new App.Target(this.app, this.params.target);
+    }
+};
+App.Callback = function(app)
+{
+    this.app = app;
+    this.opts = app.opts;
+
+    // local
+    this.callbacks = {};
+
+    // build
+    this._build();
+};
+
+App.Callback.prototype = {
+    stop: function()
+    {
+        this.callbacks = {};
+    },
+    add: function(name, handler)
+    {
+        if (typeof this.callbacks[name] === 'undefined') this.callbacks[name] = [];
+
+        this.callbacks[name].push(handler);
+    },
+    remove: function(name, handler)
+    {
+        if (handler === undefined)
+        {
+            delete this.callbacks[name];
+        }
+        else
+        {
+            for (var i = 0; i < this.callbacks[name].length; i++)
+            {
+                this.callbacks[name].splice(i, 1);
+            }
+
+            if (this.callbacks[name].length === 0)
+            {
+                delete this.callbacks[name];
+            }
+        }
+    },
+    trigger: function(name, args)
+    {
+        if (typeof this.callbacks[name] === 'undefined') return;
+
+        for (var i = 0; i < this.callbacks[name].length; i++)
+        {
+            this.callbacks[name][i].apply(this.app, args);
+        }
+    },
+
+    // private
+    _build: function()
+    {
+        if (this.opts.callbacks)
+        {
+            for (var name in this.opts.callbacks)
+            {
+                if (typeof this.opts.callbacks[name] === 'function')
+                {
+                    if (typeof this.callbacks[name] === 'undefined') this.callbacks[name] = [];
+                    this.callbacks[name].push(this.opts.callbacks[name]);
+                }
+                else
+                {
+                    for (var key in this.opts.callbacks[name])
+                    {
+                        if (typeof this.callbacks[name + '.' + key] === 'undefined') this.callbacks[name + '.' + key] = [];
+                        this.callbacks[name + '.' + key].push(this.opts.callbacks[name][key]);
+                    }
+
+                }
+            }
+        }
+    }
+};
+App.Element = function(app, $el)
+{
+    this.app = app;
+    this.parse($el);
+};
+
+App.Element.prototype = {
+    isOpened: function()
+    {
+        return !this.isClosed();
+    },
+    isClosed: function()
+    {
+        return (this.hasClass('is-hidden') || this.css('display') === 'none');
+    }
+};
+
+$K.inherit(App.Element, Dom.prototype);
+App.Target = function(app, selector)
+{
+    this.app = app;
+    this.parse(selector);
+};
+
+App.Target.prototype = {
+    isOpened: function()
+    {
+        return !this.isClosed();
+    },
+    isClosed: function()
+    {
+        var self = this;
+        var count = 0;
+        var len = this.length;
+        this.each(function(node)
+        {
+            var $node = $K.dom(node);
+            if ($node.hasClass('is-hidden') || $node.css('display') === 'none')
+            {
+                count++;
+            }
+        });
+
+        return (count === len);
+    }
+};
+
+$K.inherit(App.Target, Dom.prototype);
+App.Api = function(app)
+{
+    this.app = app;
+    this.modules = app.modules;
+};
+
+App.Api.prototype = {
+    trigger: function(name, args)
+    {
+        var arr = name.split('.');
+        var isNamed = (arr.length === 3);
+        var isApp = (arr.length === 1);
+        var isCallback = (arr[0] === 'on' || arr[0] === 'off');
+
+        var module = arr[0];
+        var method = arr[1];
+        var id = false;
+
+        if (isApp)
+        {
+            module = false;
+            method = arr[0];
+        }
+        else if (isNamed)
+        {
+            method = arr[2];
+            id = arr[1];
+        }
+
+        // app
+        if (isApp)
+        {
+            if (typeof this.app[method] === 'function')
+            {
+                return this._call(this.app, method, args);
+            }
+        }
+        // callback
+        else if (isCallback)
+        {
+            return (module === 'on') ? this.app.on(module, args[0]) : this.app.off(module, args[0] || undefined);
+        }
+        else
+        {
+            // service
+            if (this._isInstanceExists(this.app, module))
+            {
+                return this._call(this.app[module], method, args);
+            }
+            // module / plugin / addon
+            else if (this._isInstanceExists(this.modules, module))
+            {
+                this._doApi(module, method, id, args)
+            }
+        }
+    },
+
+    // private
+    _isInstanceExists: function(obj, name)
+    {
+        return (typeof obj[name] !== 'undefined');
+    },
+    _doApi: function(module, method, id, args)
+    {
+        for (var key in this.modules[module])
+        {
+            if (id === false || id === key)
+            {
+                var instance = this.modules[module][key];
+                this._call(instance, method, args);
+            }
+        }
+    },
+    _call: function(instance, method, args)
+    {
+        if (typeof instance[method] === 'function')
+        {
+            return instance[method].apply(instance, args);
+        }
+    }
+};
+App.Broadcast = function(app)
+{
+    this.app = app;
+    this.modules = app.modules;
+    this.callback = app.appcallback;
+};
+
+App.Broadcast.prototype = {
+    trigger: function(name, sender, args)
+    {
+        if (Array.isArray(name))
+        {
+            sender._id = name[0];
+            name = name[1];
+        }
+        else if (sender && typeof sender.context !== 'undefined')
+        {
+            sender._id = sender.context.getName();
+        }
+
+        args.unshift(sender);
+
+        for (var moduleName in this.modules)
+        {
+            for (var key in this.modules[moduleName])
+            {
+                var instance = this.modules[moduleName][key];
+                this._call(instance, name, args, sender);
+            }
+        }
+
+        this.callback.trigger(name, args);
+    },
+
+
+    // private
+    _call: function(instance, name, args, sender)
+    {
+        // new
+        if (typeof instance['onmessage'] !== 'undefined')
+        {
+            var arr = name.split('.');
+            var func = instance['onmessage'][arr[0]];
+
+            if (arr.length === 1 && typeof func === 'function')
+            {
+                func.apply(instance, args);
+            }
+            else if (arr.length === 2 && typeof func !== 'undefined' && typeof func[arr[1]] === 'function')
+            {
+                func[arr[1]].apply(instance, args);
+            }
+        }
+
+        // 7.1.1 compatibility
+        var arr = name.split('.');
+        if (arr.length === 1)
+        {
+            if (typeof instance['on' + name] === 'function')
+            {
+                instance['on' + name].apply(instance, args);
+            }
+        }
+        else
+        {
+            arr[0] = 'on' + arr[0];
+
+            // without id
+            var func = this.app.utils.checkProperty(instance, arr);
+            if (typeof func === 'function')
+            {
+                func.apply(instance, args);
+            }
+
+            // with id
+            if (sender && sender._id)
+            {
+                var idArr = [arr[0], sender._id, arr[1]];
+                var func = this.app.utils.checkProperty(instance, idArr);
+                if (typeof func === 'function')
+                {
+                    func.apply(instance, args);
+                }
+            }
+        }
+    }
+};
+App.Builder = function(app)
+{
+    this.app = app;
+    this.opts = app.opts;
+    this.$doc = app.$doc;
+    this.dataNamespace = app.dataNamespace;
+};
+
+App.Builder.prototype = {
+    build: function()
+    {
+        this._buildServices();
+        this._buildModules();
+    },
+
+    // private
+    _buildServices: function()
+    {
+        var services = [];
+        var startableServices = [];
+        for (var name in $K.services)
+        {
+            if (this.app.coreServices.indexOf(name) === -1)
+            {
+                this.app[name] = $K.create('service.' + name, this.app);
+                this.app.bindableServices.push(name);
+                services.push(name);
+                startableServices.push(name);
+            }
+        }
+
+        // make core services to use another services
+        for (var i = 0; i < this.app.coreServices.length; i++)
+        {
+            var name = this.app.coreServices[i];
+            if (name !== 'options') services.push(name);
+        }
+
+        // binding
+        for (var i = 0; i < services.length; i++)
+        {
+            var service = services[i];
+            for (var z = 0; z < this.app.bindableServices.length; z++)
+            {
+                var inj = this.app.bindableServices[z];
+                if (service !== inj)
+                {
+                    this.app[service][inj] = this.app[inj];
+                }
+            }
+        }
+
+        this.app.services = startableServices;
+    },
+    _buildModules: function()
+    {
+        this.$doc.find('[' + this.dataNamespace + ']').each(function(node, i)
+        {
+            var $el = $K.dom(node);
+            var name = $el.attr(this.dataNamespace);
+            var id = ($el.attr('id')) ? $el.attr('id') : name + '-' + i;
+            id = ($el.attr('data-name')) ? $el.attr('data-name') : id;
+            var instance = new App.Module(this.app, $el, name, id);
+
+            this._storeElementModule(instance, name, id);
+
+        }.bind(this));
+    },
+    _storeElementModule: function(instance, name, id)
+    {
+        if (instance)
+        {
+            if (typeof this.app.modules[name] === 'undefined')
+            {
+                this.app.modules[name] = {};
+            }
+
+            this.app.modules[name][id] = instance;
+        }
+    }
+};
+App.Starter = function(app)
+{
+    this.app = app;
+    this.queue = {
+        'start': app.queueStart,
+        'stop': app.queueStop
+    };
+    this.priority = {
+        'start': { 'service': [], 'module': [] },
+        'stop': { 'service': [], 'module': [] }
+    };
+};
+
+App.Starter.prototype = {
+    start: function()
+    {
+        this._stopStart('service', 'start');
+        this._stopStart('module', 'start');
+    },
+    stop: function()
+    {
+        this._stopStart('service', 'stop');
+        this._stopStart('module', 'stop');
+    },
+
+    // private
+    _stopStart: function(type, method)
+    {
+        // priority
+        var queue = this.queue[method][type];
+        for (var key in queue)
+        {
+            var name = queue[key];
+            var instance = (type === 'service') ? this.app[name] : this.app.modules[name];
+
+            this._callInstances(type, method, instance);
+            this.priority[method][type].push(name);
+        }
+
+        // common
+        var modules = (type === 'service') ? this.app.services : this.app.modules;
+        for (var key in modules)
+        {
+            var name = (type === 'service') ? modules[key] : key;
+
+            if (this.priority[method][type].indexOf(name) === -1)
+            {
+                var instance = (type === 'service') ? this.app[name] : modules[name];
+                this._callInstances(type, method, instance);
+            }
+        }
+    },
+    _stopModuleEvents: function(method, instance)
+    {
+        if (method === 'stop')
+        {
+            if (typeof instance._eventNodes !== 'undefined')
+            {
+                for (var i = 0; i < instance._eventNodes.length; i++)
+                {
+                    instance._eventNodes[i].off('.generatedevent');
+                }
+            }
+
+            if (typeof instance._eventCommands !== 'undefined')
+            {
+                for (var i = 0; i < instance._eventCommands.length; i++)
+                {
+                    instance._eventCommands[i].off('.generatedcommand');
+                }
+            }
+        }
+    },
+    _callInstances: function(type, method, instance)
+    {
+        if (type === 'service')
+        {
+            this._call(instance, method);
+        }
+        else
+        {
+            for (var key in instance)
+            {
+                this._call(instance[key], method);
+                this._stopModuleEvents(method, instance[key]);
+            }
+        }
+    },
+    _call: function(instance, method, args)
+    {
+        if (typeof instance[method] === 'function')
+        {
+            return instance[method].apply(instance, args);
+        }
+    }
+};
+$K.add('extend', 'dom', $K.Dom.prototype);
+$K.add('service', 'animate', {
+    init: function(app)
+    {
+        this.app = app;
+
+        // local
+        this.animationOpt = true;
+    },
+    run: function(element, animation, callback)
+    {
+        return new $K.AnimatePlay(this.app, element, animation, callback, this.animationOpt);
+    },
+    remove: function(element)
+    {
+        this.$el = $K.dom(element);
+        var effect = this.$el.attr('kube-animate-effect');
+
+		this.$el.hide();
+        this.$el.removeClass(effect);
+        this.$el.off('animationend webkitAnimationEnd');
+    }
+});
+
+$K.AnimatePlay = function(app, element, animation, callback, animationOpt)
+{
+    this.hidableEffects = ['fadeOut', 'flipOut', 'slideUp', 'zoomOut', 'slideOutUp', 'slideOutRight', 'slideOutLeft'];
+    this.prefix = 'kube-';
+    this.prefixes = ['', '-webkit-'];
+
+    this.utils = app.utils;
+    this.$el = $K.dom(element);
+    this.$body = $K.dom('body');
+    this.callback = callback;
+    this.animation = (!animationOpt) ? this._buildAnimationOff(animation) : animation;
+
+    this._setHeight();
+
+    // animate
+    if (this._isAnimate()) this._animate();
+    else                   this._toggle();
+};
+
+$K.AnimatePlay.prototype = {
+    _setHeight: function()
+    {
+        if (this.animation === 'slideUp' || this.animation === 'slideDown')
+        {
+            this.$el.height(this.$el.height());
+        }
+    },
+	_buildAnimationOff: function(animation)
 	{
-		return this.each(function()
+        return (this._isHidable(animation)) ? 'hide' : 'show';
+	},
+	_isAnimate: function()
+	{
+    	return (this.animation !== 'show' && this.animation !== 'hide');
+	},
+	_isHidable: function(effect)
+	{
+    	return (this.hidableEffects.indexOf(effect) !== -1);
+	},
+	_clean: function()
+	{
+    	this.$body.removeClass('is-no-scroll-x');
+		this.$el.removeClass(this.prefix + this.animation);
+		this.$el.removeAttr('kube-animate-effect');
+	},
+    _toggle: function()
+    {
+		if (this.animation === 'show') this.$el.show();
+		else                           this.$el.hide();
+
+		if (typeof this.callback === 'function') this.callback(this);
+    },
+	_animate: function()
+	{
+        this.$body.addClass('is-no-scroll-x');
+        this.$el.show();
+
+	    this.$el.addClass(this.prefix + this.animation);
+	    this.$el.attr('kube-animate-effect', this.prefix + this.animation);
+		this._complete();
+	},
+	_complete: function()
+	{
+
+		this.$el.one('animationend webkitAnimationEnd', function(e)
 		{
-			$.data(this, 'accordion', {});
-			$.data(this, 'accordion', Accordion(this, options));
-		});
+    		if (this.$el.hasClass(this.prefix + this.animation)) this._clean();
+			if (this._isHidable(this.animation)) this.$el.hide();
 
-	};
+			if (this.animation === 'slideUp' || this.animation === 'slideDown') this.$el.css('height', '');
+			if (typeof this.callback === 'function') this.callback(this.$el);
 
-	// Initialization
-	function Accordion(el, options)
-	{
-		return new Accordion.prototype.init(el, options);
+		}.bind(this));
 	}
+};
+$K.add('service', 'transition', {
+    init: function(app)
+    {
+        this.transitionOpt = true;
+    },
+    run: function(element, params)
+    {
+        return new $K.TransitionPlay(params, element, this.transitionOpt);
 
-	$.Accordion = Accordion;
-	$.Accordion.NAME = 'accordion';
-	$.Accordion.VERSION = '1.0';
-	$.Accordion.opts = {
+    },
+    remove: function(element)
+    {
+        this.$el = $K.dom(element);
 
-		scroll: false,
-		collapse: true,
-		toggle: true,
-		titleClass: '.accordion-title',
-		panelClass: '.accordion-panel'
+    	var classname = this.$el.attr('kube-transition-class');
+        if (classname)
+        {
+            this.$el.removeClass(classname);
+            this.$el.removeAttr('kube-transition-class');
+        }
 
-	};
+    	var css = this.$el.attr('kube-transition-css');
+        if (css)
+        {
+            var names = css.split(',');
+            for (var i = 0; i < names.length; i++)
+            {
+                this.$el.css(names[i], '');
+            }
 
-	// Functionality
-	Accordion.fn = $.Accordion.prototype = {
+            this.$el.removeAttr('kube-transition-css');
+        }
 
-		// Initialization
-		init: function(el, options)
-		{
-			this.$element = el !== false ? $(el) : false;
-			this.loadOptions(options);
-
-			this.build();
-
-			if (this.opts.collapse)
-			{
-				this.closeAll();
-			}
-			else
-			{
-				this.openAll();
-			}
-
-			this.loadFromHash();
-		},
-		loadOptions: function(options)
-		{
-			this.opts = $.extend(
-				{},
-				$.extend(true, {}, $.Accordion.opts),
-				this.$element.data(),
-				options
-			);
-		},
-		setCallback: function(type, e, data)
-		{
-			var events = $._data(this.$element[0], 'events');
-			if (events && typeof events[type] != 'undefined')
-			{
-				var value = [];
-				var len = events[type].length;
-				for (var i = 0; i < len; i++)
-				{
-					var namespace = events[type][i].namespace;
-					if (namespace == 'tools.' + $.Accordion.NAME || namespace == $.Accordion.NAME + '.tools')
-					{
-						var callback = events[type][i].handler;
-						value.push((typeof data == 'undefined') ? callback.call(this, e) : callback.call(this, e, data));
-					}
-				}
-
-				if (value.length == 1) return value[0];
-				else return value;
-			}
-
-			return (typeof data == 'undefined') ? e : data;
-
-		},
-		getTitles: function()
-		{
-			this.titles = this.$element.find(this.opts.titleClass);
-			this.titles.append($('<span />').addClass('accordion-toggle'));
-			this.titles.each(function()
-			{
-				var $el = $(this);
-				$el.attr('rel',  $el.attr('href'));
-			});
-
-		},
-		getPanels: function()
-		{
-			this.panels = this.$element.find(this.opts.panelClass);
-		},
-		build: function()
-		{
-			this.getTitles();
-			this.getPanels();
-
-			this.titles.on('click', $.proxy(this.toggle, this));
-		},
-		loadFromHash: function()
-		{
-			if (top.location.hash === '') return;
-			if (!this.opts.scroll) return;
-			if (this.$element.find('[rel=' + top.location.hash +']').size() === 0) return;
-
-			this.open(top.location.hash);
-			this.scrollTo(top.location.hash);
-		},
-		toggle: function(e)
-		{
-			e.preventDefault();
-			e.stopPropagation();
-
-			var hash = $(e.target).attr('rel');
-
-			if (this.opts.toggle)
-			{
-				var $target = $(e.target);
-				var $title = $target.closest(this.opts.titleClass);
-				var opened = $title.hasClass('accordion-title-opened');
-
-				this.closeAll();
-
-				if (!opened) this.open(hash);
-			}
-			else
-			{
-				if ($('[rel=' + hash + ']').hasClass('accordion-title-opened'))
-				{
-					this.close(hash);
-				}
-				else
-				{
-					this.open(hash);
-				}
-			}
-		},
-		open: function(hash)
-		{
-			this.$title = $('[rel=' + hash + ']');
-			this.$panel = $(hash);
-
-			top.location.hash = hash;
-
-			this.setStatus('open');
-			this.$panel.show();
-
-			this.setCallback('opened', this.$title, this.$panel);
-		},
-		close: function(hash)
-		{
-			this.$title = $('[rel=' + hash + ']');
-			this.$panel = $(hash);
-
-			this.setStatus('close');
-			this.$panel.hide();
-
-			this.setCallback('closed', this.$title, this.$panel);
-		},
-		setStatus: function(command)
-		{
-			var items = { toggle: this.$title.find('span.accordion-toggle'), title: this.$title, panel: this.$panel };
-
-			$.each(items, function(i, s)
-			{
-				if (command == 'close')
-				{
-					s.removeClass('accordion-' + i + '-opened').addClass('accordion-' + i + '-closed');
-				}
-				else
-				{
-					s.removeClass('accordion-' + i + '-closed').addClass('accordion-' + i + '-opened');
-				}
-			});
-		},
-		openAll: function()
-		{
-			this.titles.each($.proxy(function(i, s)
-			{
-				this.open($(s).attr('rel'));
-
-			}, this));
-		},
-		closeAll: function()
-		{
-			this.titles.each($.proxy(function(i, s)
-			{
-				this.close($(s).attr('rel'));
-
-			}, this));
-		},
-		scrollTo: function(id)
-		{
-			$('html, body').animate(
-			{
-				scrollTop: $(id).offset().top - 50
-
-			}, 500);
-		}
-	};
-
-	$(window).on('load.tools.accordion', function()
-	{
-		$('[data-tools="accordion"]').accordion();
-	});
-
-	// constructor
-	Accordion.prototype.init.prototype = Accordion.prototype;
+        this.$el.off('transitionend webkitTransitionEnd');
+    }
+});
 
 
-})(jQuery);
-/*
-	Autocomplete Tool
-
-	http://imperavi.com/kube/
-
-	Copyright (c) 2009-2014, Imperavi LLC.
-*/
-(function($)
+$K.TransitionPlay = function(params, element, transitionOpt)
 {
-	// Plugin
-	$.fn.autocomplete = function(options)
+    this.$el = $K.dom(element);
+    this.params = params;
+
+    this._transition();
+};
+
+$K.TransitionPlay.prototype = {
+ 	_transition: function()
 	{
-		return this.each(function()
+	    if (this.params.classname)
+	    {
+    	    this.$el.addClass(this.params.classname);
+    	    this.$el.attr('kube-transition-class', this.params.classname);
+        }
+
+	    if (this.params.css)
+	    {
+    	    this.$el.css(this.params.css);
+
+    	    var names = [];
+    	    for (var key in this.params.css)
+    	    {
+        	    names.push(key);
+    	    }
+
+    	    this.$el.attr('kube-transition-css', names.join(','))
+        }
+
+		this._complete();
+	},
+	_complete: function()
+	{
+		this.$el.one('transitionend webkitTransitionEnd', function(e)
 		{
-			$.data(this, 'autocomplete', {});
-			$.data(this, 'autocomplete', Autocomplete(this, options));
-		});
+			if (typeof this.params.callback === 'function') this.params.callback(this.$el);
 
-	};
-
-	// Initialization
-	function Autocomplete(el, options)
-	{
-		return new Autocomplete.prototype.init(el, options);
+		}.bind(this));
 	}
+};
+$K.add('service', 'lang', {
+    init: function(app)
+    {
+        this.app = app;
+        this.opts = app.opts;
 
-	$.Autocomplete = Autocomplete;
-	$.Autocomplete.NAME = 'autocomplete';
-	$.Autocomplete.VERSION = '1.0';
-	$.Autocomplete.opts = {
+        var lang = (this.opts.lang) ? this.opts.lang : 'en';
 
-		url: false,
-		min: 2,
-		set: 'value' // value or id
-
-	};
-
-	// Functionality
-	Autocomplete.fn = $.Autocomplete.prototype = {
-
-		// Initialization
-		init: function(el, options)
-		{
-			this.$element = el !== false ? $(el) : false;
-			this.loadOptions(options);
-
-			this.build();
-		},
-		loadOptions: function(options)
-		{
-			this.opts = $.extend(
-				{},
-				$.extend(true, {}, $.Autocomplete.opts),
-				this.$element.data(),
-				options
-			);
-		},
-		setCallback: function(type, e, data)
-		{
-			var events = $._data(this.$element[0], 'events');
-			if (events && typeof events[type] != 'undefined')
-			{
-				var value = [];
-				var len = events[type].length;
-				for (var i = 0; i < len; i++)
-				{
-					var namespace = events[type][i].namespace;
-					if (namespace == 'tools.' + $.Autocomplete.NAME || namespace == $.Autocomplete.NAME + '.tools')
-					{
-						var callback = events[type][i].handler;
-						value.push((typeof data == 'undefined') ? callback.call(this, e) : callback.call(this, e, data));
-					}
-				}
-
-				if (value.length == 1) return value[0];
-				else return value;
-			}
-
-			return (typeof data == 'undefined') ? e : data;
-
-		},
-		build: function()
-		{
-			this.result = $('<ul class="autocomplete">').hide();
-
-			this.pos = this.$element.offset();
-			this.elementHeight = this.$element.innerHeight();
-
-			$('body').append(this.result);
-
-			this.placement = (($(document).height() - (this.pos.top + this.elementHeight)) < this.result.height()) ? 'top' : 'bottom';
-			$(document).on('click', $.proxy(this.hide, this));
-
-			this.$element.on('keyup', $.proxy(function(e)
-			{
-				var value = this.$element.val();
-				if (value.length >= this.opts.min)
-				{
-					this.$element.addClass('autocomplete-in');
-					this.result.addClass('autocomplete-open');
-
-					this.listen(e);
-				}
-				else
-				{
-					this.hide();
-				}
-
-			}, this));
-		},
-		lookup: function()
-		{
-			$.ajax({
-				url: this.opts.url,
-				type: 'post',
-				data: this.$element.attr('name') + '=' + this.$element.val(),
-				success: $.proxy(function(json)
-				{
-					var data = $.parseJSON(json);
-
-					this.result.html('');
-
-					$.each(data, $.proxy(function(i,s)
-					{
-						var li = $('<li>');
-						var a = $('<a href="#" rel="' + s.id + '">').html(s.value).on('click', $.proxy(this.set, this));
-
-						li.append(a);
-						this.result.append(li);
-
-					}, this));
-
-					var top = (this.placement === 'top') ? (this.pos.top - this.result.height() - this.elementHeight) : (this.pos.top + this.elementHeight);
-
-					this.result.css({ top: top + 'px', left: this.pos.left + 'px' });
-					this.result.show();
-					this.active = false;
-
-				}, this)
-			});
-
-		},
-		listen: function(e)
-		{
-			if (!this.$element.hasClass('autocomplete-in')) return;
-
-			e.stopPropagation();
-			e.preventDefault();
-
-			switch(e.keyCode)
-			{
-				case 40: // down arrow
-					this.select('next');
-				break;
-
-				case 38: // up arrow
-					this.select('prev');
-				break;
-
-				case 13: // enter
-					this.set();
-				break;
-
-				case 27: // escape
-					this.hide();
-				break;
-
-				default:
-					this.lookup();
-				break;
-			}
-
-		},
-		select: function(type)
-		{
-			var $links = this.result.find('a');
-			var size = $links.size();
-
-			var $active = this.result.find('a.active');
-			$active.removeClass('active');
-
-			var $item = (type === 'next') ? $active.parent().next().children('a') : $active.parent().prev().children('a');
-			if ($item.size() === 0)
-			{
-				$item = (type === 'next') ? $links.eq(0) : $links.eq(size-1);
-			}
-
-			$item.addClass('active');
-			this.active = $item;
-		},
-		set: function(e)
-		{
-			var $el = $(this.active);
-			if (e)
-			{
-				e.preventDefault();
-				$el = $(e.target);
-			}
-
-			var id = $el.attr('rel');
-			var value = $el.html();
-
-			if (this.opts.set == 'value')
-			{
-				this.$element.val(value);
-			}
-			else
-			{
-				this.$element.val(id);
-			}
-
-			this.setCallback('set', id, value);
-
-
-			this.hide();
-		},
-		hide: function(e)
-		{
-			if (e && ($(e.target).hasClass('autocomplete-in') || $(e.target).hasClass('autocomplete-open') || $(e.target).parents().hasClass('autocomplete-open')))
-			{
-				return;
-			}
-
-			this.$element.removeClass('autocomplete-in');
-			this.result.removeClass('autocomplete-open');
-			this.result.hide();
-		}
-	};
-
-	$(window).on('load.tools.autocomplete', function()
+        // build
+        this.vars = this.build(lang);
+    },
+	build: function(lang)
 	{
-		$('[data-tools="autocomplete"]').autocomplete();
-	});
+    	lang = ($K.lang[lang] === undefined) ? 'en' : lang;
 
-	// constructor
-	Autocomplete.prototype.init.prototype = Autocomplete.prototype;
+        return ($K.lang[lang] !== undefined) ? $K.lang[lang] : [];
+	},
+    rebuild: function(lang)
+    {
+        this.opts.lang = lang;
+        this.vars = this.build(lang);
+    },
+    extend: function(obj)
+    {
+        this.vars = $K.extend(this.vars, obj);
+    },
+    parse: function(str)
+    {
+        if (str === undefined)
+        {
+            return '';
+        }
 
+        var matches = str.match(/## (.*?) ##/g);
+        if (matches)
+        {
+            for (var i = 0; i < matches.length; i++)
+            {
+                var key = matches[i].replace(/^##\s/g, '').replace(/\s##$/g, '');
+                str = str.replace(matches[i], this.get(key));
+            }
+        }
 
-})(jQuery);
-/*
-	Buttons Tool
-
-	http://imperavi.com/kube/
-
-	Copyright (c) 2009-2014, Imperavi LLC.
-*/
-(function($)
-{
-	// Plugin
-	$.fn.buttons = function(options)
+        return str;
+    },
+	get: function(name)
 	{
-		return this.each(function()
-		{
-			$.data(this, 'buttons', {});
-			$.data(this, 'buttons', Buttons(this, options));
-		});
-
-	};
-
-	// Initialization
-	function Buttons(el, options)
-	{
-		return new Buttons.prototype.init(el, options);
+		return (typeof this.vars[name] !== 'undefined') ? this.vars[name] : '';
 	}
+});
+$K.add('service', 'options', {
+    init: function(app, type, opts)
+    {
+        this.app = app;
+        this.utils = app.utils;
 
-	$.Buttons = Buttons;
-	$.Buttons.NAME = 'buttons';
-	$.Buttons.VERSION = '1.0';
-	$.Buttons.opts = {
+        return (type === 'global') ? this._build(opts) : this._buildElement(opts);
+    },
+    _build: function(opts)
+    {
+        return (opts) ? this._extendFromElements(opts) : {};
+    },
+    _buildElement: function($el)
+    {
+		return $K.extend(
+			{},
+			$el.data()
+		);
+    },
+    _extendFromElements: function(options)
+    {
+        return (options.hasOwnProperty('append')) ? this.utils.extendData(options, options['append']) : options;
+    }
+});
+$K.add('service', 'response', {
+    init: function(app)
+    {
+        this.app = app;
+    },
+    // public
+    parse: function(str)
+    {
+    	if (str === '') return false;
 
-		className: 'btn',
-		activeClassName: 'btn-active',
-		target: false,
-		type: 'switch' // switch, toggle, segmented
-
-	};
-
-	// Functionality
-	Buttons.fn = $.Buttons.prototype = {
-
-		// Initialization
-		init: function(el, options)
+		var obj = (typeof str === 'object') ? str : JSON.parse(str);
+		if (obj[0] !== undefined)
 		{
-
-			this.$element = el !== false ? $(el) : false;
-			this.loadOptions(options);
-
-			this.buttons = this.getButtons();
-			this.value = this.getValue();
-
-			this.buttons.each($.proxy(function(i,s)
+			for (var item in obj)
 			{
-				var $s = $(s);
-
-				this.setDefault($s);
-
-				$s.click($.proxy(function(e)
-				{
-					e.preventDefault();
-
-					if (this.opts.type === 'segmented') this.setSegmented($s);
-					else if (this.opts.type === 'toggle') this.setToggle($s);
-					else this.setBasic($s);
-
-				}, this));
-
-			}, this));
-		},
-		loadOptions: function(options)
-		{
-			this.opts = $.extend(
-				{},
-				$.extend(true, {}, $.Buttons.opts),
-				this.$element.data(),
-				options
-			);
-		},
-		getButtons: function()
-		{
-			return (this.opts.type === 'toggle') ? this.$element : this.$element.find('.' + this.opts.className);
-		},
-		getValue: function()
-		{
-			return (this.opts.type === 'segmented') ? $(this.opts.target).val().split(',') : $(this.opts.target).val();
-		},
-		setDefault: function($el)
-		{
-			if (this.opts.type === 'segmented' && $.inArray($el.val(), this.value) !== -1)
-			{
-				this.setActive($el);
+				this._parseItem(obj[item]);
 			}
-			else if ((this.opts.type === 'toggle' && this.value === 1) || this.value === $el.val())
-			{
-				this.setActive($el);
-			}
-		},
-		setBasic: function($el)
-		{
-			this.setInActive(this.buttons);
-			this.setActive($el);
-			$(this.opts.target).val($el.val());
-		},
-		setSegmented: function($el)
-		{
-			var $target = $(this.opts.target);
-			this.value = $target.val().split(',');
-
-			if (!$el.hasClass(this.opts.activeClassName))
-			{
-				this.setActive($el);
-				this.value.push($el.val());
-			}
-			else
-			{
-				this.setInActive($el);
-				this.value.splice(this.value.indexOf($el.val()), 1);
-			}
-
-			$target.val(this.value.join(',').replace(/^,/, ''));
-		},
-		setToggle: function($el)
-		{
-			if ($el.hasClass(this.opts.activeClassName))
-			{
-				this.setInActive($el);
-				$(this.opts.target).val(0);
-			}
-			else
-			{
-				this.setActive($el);
-				$(this.opts.target).val(1);
-			}
-		},
-		setActive: function($el)
-		{
-			$el.addClass(this.opts.activeClassName);
-		},
-		setInActive: function($el)
-		{
-			$el.removeClass(this.opts.activeClassName);
-		}
-	};
-
-	$(window).on('load.tools.buttons', function()
-	{
-		$('[data-tools="buttons"]').buttons();
-	});
-
-	// constructor
-	Buttons.prototype.init.prototype = Buttons.prototype;
-
-
-})(jQuery);
-/*
-	CheckAll Tool
-
-	http://imperavi.com/kube/
-
-	Copyright (c) 2009-2014, Imperavi LLC.
-*/
-(function($)
-{
-	// Plugin
-	$.fn.checkAll = function(options)
-	{
-		return this.each(function()
-		{
-			$.data(this, 'checkAll', {});
-			$.data(this, 'checkAll', CheckAll(this, options));
-		});
-
-	};
-
-	// Initialization
-	function CheckAll(el, options)
-	{
-		return new CheckAll.prototype.init(el, options);
-	}
-
-	$.CheckAll = CheckAll;
-	$.CheckAll.opts = {
-
-		classname: false,
-		parent: false,
-		highlight: 'highlight',
-		target: false
-
-	};
-
-	// Functionality
-	CheckAll.fn = $.CheckAll.prototype = {
-
-		// Initialization
-		init: function(el, options)
-		{
-			this.$element = el !== false ? $(el) : false;
-			this.loadOptions(options);
-
-			this.$elements = $('.' + this.opts.classname);
-			this.$target = $(this.opts.target);
-
-			// load
-			this.$element.on('click', $.proxy(this.load, this));
-
-			this.setter = (this.opts.target) ? this.$target.val().split(',') : [];
-			this.$elements.each($.proxy(this.setOnStart, this));
-		},
-		loadOptions: function(options)
-		{
-			this.opts = $.extend(
-				{},
-				$.extend(true, {}, $.CheckAll.opts),
-				this.$element.data(),
-				options
-			);
-		},
-		load: function()
-		{
-			if (this.$element.prop('checked'))
-			{
-				this.$elements.prop('checked', true);
-
-				if (this.opts.parent || this.opts.target)
-				{
-					this.$elements.each($.proxy(function(i,s)
-					{
-						var $s = $(s);
-						this.setHighlight($s);
-						this.setValue($s.val());
-
-					}, this));
-				}
-			}
-			else
-			{
-				this.$elements.prop('checked', false);
-				if (this.opts.parent) this.$elements.each($.proxy(this.removeHighlight, this));
-				if (this.opts.target) this.$target.val('');
-			}
-		},
-		setOnStart: function(i, el)
-		{
-			var $el = $(el);
-			if (this.$element.prop('checked') || (this.setter && ($.inArray($el.val(), this.setter) !== -1)))
-			{
-				$el.prop('checked', true);
-				this.setHighlight($el);
-			}
-
-			$el.on('click', $.proxy(function()
-			{
-				var checkedSize = this.$elements.filter(':checked').size();
-
-				if ($el.prop('checked'))
-				{
-					this.setValue($el.val());
-					this.setHighlight($el);
-				}
-				else
-				{
-					this.removeValue($el.val());
-					this.removeHighlight($el);
-				}
-
-				var prop = (checkedSize !== this.$elements.size()) ? false : true;
-				this.$element.prop('checked', prop);
-
-
-			}, this));
-		},
-		setHighlight: function($el)
-		{
-			if (!this.opts.parent) return;
-
-			$el.closest(this.opts.parent).addClass(this.opts.highlight);
-		},
-		removeHighlight: function(i, $el)
-		{
-			if (!this.opts.parent) return;
-
-			$($el).closest(this.opts.parent).removeClass(this.opts.highlight);
-		},
-		setValue: function(value)
-		{
-			if (!this.opts.target) return;
-
-			var str = this.$target.val();
-			var arr = str.split(',');
-			arr.push(value);
-
-			if (str === '')
-			{
-				arr = [value];
-			}
-
-			this.$target.val(arr.join(','));
-		},
-		removeValue: function(value)
-		{
-			if (!this.opts.target) return;
-
-			var arr = this.$target.val().split(',');
-
-			var index = arr.indexOf(value);
-			arr.splice(index, 1);
-
-			this.$target.val(arr.join(','));
-		}
-	};
-
-
-	$(window).on('load.tools.buttons', function()
-	{
-		$('[data-tools="check-all"]').checkAll();
-	});
-
-	// constructor
-	CheckAll.prototype.init.prototype = CheckAll.prototype;
-
-
-})(jQuery);
-/*
-	Dropdown Tool
-
-	http://imperavi.com/kube/
-
-	Copyright (c) 2009-2014, Imperavi LLC.
-*/
-(function($)
-{
-
-	// Plugin
-	$.fn.dropdown = function(options)
-	{
-		return this.each(function()
-		{
-			$.data(this, 'dropdown', {});
-			$.data(this, 'dropdown', Dropdown(this, options));
-		});
-
-	};
-
-
-	// Initialization
-	function Dropdown(el, options)
-	{
-		return new Dropdown.prototype.init(el, options);
-	}
-
-	$.Dropdown = Dropdown;
-	$.Dropdown.NAME = 'dropdown';
-	$.Dropdown.VERSION = '1.0';
-	$.Dropdown.opts = {
-
-		target: false,
-		targetClose: false,
-		height: false, // number
-		width: false // number
-
-	};
-
-	// Functionality
-	Dropdown.fn = $.Dropdown.prototype = {
-
-		// Initialization
-		init: function(el, options)
-		{
-			this.$element = el !== false ? $(el) : false;
-			this.loadOptions(options);
-
-			this.build();
-		},
-		loadOptions: function(options)
-		{
-			this.opts = $.extend(
-				{},
-				$.extend(true, {}, $.Dropdown.opts),
-				this.$element.data(),
-				options
-			);
-		},
-		setCallback: function(type, e, data)
-		{
-			var events = $._data(this.$element[0], 'events');
-			if (events && typeof events[type] != 'undefined')
-			{
-				var value = [];
-				var len = events[type].length;
-				for (var i = 0; i < len; i++)
-				{
-					var namespace = events[type][i].namespace;
-					if (namespace == 'tools.' + $.Dropdown.NAME || namespace == $.Dropdown.NAME + '.tools')
-					{
-						var callback = events[type][i].handler;
-						value.push((typeof data == 'undefined') ? callback.call(this, e) : callback.call(this, e, data));
-					}
-				}
-
-				if (value.length == 1) return value[0];
-				else return value;
-			}
-
-			return (typeof data == 'undefined') ? e : data;
-
-		},
-		build: function()
-		{
-			this.$dropdown = $(this.opts.target);
-			this.$dropdown.hide();
-
-			this.$caret = $('<b class="caret"></b>');
-			this.$element.append(this.$caret);
-
-			this.setCaretUp();
-			this.preventBodyScroll();
-
-			this.$element.click($.proxy(this.toggle, this));
-		},
-		setCaretUp: function()
-		{
-			var height =  this.$element.offset().top + this.$element.innerHeight() + this.$dropdown.innerHeight();
-			if ($(document).height() > height) return;
-
-			this.$caret.addClass('caret-up');
-		},
-		toggle: function(e)
-		{
-			e.preventDefault();
-			if (this.$element.hasClass('dropdown-in'))
-			{
-				this.hide();
-			}
-			else
-			{
-				this.show();
-			}
-		},
-		getPlacement: function(height)
-		{
-			return ($(document).height() < height) ? 'top' : 'bottom';
-		},
-		getPosition: function()
-		{
-			return (this.$element.closest('.navigation-fixed').size() !== 0) ? 'fixed' : 'absolute';
-		},
-		setPosition: function()
-		{
-			var pos =  this.$element.position();
-			var elementHeight = this.$element.innerHeight();
-			var elementWidth = this.$element.innerWidth();
-			var height = this.$dropdown.innerHeight();
-			var width = this.$dropdown.innerWidth();
-
-			var position = this.getPosition();
-			var placement = this.getPlacement(pos.top + height + elementHeight);
-
-			var leftFix = 0;
-			if ($(window).width() < (pos.left + width))
-			{
-				leftFix = (width - elementWidth);
-			}
-
-			var top;
-			var	left = pos.left - leftFix;
-			if (placement == 'bottom')
-			{
-				this.$caret.removeClass('caret-up');
-				top = (position == 'fixed') ? elementHeight : pos.top + elementHeight;
-			}
-			else
-			{
-				this.$caret.addClass('caret-up');
-				top = (position == 'fixed') ? height : pos.top - height;
-			}
-
-			this.$dropdown.css({ position: position, top: top + 'px', left: left + 'px' });
-		},
-		show: function()
-		{
-			$('.dropdown-in').removeClass('dropdown-in');
-			$('.dropdown').removeClass('dropdown-open').hide();
-
-			if (this.opts.height) this.$dropdown.css('min-height', this.opts.height + 'px');
-			if (this.opts.width) this.$dropdown.width(this.opts.width);
-
-			this.setPosition();
-
-			this.$dropdown.addClass('dropdown-open').show();
-			this.$element.addClass('dropdown-in');
-
-			$(document).on('scroll.tools.dropdown', $.proxy(this.setPosition, this));
-			$(window).on('resize.tools.dropdown', $.proxy(this.setPosition, this));
-			$(document).on('click.tools.dropdown touchstart.tools.dropdown', $.proxy(this.hide, this));
-
-			if (this.opts.targetClose)
-			{
-				$(this.opts.targetClose).on('click.tools.dropdown', $.proxy(function(e)
-				{
-					e.preventDefault();
-
-					this.hide(false);
-
-				}, this));
-			}
-
-			$(document).on('keydown.tools.dropdown', $.proxy(function(e)
-			{
-				// esc
-			   if (e.which === 27) this.hide();
-
-			}, this));
-
-			this.setCallback('opened', this.$dropdown, this.$element);
-
-		},
-		preventBodyScroll: function()
-		{
-			this.$dropdown.on('mouseover', function() { $('html').css('overflow', 'hidden'); });
-			this.$dropdown.on('mouseout', function() { $('html').css('overflow', ''); });
-		},
-		hide: function(e)
-		{
-			if (e)
-			{
-				e = e.originalEvent || e;
-
-				var $target = $(e.target);
-				if ($target.hasClass('caret') || $target.hasClass('dropdown-in') || $target.closest('.dropdown-open').size() !== 0)
-				{
-					return;
-				}
-			}
-
-			this.$dropdown.removeClass('dropdown-open').hide();
-			this.$element.removeClass('dropdown-in');
-
-			$(document).off('.tools.dropdown');
-			$(window).off('.tools.dropdown');
-
-			this.setCallback('closed', this.$dropdown, this.$element);
-		}
-	};
-
-	$(window).on('load.tools.dropdown', function()
-	{
-		$('[data-tools="dropdown"]').dropdown();
-	});
-
-	// constructor
-	Dropdown.prototype.init.prototype = Dropdown.prototype;
-
-
-})(jQuery);
-/*
-	FilterBox Tool
-
-	http://imperavi.com/kube/
-
-	Copyright (c) 2009-2014, Imperavi LLC.
-*/
-(function($)
-{
-	// Plugin
-	$.fn.filterbox = function(options)
-	{
-		return this.each(function()
-		{
-			$.data(this, 'filterbox', {});
-			$.data(this, 'filterbox', Filterbox(this, options));
-		});
-	};
-
-	// Initialization
-	function Filterbox(el, options)
-	{
-		return new Filterbox.prototype.init(el, options);
-	}
-
-	$.Filterbox = Filterbox;
-	$.Filterbox.NAME = 'filterbox';
-	$.Filterbox.VERSION = '1.0';
-	$.Filterbox.opts = {
-
-		// settings
-		placeholder: false
-	};
-
-	// Functionality
-	Filterbox.fn = $.Filterbox.prototype = {
-
-		// Initialization
-		init: function(el, options)
-		{
-			this.$element = el !== false ? $(el) : false;
-
-			this.loadOptions(options);
-			this.build();
-		},
-		loadOptions: function(options)
-		{
-			this.opts = $.extend(
-				{},
-				$.extend(true, {}, $.Filterbox.opts),
-				this.$element.data(),
-				options
-			);
-		},
-		setCallback: function(type, e, data)
-		{
-			var events = $._data(this.$element[0], 'events');
-			if (events && typeof events[type] != 'undefined')
-			{
-				var value = [];
-				var len = events[type].length;
-				for (var i = 0; i < len; i++)
-				{
-					var namespace = events[type][i].namespace;
-					if (namespace == 'tools.' + $.Filterbox.NAME || namespace == $.Filterbox.NAME + '.tools')
-					{
-						var callback = events[type][i].handler;
-						value.push((typeof data == 'undefined') ? callback.call(this, e) : callback.call(this, e, data));
-					}
-				}
-
-				if (value.length == 1) return value[0];
-				else return value;
-			}
-
-			return (typeof data == 'undefined') ? e : data;
-
-		},
-		build: function()
-		{
-			this.$sourceBox = $('<div class="filterbox" />');
-			this.$sourceSelect = $('<span class="filterbox-toggle" />');
-			this.$sourceLayer = $('<ul class="filterbox-list hide" />');
-			this.$source = $('<input type="text" id="' + this.$element.attr('id') + '-input" class="' + this.$element.attr('class') + '" />');
-
-			this.$sourceBox.append(this.$source);
-			this.$sourceBox.append(this.$sourceSelect);
-			this.$sourceBox.append(this.$sourceLayer);
-
-			this.setPlaceholder();
-
-			this.$element.hide().after(this.$sourceBox);
-			this.$element.find('option').each($.proxy(this.buildListItemsFromOptions, this));
-
-			this.$source.on('keyup', $.proxy(this.clearSelected, this));
-			this.$sourceSelect.on('click', $.proxy(this.load, this));
-
-			this.preventBodyScroll();
-
-		},
-		load: function(e)
-		{
-			e.preventDefault();
-
-			if (this.$sourceLayer.hasClass('open'))
-			{
-				this.close();
-				return;
-			}
-
-			var value = this.$element.val();
-
-			this.$sourceLayer.addClass('open').show();
-
-			var items = this.$sourceLayer.find('li').removeClass('active');
-			this.setSelectedItem(items, value);
-
-			$(document).on('click.tools.filterbox', $.proxy(this.close, this));
-			$(document).on('keydown.tools.filterbox', $.proxy(function(e)
-			{
-			   var key = e.which;
-			   var $el;
-			   var item;
-
-			   if (key === 38) // up
-			   {
-				   e.preventDefault();
-
-				   if (items.hasClass('active'))
-				   {
-					   	item = items.filter('li.active');
-				   		item.removeClass('active');
-
-				   		var prev = item.prev();
-				   		$el = (prev.size() !== 0) ? $el = prev : items.last();
-				   }
-				   else
-				   {
-				   		$el = items.last();
-				   }
-
-				   $el.addClass('active');
-				   this.setScrollTop($el);
-			   }
-			   else if (key === 40) // down
-			   {
-				   e.preventDefault();
-
-				   if (items.hasClass('active'))
-				   {
-				   		item = items.filter('li.active');
-				   		item.removeClass('active');
-
-				   		var next = item.next();
-				   		$el = (next.size() !== 0) ? next : items.first();
-				   }
-				   else
-				   {
-					    $el = items.first();
-				   }
-
-				   $el.addClass('active');
-				   this.setScrollTop($el);
-
-			   }
-			   else if (key === 13) // enter
-			   {
-			   		if (!items.hasClass('active')) return;
-
-				   	item = items.filter('li.active');
-					this.onItemClick(e, item);
-			   }
-			   else if (key === 27) // esc
-			   {
-				   this.close();
-			   }
-
-			}, this));
-
-		},
-		clearSelected: function()
-		{
-			if (this.$source.val().length === 0) this.$element.val(0);
-		},
-		setSelectedItem: function(items, value)
-		{
-			var selectEl = items.filter('[rel=' + value + ']');
-			if (selectEl.size() === 0)
-			{
-				selectEl = false;
-
-				// if user typed value
-				var sourceValue = this.$source.val();
-				$.each(items, function(i,s)
-				{
-					var $s = $(s);
-					if ($s.text() == sourceValue)
-					{
-						selectEl = $s;
-					}
-				});
-
-				if (selectEl === false) return;
-			}
-
-			selectEl.addClass('active');
-			this.setScrollTop(selectEl);
-		},
-		setScrollTop: function($el)
-		{
-			this.$sourceLayer.scrollTop(this.$sourceLayer.scrollTop() + $el.position().top - 40);
-		},
-		buildListItemsFromOptions: function(i,s)
-		{
-			var $el = $(s);
-			var val = $el.val();
-			if (val === 0) return;
-
-			var item = $('<li />');
-
-			item.attr('rel', val).text($el.html());
-			item.on('click', $.proxy(this.onItemClick, this));
-
-			this.$sourceLayer.append(item);
-		},
-		onItemClick: function(e, item)
-		{
-			e.preventDefault();
-
-			var $el = $(item || e.target);
-			var rel = $el.attr('rel');
-			var text = $el.text();
-
-			this.$source.val(text);
-			this.$element.val(rel);
-
-			this.close();
-
-			this.setCallback('select', { id: rel, value: text });
-		},
-		preventBodyScroll: function()
-		{
-			this.$sourceLayer.on('mouseover', function() { $('html').css('overflow', 'hidden'); });
-			this.$sourceLayer.on('mouseout', function() { $('html').css('overflow', ''); });
-		},
-		setPlaceholder: function()
-		{
-			if (!this.opts.placeholder) return;
-			this.$source.attr('placeholder', this.opts.placeholder);
-		},
-		close: function(e)
-		{
-			if (e && ($(e.target).hasClass('filterbox-toggle') || $(e.target).closest('div.filterbox').size() == 1))
-			{
-				return;
-			}
-
-			this.$sourceLayer.removeClass('open').hide();
-			$(document).off('.tools.filterbox');
-		}
-	};
-
-	$(window).on('load.tools.filterbox', function()
-	{
-		$('[data-tools="filterbox"]').filterbox();
-	});
-
-	// constructor
-	Filterbox.prototype.init.prototype = Filterbox.prototype;
-
-
-})(jQuery);
-/*
-	Infinity Scroll Tool
-
-	http://imperavi.com/kube/
-
-	Copyright (c) 2009-2014, Imperavi LLC.
-*/
-(function($)
-{
-	// Plugin
-	$.fn.infinityScroll = function(options)
-	{
-		return this.each(function()
-		{
-			$.data(this, 'infinity-scroll', {});
-			$.data(this, 'infinity-scroll', InfinityScroll(this, options));
-		});
-	};
-
-	// Initialization
-	function InfinityScroll(el, options)
-	{
-		return new InfinityScroll.prototype.init(el, options);
-	}
-
-	$.InfinityScroll = InfinityScroll;
-	$.InfinityScroll.NAME = 'infinity-scroll';
-	$.InfinityScroll.VERSION = '1.0';
-	$.InfinityScroll.opts = {
-
-		url: false,
-		offset: 0,
-		limit: 20,
-		tolerance: 50,
-		pagination: false
-
-	};
-
-	// Functionality
-	InfinityScroll.fn = $.InfinityScroll.prototype = {
-
-		// Initialization
-		init: function(el, options)
-		{
-			this.$element = el !== false ? $(el) : false;
-			this.loadOptions(options);
-
-			this.hidePagination();
-			this.build();
-		},
-		loadOptions: function(options)
-		{
-			this.opts = $.extend(
-				{},
-				$.extend(true, {}, $.InfinityScroll.opts),
-				this.$element.data(),
-				options
-			);
-		},
-		setCallback: function(type, e, data)
-		{
-			var events = $._data(this.$element[0], 'events');
-			if (events && typeof events[type] != 'undefined')
-			{
-				var value = [];
-				var len = events[type].length;
-				for (var i = 0; i < len; i++)
-				{
-					var namespace = events[type][i].namespace;
-					if (namespace == 'tools.' + $.InfinityScroll.NAME || namespace == $.InfinityScroll.NAME + '.tools')
-					{
-						var callback = events[type][i].handler;
-						value.push((typeof data == 'undefined') ? callback.call(this, e) : callback.call(this, e, data));
-					}
-				}
-
-				if (value.length == 1) return value[0];
-				else return value;
-			}
-
-			return (typeof data == 'undefined') ? e : data;
-
-		},
-		build: function()
-		{
-			$(window).on('DOMContentLoaded.tools.infinite-scroll load.tools.infinite-scroll resize.tools.infinite-scroll scroll.tools.infinite-scroll', $.proxy(function()
-			{
-				var $last = this.$element.children().last();
-				if (this.isElementInViewport($last[0]))
-				{
-					this.getData();
-				}
-
-			}, this));
-		},
-		getData: function()
-		{
-			$.ajax({
-				url: this.opts.url,
-				type: 'post',
-				data:  'limit=' + this.opts.limit + '&offset=' + this.opts.offset,
-				success: $.proxy(function(data)
-				{
-					if (data === '')
-					{
-						$(window).off('.tools.infinite-scroll');
-						return;
-					}
-
-					this.opts.offset = this.opts.offset + this.opts.limit;
-					this.$element.append(data);
-
-					this.setCallback('loaded', data);
-
-				}, this)
-			});
-		},
-		hidePagination: function()
-		{
-			if (!this.opts.pagination) return;
-
-			$(this.opts.pagination).hide();
-		},
-		isElementInViewport: function(el)
-		{
-		    var rect = el.getBoundingClientRect();
-		    return (
-		        rect.top >= 0 &&
-		        rect.left >= 0 &&
-		        rect.bottom <= $(window).height() + this.opts.tolerance &&
-		        rect.right <= $(window).width()
-		    );
-		}
-	};
-
-	$(window).on('load.tools.infinity-scroll', function()
-	{
-		$('[data-tools="infinity-scroll"]').infinityScroll();
-	});
-
-	// constructor
-	InfinityScroll.prototype.init.prototype = InfinityScroll.prototype;
-
-})(jQuery);
-
-
-/*
-	Livesearch Tool
-
-	http://imperavi.com/kube/
-
-	Copyright (c) 2009-2014, Imperavi LLC.
-*/
-(function($)
-{
-	// Plugin
-	$.fn.livesearch = function(options)
-	{
-		return this.each(function()
-		{
-			$.data(this, 'livesearch', {});
-			$.data(this, 'livesearch', Livesearch(this, options));
-		});
-
-	};
-
-	// Initialization
-	function Livesearch(el, options)
-	{
-		return new Livesearch.prototype.init(el, options);
-	}
-
-	$.Livesearch = Livesearch;
-	$.Livesearch.NAME = 'livesearch';
-	$.Livesearch.VERSION = '1.0';
-	$.Livesearch.opts = {
-
-		// settings
-		url: false,
-		target: false,
-		min: 2,
-		params: false,
-		appendForms: false
-	};
-
-	// Functionality
-	Livesearch.fn = $.Livesearch.prototype = {
-
-		// Initialization
-		init: function(el, options)
-		{
-			this.$element = el !== false ? $(el) : false;
-			this.loadOptions(options);
-
-			this.build();
-		},
-		loadOptions: function(options)
-		{
-			this.opts = $.extend(
-				{},
-				$.extend(true, {}, $.Livesearch.opts),
-				this.$element.data(),
-				options
-			);
-		},
-		setCallback: function(type, e, data)
-		{
-			var events = $._data(this.$element[0], 'events');
-			if (events && typeof events[type] != 'undefined')
-			{
-				var value = [];
-				var len = events[type].length;
-				for (var i = 0; i < len; i++)
-				{
-					var namespace = events[type][i].namespace;
-					if (namespace == 'tools.' + $.Livesearch.NAME || namespace == $.Livesearch.NAME + '.tools')
-					{
-						var callback = events[type][i].handler;
-						value.push((typeof data == 'undefined') ? callback.call(this, e) : callback.call(this, e, data));
-					}
-				}
-
-				if (value.length == 1) return value[0];
-				else return value;
-			}
-
-			return (typeof data == 'undefined') ? e : data;
-
-		},
-		build: function()
-		{
-			this.$box = $('<span class="livesearch-box" />');
-
-			this.$element.after(this.$box);
-			this.$box.append(this.$element);
-
-			this.$element.off('keyup.tools.livesearch');
-			this.$element.on('keyup.tools.livesearch', $.proxy(this.load, this));
-
-			this.$icon = $('<span class="livesearch-icon" />');
-			this.$box.append(this.$icon);
-
-			this.$close = $('<span class="close" />').hide();
-			this.$box.append(this.$close);
-
-			this.$close.off('click.tools.livesearch');
-			this.$close.on('click.tools.livesearch', $.proxy(function()
-			{
-				this.search();
-				this.$element.val('').focus();
-				this.$close.hide();
-
-			}, this));
-
-		},
-		toggleClose: function(length)
-		{
-			if (length === 0) this.$close.hide();
-			else this.$close.show();
-		},
-		load: function()
-		{
-			var value = this.$element.val();
-			var data = '';
-
-			if (value.length > this.opts.min)
-			{
-				var name = 'q';
-				if (typeof this.$element.attr('name') != 'undefined') name = this.$element.attr('name');
-
-				data += '&' + name + '=' + value;
-				data = this.appendForms(data);
-
-				var str = '';
-				if (this.opts.params)
-				{
-					this.opts.params = $.trim(this.opts.params.replace('{', '').replace('}', ''))
-					var properties = this.opts.params.split(',');
-					var obj = {};
-					$.each(properties, function(k, v)
-					{
-					    var tup = v.split(':');
-					    obj[$.trim(tup[0])] = $.trim(tup[1]);
-					});
-
-					str = [];
-					$.each(obj, $.proxy(function(k, v)
-					{
-						str.push(k + "=" + v);
-
-					}, this));
-
-					str = str.join("&");
-
-					data += '&' + str;
-				}
-			}
-
-			this.toggleClose(value.length);
-			this.search(data);
-
-		},
-		appendForms: function(data)
-		{
-			if (!this.opts.appendForms) return data;
-
-			$.each(this.opts.appendForms, function(i, s)
-			{
-				data += '&' + $(s).serialize();
-			});
-
-			return data;
-		},
-		search: function(data)
-		{
-			$.ajax({
-				url: this.opts.url,
-				type: 'post',
-				data: data,
-				success: $.proxy(function(result)
-				{
-					$(this.opts.target).html(result);
-					this.setCallback('result', result);
-
-				}, this)
-			});
-		}
-	};
-
-	$(window).on('load.tools.livesearch', function()
-	{
-		$('[data-tools="livesearch"]').livesearch();
-	});
-
-	// constructor
-	Livesearch.prototype.init.prototype = Livesearch.prototype;
-
-
-})(jQuery);
-
-/*
-	Tabs Tool
-
-	http://imperavi.com/kube/
-
-	Copyright (c) 2009-2014, Imperavi LLC.
-*/
-(function($)
-{
-	// Plugin
-	$.fn.message = function(options)
-	{
-		var val = [];
-		var args = Array.prototype.slice.call(arguments, 1);
-
-		if (typeof options === 'string')
-		{
-			this.each(function()
-			{
-				var instance = $.data(this, 'message');
-				if (typeof instance !== 'undefined' && $.isFunction(instance[options]))
-				{
-					var methodVal = instance[options].apply(instance, args);
-					if (methodVal !== undefined && methodVal !== instance) val.push(methodVal);
-				}
-				else return $.error('No such method "' + options + '" for Message');
-			});
 		}
 		else
 		{
-			this.each(function()
-			{
-				$.data(this, 'message', {});
-				$.data(this, 'message', Message(this, options));
-			});
+			this._parseItem(obj);
 		}
 
-		if (val.length === 0) return this;
-		else if (val.length === 1) return val[0];
-		else return val;
-	};
-
-	// Initialization
-	function Message(el, options)
+		return obj;
+    },
+    // private
+	_parseItem: function(item)
 	{
-		return new Message.prototype.init(el, options);
-	}
-
-	$.Message = Message;
-	$.Message.NAME = 'message';
-	$.Message.VERSION = '1.0';
-	$.Message.opts = {
-
-		target: false,
-		delay: 10 // message delay - seconds or false
-
-	};
-
-	// Functionality
-	Message.fn = $.Message.prototype = {
-
-		// Initialization
-		init: function(el, options)
+		if (item.type === 'location')
 		{
-			this.$element = el !== false ? $(el) : false;
-
-			this.loadOptions(options);
-			this.build();
-		},
-		loadOptions: function(options)
-		{
-			this.opts = $.extend(
-				{},
-				$.extend(true, {}, $.Message.opts),
-				this.$element.data(),
-				options
-			);
-		},
-		setCallback: function(type, e, data)
-		{
-			var events = $._data(this.$message[0], 'events');
-			if (events && typeof events[type] != 'undefined')
-			{
-				var value = [];
-				var len = events[type].length;
-				for (var i = 0; i < len; i++)
-				{
-					var namespace = events[type][i].namespace;
-					if (namespace == 'tools.' + $.Message.NAME || namespace == $.Message.NAME + '.tools')
-					{
-						var callback = events[type][i].handler;
-						value.push((typeof data == 'undefined') ? callback.call(this, e) : callback.call(this, e, data));
-					}
-				}
-
-				if (value.length == 1) return value[0];
-				else return value;
-			}
-
-			return (typeof data == 'undefined') ? e : data;
-
-		},
-		build: function()
-		{
-
-			if (!this.opts.target)
-			{
-				this.$message = this.$element;
-				this.show();
-			}
-			else
-			{
-				this.$message = $(this.opts.target);
-
-				this.$message.data('message', '');
-				this.$message.data('message', this);
-
-				this.$element.on('click', $.proxy(this.show, this));
-			}
-		},
-		show: function()
-		{
-			if (this.$message.hasClass('open'))
-			{
-				this.hide();
-				return;
-			}
-
-			$('.tools-message').hide().removeClass('open');
-			this.$message.addClass('open').fadeIn('fast').on('click.tools.message', $.proxy(this.hide, this));
-
-			$(document).on('keyup.tools.message', $.proxy(this.hideHandler, this));
-
-			if (this.opts.delay)
-			{
-				setTimeout($.proxy(this.hide, this), this.opts.delay * 1000);
-			}
-
-			this.setCallback('opened');
-		},
-		hideHandler: function(e)
-		{
-			if (e.which != 27) return;
-
-			this.hide();
-		},
-		hide: function()
-		{
-			if (!this.$message.hasClass('open')) return;
-
-			this.$message.off('click.tools.message');
-			$(document).off('keyup.tools.message');
-			this.$message.fadeOut('fast', $.proxy(function()
-			{
-				this.$message.removeClass('open');
-				this.setCallback('closed');
-
-			}, this));
+			top.location.href = item.data;
 		}
-	};
-
-	// Constructor
-	Message.prototype.init.prototype = Message.prototype;
-
-	$(function()
-	{
-		$('[data-tools="message"]').message();
-	});
-
-})(jQuery);
-
-
-/*
-	Modal Tool
-
-	http://imperavi.com/kube/
-
-	Copyright (c) 2009-2014, Imperavi LLC.
-*/
-(function($)
-{
-	// Plugin
-	$.fn.modal = function(options)
-	{
-		var val = [];
-		var args = Array.prototype.slice.call(arguments, 1);
-
-		if (typeof options === 'string')
+		else if (item.type === 'message')
 		{
-			this.each(function()
-			{
-				var instance = $.data(this, 'modal');
-				if (typeof instance !== 'undefined' && $.isFunction(instance[options]))
-				{
-					var methodVal = instance[options].apply(instance, args);
-					if (methodVal !== undefined && methodVal !== instance) val.push(methodVal);
-				}
-				else return $.error('No such method "' + options + '" for Modal');
-			});
+			this.message.show(item.data);
 		}
 		else
 		{
-			this.each(function()
-			{
-				$.data(this, 'modal', {});
-				$.data(this, 'modal', Modal(this, options));
-			});
-		}
+    		for (var key in item.data)
+    		{
+        		var val = item.data[key];
+        		var $el = $K.dom(key);
 
-		if (val.length === 0) return this;
-		else if (val.length === 1) return val[0];
-		else return val;
-	};
+        		if (item.type === 'value')
+        		{
+        			val = (val === null || val === false) ? 0 : val;
+        			val = (val === true) ? 1 : val;
 
-	// Initialization
-	function Modal(el, options)
-	{
-		return new Modal.prototype.init(el, options);
-	}
-
-	$.Modal = Modal;
-	$.Modal.NAME = 'modal';
-	$.Modal.VERSION = '1.0';
-	$.Modal.opts = {
-
-		title: '',
-		width: 500,
-		blur: false
-
-	};
-
-	// Functionality
-	Modal.fn = $.Modal.prototype = {
-
-		// Initialization
-		init: function(el, options)
-		{
-			this.$element = el !== false ? $(el) : false;
-			this.loadOptions(options);
-
-			this.$element.on('click.tools.modal', $.proxy(this.load, this));
-
-		},
-		loadOptions: function(options)
-		{
-			this.opts = $.extend(
-				{},
-				$.extend(true, {}, $.Modal.opts),
-				this.$element.data(),
-				options
-			);
-		},
-		setCallback: function(type, e, data)
-		{
-			var events = $._data(this.$element[0], 'events');
-			if (events && typeof events[type] != 'undefined')
-			{
-				var value = [];
-				var len = events[type].length;
-				for (var i = 0; i < len; i++)
-				{
-					var namespace = events[type][i].namespace;
-					if (namespace == 'tools.' + $.Modal.NAME || namespace == $.Modal.NAME + '.tools')
-					{
-						var callback = events[type][i].handler;
-						value.push((typeof data == 'undefined') ? callback.call(this, e) : callback.call(this, e, data));
-					}
+    				$el.val(val);
 				}
+				else if (item.type === 'html')
+                {
+                    val = (val === null || val === false) ? '' : val;
 
-				if (value.length == 1) return value[0];
-				else return value;
-			}
-
-			return (typeof data == 'undefined') ? e : data;
-
-		},
-		load: function()
-		{
-			this.build();
-			this.enableEvents();
-			this.setTitle();
-			this.setDraggable();
-			this.setContent();
-		},
-		build: function()
-		{
-			this.buildOverlay();
-
-			this.$modalBox = $('<div class="modal-box" />').hide();
-			this.$modal = $('<div class="modal" />');
-			this.$modalHeader = $('<header />');
-			this.$modalClose = $('<span class="modal-close" />').html('&times;');
-			this.$modalBody = $('<section />');
-			this.$modalFooter = $('<footer />');
-
-			this.$modal.append(this.$modalHeader);
-			this.$modal.append(this.$modalClose);
-			this.$modal.append(this.$modalBody);
-			this.$modal.append(this.$modalFooter);
-			this.$modalBox.append(this.$modal);
-			this.$modalBox.appendTo(document.body);
-		},
-		buildOverlay: function()
-		{
-			this.$modalOverlay = $('<div id="modal-overlay">').hide();
-			$('body').prepend(this.$modalOverlay);
-
-			if (this.opts.blur)
-			{
-				this.blurredElements = $('body').children('div, section, header, article, pre, aside, table').not('.modal, .modal-box, #modal-overlay');
-				this.blurredElements.addClass('modal-blur');
-			}
-		},
-		show: function()
-		{
-			// modal loading callback
-			this.setCallback('loading', this.$modal);
-
-			this.bodyOveflow = $(document.body).css('overflow');
-			$(document.body).css('overflow', 'hidden');
-
-			if (this.isMobile())
-			{
-				this.showOnMobile();
-			}
-			else
-			{
-				this.showOnDesktop();
-			}
-
-			this.$modalOverlay.show();
-			this.$modalBox.show();
-
-			this.setButtonsWidth();
-
-			// resize
-			if (!this.isMobile())
-			{
-				setTimeout($.proxy(this.showOnDesktop, this), 0);
-				$(window).on('resize.tools.modal', $.proxy(this.resize, this));
-			}
-
-			// modal shown callback
-			this.setCallback('opened', this.$modal);
-
-			// fix bootstrap modal focus
-			$(document).off('focusin.modal');
-
-		},
-		showOnDesktop: function()
-		{
-			var height = this.$modal.outerHeight();
-			var windowHeight = $(window).height();
-			var windowWidth = $(window).width();
-
-			if (this.opts.width > windowWidth)
-			{
-				this.$modal.css({
-					width: '96%',
-					marginTop: (windowHeight/2 - height/2) + 'px'
-				});
-				return;
-			}
-
-			if (height > windowHeight)
-			{
-				this.$modal.css({
-					width: this.opts.width + 'px',
-					marginTop: '20px'
-				});
-			}
-			else
-			{
-				this.$modal.css({
-					width: this.opts.width + 'px',
-					marginTop: (windowHeight/2 - height/2) + 'px'
-				});
-			}
-		},
-		showOnMobile: function()
-		{
-			this.$modal.css({
-				width: '96%',
-				marginTop: '2%'
-			});
-
-		},
-		resize: function()
-		{
-			if (this.isMobile())
-			{
-				this.showOnMobile();
-			}
-			else
-			{
-				this.showOnDesktop();
-			}
-		},
-		setTitle: function()
-		{
-			this.$modalHeader.html(this.opts.title);
-		},
-		setContent: function()
-		{
-			if (typeof this.opts.content == 'object' || this.opts.content.search('#') === 0)
-			{
-				this.type = 'html';
-
-				this.$modalBody.html($(this.opts.content).html());
-				this.show();
-			}
-			else
-			{
-				$.ajax({
-					url: this.opts.content,
-					cache: false,
-					success: $.proxy(function(data)
-					{
-						this.$modalBody.html(data);
-						this.show();
-
-					}, this)
-				});
-			}
-
-		},
-		setDraggable: function()
-		{
-			if (typeof $.fn.draggable === 'undefined') return;
-
-			this.$modal.draggable({ handle: this.$modalHeader });
-			this.$modalHeader.css('cursor', 'move');
-		},
-		createCancelButton: function(label)
-		{
-			if (typeof label == 'undefined') label = 'Cancel';
-
-			var button = $('<button>').addClass('btn modal-close-btn').html(label);
-			button.on('click', $.proxy(this.close, this));
-
-			this.$modalFooter.append(button);
-		},
-		createDeleteButton: function(label)
-		{
-			if (typeof label == 'undefined') label = 'Delete';
-
-			return this.createButton(label, 'red');
-		},
-		createActionButton: function(label)
-		{
-			if (typeof label == 'undefined') label = 'Ok';
-
-			return this.createButton(label, 'blue');
-		},
-		createButton: function(label, className)
-		{
-			var button = $('<button>').addClass('btn').addClass('btn-' + className).html(label);
-			this.$modalFooter.append(button);
-
-			return button;
-		},
-		setButtonsWidth: function()
-		{
-			var buttons = this.$modalFooter.find('button');
-			var buttonsSize = buttons.size();
-			if (buttonsSize === 0) return;
-
-			buttons.css('width', (100/buttonsSize) + '%');
-		},
-		enableEvents: function()
-		{
-			this.$modalClose.on('click.tools.modal', $.proxy(this.close, this));
-			$(document).on('keyup.tools.modal', $.proxy(this.closeHandler, this));
-			this.$modalBox.on('click.tools.modal', $.proxy(this.close, this));
-		},
-		disableEvents: function()
-		{
-			this.$modalClose.off('click.tools.modal');
-			$(document).off('keyup.tools.modal');
-			this.$modalBox.off('click.tools.modal');
-			$(window).off('resize.tools.modal');
-		},
-		closeHandler: function(e)
-		{
-			if (e.which != 27) return;
-
-			this.close();
-		},
-		close: function(e)
-		{
-			if (e)
-			{
-				if (!$(e.target).hasClass('modal-close-btn') && e.target != this.$modalClose[0] && e.target != this.$modalBox[0])
-				{
-					return;
+    				$el.html(this._stripslashes(val));
 				}
-
-				e.preventDefault();
+        		else if (item.type === 'addClass')
+        		{
+            		$el.addClass(val);
+                }
+        		else if (item.type === 'removeClass')
+        		{
+            		$el.removeClass(val);
+                }
+        		else if (item.type === 'show')
+        		{
+            		$el.removeClass('is-hidden');
+        		}
+        		else if (item.type === 'hide')
+        		{
+            		$el.addClass('is-hidden');
+        		}
+        		else if (item.type === 'animate')
+        		{
+                    this.animate.run($el, val);
+        		}
 			}
+        }
 
-			if (!this.$modalBox) return;
-
-			this.disableEvents();
-
-			this.$modalOverlay.remove();
-			this.$modalBox.fadeOut('fast', $.proxy(function()
-			{
-				this.$modalBox.remove();
-
-				$(document.body).css('overflow', this.bodyOveflow);
-
-				// remove blur
-				if (this.opts.blur && typeof this.blurredElements != 'undefined')
-				{
-					this.blurredElements.removeClass('modal-blur');
-				}
-
-				this.setCallback('closed');
-
-			}, this));
-		},
-		isMobile: function()
-		{
-			var mq = window.matchMedia("(max-width: 767px)");
-			return (mq.matches) ? true : false;
-		}
-	};
-
-	$(window).on('load.tools.modal', function()
+		return item;
+	},
+    _stripslashes: function(str)
 	{
-		$('[data-tools="modal"]').modal();
-	});
+		return (str+'').replace(/\0/g, '0').replace(/\\([\\'"])/g, '$1');
+    }
+});
+$K.add('service', 'progress', {
+    init: function(app)
+    {
+        this.app = app;
+        this.$body = app.$body;
 
-	// constructor
-	Modal.prototype.init.prototype = Modal.prototype;
+        // defaults
+        this.defaults = {
+            selector: 'kube-progress',
+            target: false,
+            value: 100
+        }
 
-})(jQuery);
+        // local
+        this.$progress = false;
+        this.$progressBar = false;
+    },
+    // public
+    stop: function()
+    {
+        this.$progress = false;
+        this.$progressBar = false;
 
+        $K.dom('#' + this.params.selector).remove();
 
-/*
-	Navigation Fixed Tool
+        if (this.params.target)
+        {
+            var $target = $K.dom(this.params.target);
+            $target.removeClass('is-relative');
+        }
+    },
+    show: function(params)
+    {
+        this._buildDefaults(params);
+        this._build();
+    },
+    hide: function(params)
+    {
+        if (this.$progress)
+        {
+            this._buildDefaults(params);
+            this.animate.run(this.$progress, 'fadeOut', this.stop.bind(this));
+        }
+    },
+    update: function(params)
+    {
+        this._buildDefaults(params);
 
-	http://imperavi.com/kube/
+        if (!this.$progress) this._build();
+        this._setValue();
+    },
 
-	Copyright (c) 2009-2014, Imperavi LLC.
-*/
-(function($)
-{
-	// Plugin
-	$.fn.navigationFixed = function(options)
+    // private
+    _buildDefaults: function(data)
+    {
+         this.params = $K.extend({}, this.defaults, data);
+    },
+    _build: function()
+    {
+        this.stop();
+
+        this.$progress = $K.dom('<div>');
+        this.$progress.attr('id', this.params.selector);
+        this.$progress.addClass(this.params.selector);
+
+        this.$progressBar = $K.dom('<span>');
+        this.$progress.append(this.$progressBar);
+
+        if (this.params.target)
+        {
+            var $target = $K.dom(this.params.target);
+            if ($target.css('position') === 'static')
+            {
+                $target.addClass('is-relative');
+            }
+
+            $target.append(this.$progress);
+        }
+        else
+        {
+            this.$progress.addClass('is-fixed');
+            this.$body.append(this.$progress);
+        }
+    },
+    _setValue: function()
+    {
+        this.$progressBar.css('width', this.params.value + '%');
+    }
+});
+$K.add('service', 'message', {
+    init: function(app)
+    {
+        this.app = app;
+
+        // defaults
+        this.defaults = {
+            name: false,
+            delay: 7, // seconds
+            message: '',
+            position: 'right', // left, centered, line
+            positions: ['is-left', 'is-right', 'is-center', 'is-centered', 'is-line'],
+            type: false,
+            types: ['is-error', 'is-success', 'is-focus', 'is-black'],
+            selector: 'kube-message'
+        };
+
+        // animation
+        this.currentAnimation = [];
+        this.animation = {
+            line: ['slideInDown', 'slideOutUp'],
+            centered: ['slideInDown', 'slideOutUp'],
+            left: ['slideInLeft', 'slideOutLeft'],
+            right: ['slideInRight', 'slideOutRight']
+        };
+
+        // local
+        this.$message = false;
+        this.timeout = false;
+    },
+    // public
+    stop: function()
+    {
+        clearTimeout(this.timeout);
+
+        $K.dom('#' + this.params.selector).remove();
+
+        this.$message = false;
+        this.$doc.off('.kube.message');
+    },
+    show: function(params)
+    {
+        this._buildDefaults(params);
+
+        // stop
+        this.stop();
+
+        // build
+        this._build();
+        this._open();
+    },
+    hide: function(params)
+    {
+        this._buildDefaults(params);
+        this._close();
+    },
+    // private
+    _broadcast: function(message)
+    {
+        message = 'message.' + message;
+        message = (this.params.name !== false ) ? [this.params.name, message] : message;
+
+        this.app.broadcast(message, this);
+    },
+    _buildDefaults: function(data)
+    {
+         this.params = $K.extend({}, this.defaults, data);
+    },
+	_buildAnimation: function()
 	{
-		return this.each(function()
-		{
-			$.data(this, 'navigationFixed', {});
-			$.data(this, 'navigationFixed', NavigationFixed(this, options));
-		});
-
-	};
-
-	// Initialization
-	function NavigationFixed(el, options)
+        this.currentAnimation = this.animation[this.params.position];
+	},
+	_buildClose: function()
 	{
-		return new NavigationFixed.prototype.init(el, options);
-	}
-
-	$.NavigationFixed = NavigationFixed;
-	$.NavigationFixed.NAME = 'navigation-fixed';
-	$.NavigationFixed.VERSION = '1.0';
-	$.NavigationFixed.opts = {
-
-		// settings
-
-	};
-
-	// Functionality
-	NavigationFixed.fn = $.NavigationFixed.prototype = {
-
-		// Initialization
-		init: function(el, options)
-		{
-			var mq = window.matchMedia("(max-width: 767px)");
-			if (mq.matches) return;
-
-			this.$element = el !== false ? $(el) : false;
-			this.loadOptions(options);
-
-		    this.navBoxOffsetTop = this.$element.offset().top;
-
-		    this.build();
-		    $(window).scroll($.proxy(this.build, this));
-
-		},
-		loadOptions: function(options)
-		{
-			this.opts = $.extend(
-				{},
-				$.extend(true, {}, $.NavigationFixed.opts),
-				this.$element.data(),
-				options
-			);
-		},
-		setCallback: function(type, e, data)
-		{
-			var events = $._data(this.$element[0], 'events');
-			if (events && typeof events[type] != 'undefined')
-			{
-				var value = [];
-				var len = events[type].length;
-				for (var i = 0; i < len; i++)
-				{
-					var namespace = events[type][i].namespace;
-					if (namespace == 'tools.' + $.NavigationFixed.NAME || namespace == $.NavigationFixed.NAME + '.tools')
-					{
-						var callback = events[type][i].handler;
-						value.push((typeof data == 'undefined') ? callback.call(this, e) : callback.call(this, e, data));
-					}
-				}
-
-				if (value.length == 1) return value[0];
-				else return value;
-			}
-
-			return (typeof data == 'undefined') ? e : data;
-
-		},
-		build: function()
-		{
-			if ($(window).scrollTop() > this.navBoxOffsetTop)
-			{
-				this.$element.addClass('navigation-fixed');
-				this.setCallback('fixed');
-			}
-			else
-			{
-				this.$element.removeClass('navigation-fixed');
-				this.setCallback('unfixed');
-			}
-
-
-		}
-	};
-
-	$(window).on('load.tools.navigation-fixed', function()
+        this.$message.on('click.kube.message', this._close.bind(this));
+	},
+	_buildType: function()
 	{
-		$('[data-tools="navigation-fixed"]').navigationFixed();
-	});
-
-	// constructor
-	NavigationFixed.prototype.init.prototype = NavigationFixed.prototype;
-
-
-})(jQuery);
-/*
-	Navigation Toggle Tool
-
-	http://imperavi.com/kube/
-
-	Copyright (c) 2009-2014, Imperavi LLC.
-*/
-(function($)
-{
-	// Plugin
-	$.fn.navigationToggle = function(options)
+        if (this.params.type)
+        {
+            this.$message.removeClass(this.params.types.join(' '));
+            this.$message.addClass(this.params.type);
+        }
+	},
+	_buildPosition: function()
 	{
-		return this.each(function()
-		{
-			$.data(this, 'navigationToggle', {});
-			$.data(this, 'navigationToggle', NavigationToggle(this, options));
-		});
-
-	};
-
-	// Initialization
-	function NavigationToggle(el, options)
+        this.$message.removeClass(this.params.positions.join(' '));
+        this.$message.addClass('is-' + this.params.position);
+	},
+	_buildMessage: function()
 	{
-		return new NavigationToggle.prototype.init(el, options);
-	}
-
-	$.NavigationToggle = NavigationToggle;
-	$.NavigationToggle.NAME = 'navigation-toggle';
-	$.NavigationToggle.VERSION = '1.0';
-	$.NavigationToggle.opts = {
-
-		target: false
-
-	};
-
-	// Functionality
-	NavigationToggle.fn = $.NavigationToggle.prototype = {
-
-		// Initialization
-		init: function(el, options)
-		{
-			this.$element = el !== false ? $(el) : false;
-			this.loadOptions(options);
-
-			this.$target = $(this.opts.target);
-
-			this.$toggle = this.$element.find('span');
-			this.$toggle.on('click', $.proxy(this.onClick, this));
-
-		    this.build();
-		    $(window).resize($.proxy(this.build, this));
-
-		},
-		loadOptions: function(options)
-		{
-			this.opts = $.extend(
-				{},
-				$.extend(true, {}, $.NavigationToggle.opts),
-				this.$element.data(),
-				options
-			);
-		},
-		setCallback: function(type, e, data)
-		{
-			var events = $._data(this.$element[0], 'events');
-			if (events && typeof events[type] != 'undefined')
-			{
-				var value = [];
-				var len = events[type].length;
-				for (var i = 0; i < len; i++)
-				{
-					var namespace = events[type][i].namespace;
-					if (namespace == 'tools.' + $.NavigationToggle.NAME || namespace == $.NavigationToggle.NAME + '.tools')
-					{
-						var callback = events[type][i].handler;
-						value.push((typeof data == 'undefined') ? callback.call(this, e) : callback.call(this, e, data));
-					}
-				}
-
-				if (value.length == 1) return value[0];
-				else return value;
-			}
-
-			return (typeof data == 'undefined') ? e : data;
-
-		},
-		build: function()
-		{
-			var mq = window.matchMedia("(max-width: 767px)");
-			if (mq.matches)
-			{
-				// hide
-				if (!this.$target.hasClass('navigation-target-show'))
-				{
-					this.$element.addClass('navigation-toggle-show').show();
-					this.$target.addClass('navigation-target-show').hide();
-				}
-
-			}
-			else
-			{
-				// show
-				this.$element.removeClass('navigation-toggle-show').hide();
-				this.$target.removeClass('navigation-target-show').show();
-			}
-		},
-		onClick: function(e)
-		{
-			e.stopPropagation();
-			e.preventDefault();
-
-			if (this.isTargetHide())
-			{
-				this.$element.addClass('navigation-toggle-show');
-				this.$target.show();
-				this.setCallback('show', this.$target);
-			}
-			else
-			{
-				this.$element.removeClass('navigation-toggle-show');
-				this.$target.hide();
-				this.setCallback('hide', this.$target);
-			}
-		},
-		isTargetHide: function()
-		{
-			return (this.$target[0].style.display == 'none') ? true : false;
-		}
-	};
-
-	$(window).on('load.tools.navigation-toggle', function()
+    	this.$message.html(this.params.message);
+	},
+	_build: function()
 	{
-		$('[data-tools="navigation-toggle"]').navigationToggle();
-	});
+        this.$message = $K.dom('<div>');
+        this.$message.attr('id', this.params.selector);
+        this.$message.addClass('message is-hidden');
 
-	// constructor
-	NavigationToggle.prototype.init.prototype = NavigationToggle.prototype;
-
-
-})(jQuery);
-/*
-	Progress Tool
-
-	http://imperavi.com/kube/
-
-	Copyright (c) 2009-2014, Imperavi LLC.
-*/
-(function($)
-{
-	$.progress = {
-		show: function()
-		{
-			if ($('#tools-progress').length !== 0)
-			{
-				$('#tools-progress').fadeIn();
-			}
-			else
-			{
-				var $progress = $('<div id="tools-progress"><span></span></div>').hide();
-				$(document.body).append($progress);
-				$('#tools-progress').fadeIn();
-			}
-		},
-		update: function(value)
-		{
-			this.show();
-			$('#tools-progress').find('span').css('width', value + '%');
-		},
-		hide: function()
-		{
-			$('#tools-progress').fadeOut(1500);
-		}
-	};
-
-
-})(jQuery);
-
-/*
-	Tabs Tool
-
-	http://imperavi.com/kube/
-
-	Copyright (c) 2009-2014, Imperavi LLC.
-*/
-(function($)
-{
-	// Plugin
-	$.fn.tabs = function(options)
+        this.$body.append(this.$message);
+	},
+    _handleKeyboard: function(e)
 	{
-		var val = [];
-		var args = Array.prototype.slice.call(arguments, 1);
+		if (e.which === 27) this._close();
+	},
+    _open: function()
+    {
+        this._broadcast('open');
 
-		if (typeof options === 'string')
-		{
-			this.each(function()
-			{
-				var instance = $.data(this, 'tabs');
-				if (typeof instance !== 'undefined' && $.isFunction(instance[options]))
-				{
-					var methodVal = instance[options].apply(instance, args);
-					if (methodVal !== undefined && methodVal !== instance) val.push(methodVal);
-				}
-				else return $.error('No such method "' + options + '" for Tabs');
-			});
-		}
-		else
-		{
-			this.each(function()
-			{
-				$.data(this, 'tabs', {});
-				$.data(this, 'tabs', Tabs(this, options));
-			});
-		}
+        this._buildClose();
+        this._buildType();
+        this._buildPosition();
+        this._buildAnimation();
+        this._buildMessage();
 
-		if (val.length === 0) return this;
-		else if (val.length === 1) return val[0];
-		else return val;
-	};
+        this.animate.run(this.$message, this.currentAnimation[0], this._opened.bind(this));
+    },
+    _close: function(e)
+    {
+        if (this.$message)
+        {
+             this._broadcast('close');
+            this.animate.run(this.$message, this.currentAnimation[1], this._closed.bind(this));
+        }
+    },
+    _opened: function()
+    {
+        this.$doc.on('keyup.kube.message', this._handleKeyboard.bind(this));
+        this.timeout = setTimeout(this._close.bind(this), this.params.delay * 1000);
 
-	// Initialization
-	function Tabs(el, options)
+        this._broadcast('opened');
+    },
+    _closed: function()
+    {
+        this.stop();
+        this._broadcast('closed');
+    }
+});
+$K.add('service', 'modal', {
+    init: function(app)
+    {
+        this.app = app;
+
+        // defaults
+        this.defaults = {
+            target: false,
+            name: false,
+            url: false,
+            title: false,
+            width: '600px',
+            height: false,
+            handle: false,
+            commands: false
+        };
+
+        // local
+        this.$box = false;
+        this.$modal = false;
+
+	},
+	// public
+    stop: function()
+    {
+        if (this.$box)
+        {
+            this.$box.remove();
+            this.$box = false;
+            this.$modal = false;
+
+            this.$doc.off('.kube.modal');
+            this.$win.off('.kube.modal');
+        }
+
+        if (this.$overlay)
+        {
+            this.$overlay.remove();
+        }
+    },
+	open: function(params)
 	{
-		return new Tabs.prototype.init(el, options);
-	}
+        this._buildDefaults(params);
 
-	$.Tabs = Tabs;
-	$.Tabs.NAME = 'tabs';
-	$.Tabs.VERSION = '1.0';
-	$.Tabs.opts = {
-
-		equals: false,
-		active: false
-
-	};
-
-	// Functionality
-	Tabs.fn = $.Tabs.prototype = {
-
-		// Initialization
-		init: function(el, options)
-		{
-			this.$element = el !== false ? $(el) : false;
-
-			this.loadOptions(options);
-
-			this.links = this.$element.find('a');
-			this.tabs = [];
-
-			this.links.each($.proxy(this.load, this));
-
-			this.setEquals();
-			this.setCallback('init');
-		},
-		loadOptions: function(options)
-		{
-			this.opts = $.extend(
-				{},
-				$.extend(true, {}, $.Tabs.opts),
-				this.$element.data(),
-				options
-			);
-		},
-		setCallback: function(type, e, data)
-		{
-			var events = $._data(this.$element[0], 'events');
-			if (events && typeof events[type] != 'undefined')
-			{
-				var value = [];
-				var len = events[type].length;
-				for (var i = 0; i < len; i++)
-				{
-					var namespace = events[type][i].namespace;
-					if (namespace == 'tools.' + $.Tabs.NAME || namespace == $.Tabs.NAME + '.tools')
-					{
-						var callback = events[type][i].handler;
-						value.push((typeof data == 'undefined') ? callback.call(this, e) : callback.call(this, e, data));
-					}
-				}
-
-				if (value.length == 1) return value[0];
-				else return value;
-			}
-
-			return (typeof data == 'undefined') ? e : data;
-
-		},
-		load: function(i, el)
-		{
-			var $el = $(el);
-			var hash = $el.attr('href');
-			$el.attr('rel', hash);
-
-			this.tabs.push($(hash));
-
-			if (!$el.parent().hasClass('active'))
-			{
-				$(hash).hide();
-			}
-
-			// is hash in url
-			this.readLocationHash(hash);
-
-			// is active
-			if (this.opts.active !== false && this.opts.active === hash)
-			{
-				this.show(hash);
-			}
-
-			$el.on('click', $.proxy(this.onClick, this));
-		},
-		onClick: function(e)
-		{
-			e.preventDefault();
-
-			var hash = $(e.target).attr('rel');
-			top.location.hash = hash;
-			this.show(hash);
-		},
-		readLocationHash: function(hash)
-		{
-			if (top.location.hash === '' || top.location.hash != hash) return;
-
-			this.opts.active = top.location.hash;
-		},
-		setActive: function(hash)
-		{
-			this.activeHash = hash;
-			this.activeTab = $('[rel=' + hash + ']');
-
-			this.links.parent().removeClass('active');
-			this.activeTab.parent().addClass('active');
-		},
-		getActiveHash: function()
-		{
-			return this.activeHash;
-		},
-		getActiveTab: function()
-		{
-			return this.activeTab;
-		},
-		show: function(hash)
-		{
-			this.hideAll();
-			$(hash).show();
-			this.setActive(hash);
-
-			this.setCallback('show', $('[rel=' + hash + ']'), hash);
-		},
-		hideAll: function()
-		{
-			$.each(this.tabs, function()
-			{
-				$(this).hide();
-			});
-		},
-		setEquals: function()
-		{
-			if (!this.opts.equals) return;
-
-			this.setMaxHeight(this.getMaxHeight());
-		},
-		setMaxHeight: function(height)
-		{
-			$.each(this.tabs, function()
-			{
-				$(this).css('min-height', height + 'px');
-			});
-		},
-		getMaxHeight: function()
-		{
-			var max = 0;
-			$.each(this.tabs, function()
-			{
-				var h = $(this).height();
-				max = h > max ? h : max;
-			});
-
-			return max;
-		}
-	};
-
-	$(window).on('load.tools.tabs', function()
+        if (this.params.url)
+        {
+            this._openUrl();
+        }
+        else if (this.params.target)
+        {
+            this._openTarget();
+        }
+    },
+    close: function()
 	{
-		$('[data-tools="tabs"]').tabs();
-	});
+        this._close();
+	},
+    resize: function()
+    {
+        this.$modal.setWidth(this.params.width);
+        this.$modal.updatePosition();
+    },
 
-	// constructor
-	Tabs.prototype.init.prototype = Tabs.prototype;
+    // private
+    _broadcast: function(message)
+    {
+        message = 'modal.' + message;
 
-})(jQuery);
+        this.app.broadcast([this.params.name, message], this, this.$modal, this.$modalForm);
+    },
+    _isOpened: function()
+    {
+        return (this.$modal && this.$modal.hasClass('is-open'));
+    },
+    _openUrl: function()
+    {
+        $K.ajax.post({
+            url: this.params.url,
+            success: this._doOpen.bind(this)
+        });
+    },
+    _openTarget: function()
+    {
+        var template = $K.dom(this.params.target).clone().html();
+        this._doOpen(template);
+    },
+    _doOpen: function(template)
+    {
+        this.stop();
+
+        if (!this._isDesktop())
+        {
+            document.activeElement.blur();
+        }
 
 
-/*
-	TextFit Tool
+        this._createModal(template);
 
-	http://imperavi.com/kube/
+        this._buildModalBox();
+        this._buildOverlay();
+        this._buildModal();
+        this._buildModalForm();
+        this._buildModalCommands();
 
-	Copyright (c) 2009-2014, Imperavi LLC.
-*/
-(function($)
-{
-	// Plugin
-	$.fn.textfit = function(options)
-	{
-		return this.each(function()
+        this.$modal.updatePosition();
+        this._broadcast('open');
+
+        this.animate.run(this.$box, 'fadeIn', this._opened.bind(this));
+        this.animate.run(this.$overlay, 'fadeIn');
+    },
+    _opened: function()
+    {
+        this.$modal.addClass('is-open');
+        this.$box.on('mousedown.kube.modal', this._close.bind(this));
+        this.$doc.on('keyup.kube.modal', this._handleEscape.bind(this));
+        this.$win.on('resize.kube.modal', this.resize.bind(this));
+        this.$modal.getBody().find('input[type=text],input[type=url],input[type=email]').on('keydown.kube.modal', this._handleEnter.bind(this));
+
+        this._broadcast('opened');
+    },
+    _close: function(e)
+    {
+        if (!this.$box || !this._isOpened()) return;
+
+        if (e)
+        {
+            if (!this._needToClose(e.target))
+            {
+                return;
+            }
+
+            e.stopPropagation();
+            e.preventDefault();
+        }
+
+        this._broadcast('close');
+
+        this.animate.run(this.$box, 'fadeOut', this._closed.bind(this));
+        this.animate.run(this.$overlay, 'fadeOut');
+    },
+    _closed: function()
+    {
+        this.$modal.removeClass('is-open');
+        this.$box.off('.kube.modal');
+        this.$doc.off('.kube.modal');
+        this.$win.off('.kube.modal');
+
+        this._broadcast('closed');
+    },
+    _createModal: function(template)
+    {
+        this.$modal = $K.create('class.modal.element', this.app, template);
+    },
+    _buildDefaults: function(data)
+    {
+         this.params = $K.extend({}, this.defaults, data);
+    },
+    _buildModalBox: function()
+    {
+        this.$box = $K.dom('<div>');
+        this.$box.attr('id', 'kube-modal');
+        this.$box.addClass('modal-box is-hidden');
+        this.$box.html('');
+        this.$body.append(this.$box);
+    },
+    _buildOverlay: function()
+    {
+        this.$overlay = $K.dom('#kube-overlay');
+        if (this.$overlay.length === 0)
+        {
+            this.$overlay = $K.dom('<div>');
+            this.$overlay.attr('id', 'kube-overlay');
+            this.$overlay.addClass('overlay is-hidden');
+            this.$body.prepend(this.$overlay);
+        }
+    },
+    _buildModal: function()
+    {
+        this.$box.append(this.$modal);
+
+        this.$modal.setTitle(this.params.title);
+        this.$modal.setHeight(this.params.height);
+        this.$modal.setWidth(this.params.width);
+    },
+    _buildModalCommands: function()
+    {
+        if (this.params.commands)
+        {
+            var commands = this.params.commands;
+            var $footer = this.$modal.getFooter();
+            for (var key in commands)
+            {
+                var $btn = $K.dom('<button>');
+
+                $btn.addClass('button');
+                $btn.html(commands[key].title);
+                $btn.attr('data-command', key);
+
+                if (typeof commands[key].classname !== 'undefined')
+                {
+                    $btn.addClass(commands[key].classname);
+                }
+
+                if (typeof commands[key].close !== 'undefined')
+                {
+                    $btn.attr('data-action', 'close');
+                    $btn.on('click', this._close.bind(this));
+                }
+                else
+                {
+                    $btn.on('click', this._handleCommand.bind(this));
+                }
+
+                $footer.append($btn);
+            }
+        }
+    },
+    _buildModalForm: function()
+    {
+        this.$modalForm = $K.create('modal.form', this.app, this.$modal.getForm());
+    },
+    _needToClose: function(el)
+    {
+        var $target = $K.dom(el);
+        if ($target.attr('data-action') === 'close' || this.$modal.isCloseNode(el) || $target.closest('.modal').length === 0)
+        {
+            return true;
+        }
+
+        return false;
+    },
+    _handleCommand: function(e)
+    {
+        var $btn = $K.dom(e.target).closest('button');
+        var command = $btn.attr('data-command');
+
+        if (command !== 'cancel') e.preventDefault();
+
+        this._broadcast(command);
+    },
+    _handleEnter: function(e)
+    {
+        if (e.which === 13)
+        {
+            if (this.params.handle)
+            {
+                e.preventDefault();
+                this._broadcast(this.params.handle);
+            }
+        }
+    },
+    _handleEscape: function(e)
+    {
+        if (e.which === 27) this._close();
+    },
+    _isDesktop: function()
+    {
+        return !/(iPhone|iPod|iPad|Android)/.test(navigator.userAgent);
+    }
+});
+
+$K.add('class', 'modal.form', {
+    extends: ['dom'],
+    init: function(app, element)
+    {
+        this.app = app;
+
+        // build
+        this.build(element);
+    },
+
+    // public
+    build: function(element)
+    {
+        this.parse(element);
+    },
+    getData: function()
+    {
+        var data = {};
+        this.find('[name]').each(function(node)
+        {
+            var $node = $K.dom(node);
+            data[$node.attr('name')] = $node.val();
+        });
+
+        return data;
+    },
+    setData: function(data)
+    {
+        this.find('[name]').each(function(node)
+        {
+            var $node = $K.dom(node);
+            var name = $node.attr('name');
+            if (data.hasOwnProperty(name))
+            {
+                if (node.type && node.type === 'checkbox') node.checked = data[name];
+                else $node.val(data[name]);
+            }
+        });
+    },
+    getItem: function(name)
+    {
+        return this.find('[name=' + name + ']');
+    }
+});
+$K.add('class', 'modal.element', {
+    extends: ['dom'],
+    init: function(app, template)
+    {
+        this.app = app;
+        this.opts = app.opts;
+        this.$win = app.$win;
+
+        // init
+        this._init(template);
+    },
+
+    // get
+    getForm: function()
+    {
+        return this.find('form');
+    },
+    getHeader: function()
+    {
+        return this.$modalHeader;
+    },
+    getBody: function()
+    {
+        return this.$modalBody;
+    },
+    getFooter: function()
+    {
+        return this.$modalFooter;
+    },
+
+    // set
+    setTitle: function(title)
+    {
+        if (title) this.$modalHeader.html(title);
+    },
+    setWidth: function(width)
+    {
+        width = (parseInt(width) >= this.$win.width()) ? '96%' : width;
+
+        this.css('max-width', width);
+    },
+    setHeight: function(height)
+    {
+        if (height !== false) this.$modalBody.css('height', height);
+    },
+
+    // update
+    updatePosition: function()
+    {
+        var width = this.width();
+        this.css({ 'left': '50%', 'margin-left': '-' + (width/2) + 'px' });
+
+        var windowHeight = this.$win.height();
+        var height = this.height();
+        var marginTop = (windowHeight/2 - height/2);
+
+        if (height < windowHeight && marginTop !== 0)
+        {
+            this.css('margin-top', marginTop + 'px');
+        }
+    },
+
+    // is
+    isCloseNode: function(el)
+    {
+        return (el === this.$modalClose.get());
+    },
+
+    // private
+    _init: function(template)
+    {
+        this._build();
+        this._buildClose();
+        this._buildHeader();
+        this._buildBody();
+        this._buildFooter();
+        this._buildTemplate(template);
+    },
+    _build: function()
+    {
+        this.parse('<div>');
+        this.addClass('modal');
+        this.attr('dir', this.opts.direction);
+    },
+    _buildClose: function()
+    {
+        this.$modalClose = $K.dom('<span>');
+        this.$modalClose.addClass('close');
+
+        this.append(this.$modalClose);
+    },
+    _buildHeader: function()
+    {
+        this.$modalHeader = $K.dom('<div>');
+        this.$modalHeader.addClass('modal-header');
+
+        this.append(this.$modalHeader);
+    },
+    _buildBody: function()
+    {
+        this.$modalBody = $K.dom('<div>');
+        this.$modalBody.addClass('modal-body');
+
+        this.append(this.$modalBody);
+    },
+    _buildFooter: function()
+    {
+        this.$modalFooter = $K.dom('<div>');
+        this.$modalFooter.addClass('modal-footer');
+
+        this.append(this.$modalFooter);
+    },
+    _buildTemplate: function(template)
+    {
+        this.$modalBody.html(template);
+    }
+});
+$K.add('service', 'observer', {
+    init: function(app)
+    {
+        this.app = app;
+        this.opts = app.opts;
+
+        if (this._isObserve())
+        {
+            this._build();
+        }
+    },
+
+    // private
+    _isObserve: function()
+    {
+        return (typeof this.opts.observer !== 'undefined' && window.MutationObserver);
+    },
+    _build: function()
+    {
+        var self = this;
+		var observer = new MutationObserver(function(mutations)
 		{
-			$.data(this, 'textfit', {});
-			$.data(this, 'textfit', Textfit(this, options));
-		});
-
-	};
-
-	// Initialization
-	function Textfit(el, options)
-	{
-		return new Textfit.prototype.init(el, options);
-	}
-
-	$.Textfit = Textfit;
-	$.Textfit.NAME = 'textfit';
-	$.Textfit.VERSION = '1.0';
-	$.Textfit.opts = {
-
-		min: '10px',
-		max: '100px',
-		compressor: 1
-
-	};
-
-	// Functionality
-	Textfit.fn = $.Textfit.prototype = {
-
-		// Initialization
-		init: function(el, options)
-		{
-
-			this.$element = el !== false ? $(el) : false;
-			this.loadOptions(options);
-
-			this.$element.css('font-size', Math.max(Math.min(this.$element.width() / (this.opts.compressor*10), parseFloat(this.opts.max)), parseFloat(this.opts.min)));
-
-		},
-		loadOptions: function(options)
-		{
-			this.opts = $.extend(
-				{},
-				$.extend(true, {}, $.Textfit.opts),
-				this.$element.data(),
-				options
-			);
-		}
-	};
-
-	$(window).on('load.tools.textfit', function()
-	{
-		$('[data-tools="textfit"]').textfit();
-	});
-
-	// constructor
-	Textfit.prototype.init.prototype = Textfit.prototype;
-
-
-})(jQuery);
-/*
-	Tooltip Tool
-
-	http://imperavi.com/kube/
-
-	Copyright (c) 2009-2014, Imperavi LLC.
-*/
-(function($)
-{
-	// Plugin
-	$.fn.tooltip = function(options)
-	{
-		return this.each(function()
-		{
-			$.data(this, 'tooltip', {});
-			$.data(this, 'tooltip', Tooltip(this, options));
-		});
-	};
-
-	// Initialization
-	function Tooltip(el, options)
-	{
-		return new Tooltip.prototype.init(el, options);
-	}
-
-	$.Tooltip = Tooltip;
-	$.Tooltip.NAME = 'tooltip';
-	$.Tooltip.VERSION = '1.0';
-	$.Tooltip.opts = {
-
-		theme: false
-
-	};
-
-	// Functionality
-	Tooltip.fn = $.Tooltip.prototype = {
-
-		// Initialization
-		init: function(el, options)
-		{
-			this.$element = el !== false ? $(el) : false;
-
-			this.loadOptions(options);
-
-			this.$element.on('mouseover', $.proxy(this.show, this));
-			this.$element.on('mouseout', $.proxy(this.hide, this));
-		},
-		loadOptions: function(options)
-		{
-			this.opts = $.extend(
-				{},
-				$.extend(true, {}, $.Tooltip.opts),
-				this.$element.data(),
-				options
-			);
-		},
-		show: function()
-		{
-			$('.tooltip').hide();
-
-			var text = this.$element.attr('title');
-			this.$element.data('cached-title', text);
-			this.$element.attr('title', '');
-
-			this.tooltip = $('<div class="tooltip" />').html(text).hide();
-
-			if (this.opts.theme !== false)
+			mutations.forEach(function(mutation)
 			{
-				this.tooltip.addClass('tooltip-theme-' + this.opts.theme);
-			}
-
-			this.tooltip.css({
-				top: (this.$element.offset().top + this.$element.innerHeight()) + 'px',
-				left: this.$element.offset().left + 'px'
-			});
-
-			$('body').append(this.tooltip);
-
-			this.tooltip.show();
-
-		},
-		hide: function()
-		{
-			this.tooltip.fadeOut('fast', $.proxy(function()
-			{
-				this.tooltip.remove();
-
-			}, this));
-
-			this.$element.attr('title', this.$element.data('cached-title'));
-			this.$element.data('cached-title', '');
-		}
-	};
-
-	// Constructor
-	Tooltip.prototype.init.prototype = Tooltip.prototype;
-
-	$(function()
-	{
-		$('[data-tools="tooltip"]').tooltip();
-	});
-
-})(jQuery);
-
-/*
-	Upload Tool
-
-	http://imperavi.com/kube/
-
-	Copyright (c) 2009-2014, Imperavi LLC.
-*/
-(function($)
-{
-	// Plugin
-	$.fn.upload = function(options)
-	{
-		return this.each(function()
-		{
-			$.data(this, 'upload', {});
-			$.data(this, 'upload', Upload(this, options));
-		});
-	};
-
-	// Initialization
-	function Upload(el, options)
-	{
-		return new Upload.prototype.init(el, options);
-	}
-
-	$.Upload = Upload;
-	$.Upload.NAME = 'upload';
-	$.Upload.VERSION = '1.0';
-	$.Upload.opts = {
-
-		url: false,
-		placeholder: 'Drop file here or ',
-		param: 'file'
-
-	};
-
-	// Functionality
-	Upload.fn = $.Upload.prototype = {
-
-		// Initialization
-		init: function(el, options)
-		{
-			this.$element = el !== false ? $(el) : false;
-			this.loadOptions(options);
-
-			this.load();
-		},
-		loadOptions: function(options)
-		{
-			this.opts = $.extend(
-				{},
-				$.extend(true, {}, $.Upload.opts),
-				this.$element.data(),
-				options
-			);
-		},
-		setCallback: function(type, e, data)
-		{
-			var events = $._data(this.$element[0], 'events');
-			if (events && typeof events[type] != 'undefined')
-			{
-				var value = [];
-				var len = events[type].length;
-				for (var i = 0; i < len; i++)
-				{
-					var namespace = events[type][i].namespace;
-					if (namespace == 'tools.' + $.Upload.NAME || namespace == $.Upload.NAME + '.tools')
-					{
-						var callback = events[type][i].handler;
-						value.push((typeof data == 'undefined') ? callback.call(this, e) : callback.call(this, e, data));
-					}
-				}
-
-				if (value.length == 1) return value[0];
-				else return value;
-			}
-
-			return (typeof data == 'undefined') ? e : data;
-
-		},
-		load: function()
-		{
-			this.$droparea = $('<div class="tools-droparea" />');
-			this.$placeholdler = $('<div class="tools-droparea-placeholder" />').text(this.opts.placeholder);
-
-			this.$droparea.append(this.$placeholdler);
-			this.$element.after(this.$droparea);
-			this.$placeholdler.append(this.$element);
-
-			this.$droparea.off('.tools.upload');
-			this.$element.off('.tools.upload');
-
-			this.$droparea.on('dragover.tools.upload', $.proxy(this.onDrag, this));
-			this.$droparea.on('dragleave.tools.upload', $.proxy(this.onDragLeave, this));
-
-			// change
-			this.$element.on('change.tools.upload', $.proxy(function(e)
-			{
-				e = e.originalEvent || e;
-				this.traverseFile(this.$element[0].files[0], e);
-			}, this));
-
-			// drop
-			this.$droparea.on('drop.tools.upload', $.proxy(function(e)
-			{
-				e.preventDefault();
-
-				this.$droparea.removeClass('drag-hover').addClass('drag-drop');
-				this.onDrop(e);
-
-			}, this));
-		},
-		onDrop: function(e)
-		{
-			e = e.originalEvent || e;
-			var files = e.dataTransfer.files;
-
-			this.traverseFile(files[0], e);
-		},
-		traverseFile: function(file, e)
-		{
-			var formData = !!window.FormData ? new FormData() : null;
-			if (window.FormData)
-			{
-				formData.append(this.opts.param, file);
-			}
-
-			if ($.progress) $.progress.show();
-			this.sendData(formData, e);
-		},
-		sendData: function(formData, e)
-		{
-			var xhr = new XMLHttpRequest();
-			xhr.open('POST', this.opts.url);
-
-			// complete
-			xhr.onreadystatechange = $.proxy(function()
-			{
-			    if (xhr.readyState == 4)
+				var newNodes = mutation.addedNodes;
+			    if (newNodes.length === 0 || (newNodes.length === 1 && newNodes.nodeType === 3))
 			    {
-			        var data = xhr.responseText;
+				    return;
+				}
 
-					data = data.replace(/^\[/, '');
-					data = data.replace(/\]$/, '');
+                self._iterate();
+			});
+		});
 
-					var json = (typeof data === 'string' ? $.parseJSON(data) : data);
-
-					if ($.progress) $.progress.hide();
-
-					this.$droparea.removeClass('drag-drop');
-					this.setCallback('success', json);
-			    }
-			}, this);
-
-			xhr.send(formData);
-		},
-		onDrag: function(e)
+		// pass in the target node, as well as the observer options
+		observer.observe(document, {
+			 subtree: true,
+			 childList: true
+		});
+    },
+    _iterate: function()
+    {
+        var self = this;
+        var $nodes = $K.dom('[data-kube]').not('[data-loaded]');
+		$nodes.each(function(node, i)
 		{
-			e.preventDefault();
-			this.$droparea.addClass('drag-hover');
-		},
-		onDragLeave: function(e)
-		{
-			e.preventDefault();
-			this.$droparea.removeClass('drag-hover');
-		}
+    		var $el = $K.dom(node);
+    		var name = $el.attr('data-kube');
+            var id = ($el.attr('id')) ? $el.attr('id') : name + '-' + (self.app.servicesIndex + i);
+            var instance = new App.Module(self.app, $el, name, id);
 
-	};
+            self._storeElementModule(instance, name, id)
+            self._call(instance, 'start');
+        });
 
-	// Constructor
-	Upload.prototype.init.prototype = Upload.prototype;
+        // $R
+        if (typeof $R !== 'undefined')
+        {
+            $R('[data-redactor]');
+        }
+    },
+    _call: function(instance, method, args)
+    {
+        if (typeof instance[method] === 'function')
+        {
+            return instance[method].apply(instance, args);
+        }
+    },
+    _storeElementModule: function(instance, name, id)
+    {
+        if (instance)
+        {
+            if (typeof this.app.modules[name] === 'undefined')
+            {
+                this.app.modules[name] = {};
+            }
 
-	$(function()
-	{
-		$('[data-tools="upload"]').upload();
-	});
+            this.app.modules[name][id] = instance;
+        }
+    }
+});
+$K.add('service', 'utils', {
+    init: function(app)
+    {
+        this.app = app;
+    },
 
-})(jQuery);
+    // string
+    parseOptsString: function(str)
+    {
+        var properties = str.replace('{', '').replace('}', '').trim().replace(/;$/, '').split(';');
+        var obj = {};
+        properties.forEach(function(property) {
+            var tup = property.split(':');
+            obj[tup[0].trim()] = tup[1].trim().replace(/'/g, '');
+        });
 
+        return obj;
+    },
+    ucfirst: function(str)
+    {
+        return str.charAt(0).toUpperCase() + str.slice(1);
+    },
 
+    // object
+    checkProperty: function(obj)
+    {
+        var args = (arguments[1] && Array.isArray(arguments[1])) ? arguments[1] : [].slice.call(arguments, 1);
+
+        for (var i = 0; i < args.length; i++)
+        {
+            if (!obj || (typeof obj[args[i]] === 'undefined'))
+            {
+                return false;
+            }
+
+            obj = obj[args[i]];
+        }
+
+        return obj;
+    },
+
+    // data
+    extendData: function(data, elements)
+    {
+        if (typeof elements === 'object')
+        {
+            data = $K.extend({}, data, elements);
+        }
+        else if (typeof elements === 'string')
+        {
+            var $elms = $K.dom(elements);
+            $elms.each(function(node)
+            {
+                var $node = $K.dom(node);
+                if (node.tagName === 'FORM')
+                {
+                    data = $K.extend({}, data, $node.serialize(true));
+                }
+                else
+                {
+                    var name = ($node.attr('name')) ? $node.attr('name') : $node.attr('id');
+                    var val = $node.val();
+                    data[name] = (this._isNumber(val)) ? parseFloat(val) : this._getBooleanFromStr(val);
+                }
+            });
+        }
+
+        return data;
+    },
+    _isNumber: function(str)
+    {
+        return !isNaN(str) && !isNaN(parseFloat(str));
+    },
+    _getBooleanFromStr: function(str)
+    {
+        if (str === 'true') return true;
+        else if (str === 'false') return false;
+
+        return str;
+    }
+});
+
+    window.Kube = window.$K = $K;
+}());
+(function($K)
+{
+    $K.add('module', 'alert', {
+        init: function(app, context)
+        {
+            this.app = app;
+            this.animate = app.animate;
+
+            // context
+            this.context = context;
+            this.$element = context.getElement();
+        },
+        // events
+        onclick: function(e, element, type)
+        {
+            if (type === 'close')
+            {
+                this.close(e);
+            }
+        },
+        // public
+        open: function(e)
+        {
+            if (this.$element.isOpened()) return;
+            if (e) e.preventDefault();
+
+            this.app.broadcast('alert.open', this);
+            this.animate.run(this.$element, 'fadeIn', this._opened.bind(this));
+        },
+        close: function(e)
+        {
+            if (this.$element.isClosed()) return;
+            if (e) e.preventDefault();
+
+            this.app.broadcast('alert.close', this);
+            this.animate.run(this.$element, 'fadeOut', this._closed.bind(this));
+        },
+        // private
+        _opened: function()
+        {
+            this.app.broadcast('alert.opened', this);
+        },
+        _closed: function()
+        {
+            this.app.broadcast('alert.closed', this);
+        }
+    });
+})(Kube);
+(function($K)
+{
+    $K.add('module', 'toggle', {
+        init: function(app, context)
+        {
+            this.app = app;
+            this.animate = app.animate;
+
+            // defaults
+            var defaults = {
+                target: false
+            };
+
+            // context
+            this.context = context;
+            this.params = context.getParams(defaults);
+            this.$element = context.getElement();
+            this.$target = context.getTarget();
+        },
+        // public
+        start: function()
+        {
+            this.$element.on('click.kube.toggle', this.toggle.bind(this));
+        },
+        stop: function()
+        {
+            this.$element.off('.kube.toggle');
+        },
+        toggle: function(e)
+        {
+            return (this.$target.isOpened()) ? this.close(e) : this.open(e);
+        },
+        open: function(e)
+        {
+            if (this.$target.isOpened()) return;
+            if (e) e.preventDefault();
+
+            this.app.broadcast('toggle.open', this);
+            this.animate.run(this.$target, 'slideDown', this._opened.bind(this));
+        },
+        close: function(e)
+        {
+            if (this.$target.isClosed()) return;
+            if (e) e.preventDefault();
+
+            this.app.broadcast('toggle.close', this);
+            this.animate.run(this.$target, 'slideUp', this._closed.bind(this));
+        },
+
+        // private
+        _opened: function()
+        {
+            this.app.broadcast('toggle.opened', this);
+        },
+        _closed: function()
+        {
+            this.app.broadcast('toggle.closed', this);
+        }
+    });
+})(Kube);
+(function($K)
+{
+    $K.add('module', 'sticky', {
+        init: function(app, context)
+        {
+            this.app = app;
+            this.$win = app.$win;
+
+            // defaults
+            var defaults = {
+                offset: 0 // string in pixels
+            };
+
+            // context
+            this.context = context;
+            this.params = context.getParams(defaults);
+            this.$element = context.getElement();
+        },
+        start: function()
+        {
+            this.offsetTop = this._getOffsetTop();
+
+    	    this._load();
+    	    this.$win.on('scroll.kube.sticky', this._load.bind(this));
+    	},
+    	stop: function()
+    	{
+        	this.$win.off('scroll.kube.sticky');
+        	this.$element.removeClass('fixed').css('top', '');
+    	},
+        // private
+    	_load: function()
+    	{
+    		return (this._isFix()) ? this._setFixed() : this._setUnfixed();
+    	},
+    	_isFix: function()
+    	{
+            return (this.$win.scrollTop() > (this.offsetTop + parseInt(this.params.offset, 10)));
+    	},
+    	_setFixed: function()
+    	{
+    		this.$element.addClass('is-fixed').css('top', this.params.offset);
+    		this.app.broadcast('sticky.fixed', this);
+    	},
+    	_setUnfixed: function()
+    	{
+    		this.$element.removeClass('is-fixed').css('top', '');
+    		this.app.broadcast('sticky.unfixed', this);
+        },
+    	_getOffsetTop: function()
+    	{
+        	return this.$element.offset().top;
+    	}
+    });
+})(Kube);
+(function($K)
+{
+    $K.add('module', 'offcanvas', {
+        init: function(app, context)
+        {
+            this.app = app;
+            this.$doc = app.$doc;
+            this.$body = app.$body;
+            this.utils = app.utils;
+            this.animate = app.animate;
+            this.transition = app.transition;
+
+            // defaults
+            var defaults = {
+                clickOutside: true,
+                target: false
+            };
+
+            // context
+            this.context = context;
+            this.params = context.getParams(defaults);
+            this.$element = context.getElement();
+            this.$target = context.getTarget();
+
+            // build
+            this._build();
+        },
+        start: function()
+        {
+            this.$element.on('click.kube.offcanvas', this.toggle.bind(this));
+        },
+        stop: function()
+        {
+            this._clear();
+        },
+        toggle: function(e)
+        {
+            return (this.$target.isOpened()) ? this.close(e) : this.open(e);
+        },
+        open: function(e)
+        {
+            if (e)
+            {
+                e.stopPropagation();
+                e.preventDefault();
+            }
+
+            this._clear();
+
+            this.$body.addClass('is-no-scroll-x');
+            this.$target.addClass('is-offcanvas');
+
+            this.targetWidth = this.$target.width();
+
+            this._resize();
+            this.app.broadcast('offcanvas.open', this);
+
+            return (this.isSlide) ? this._openSlide() : this._openPush();
+        },
+        close: function(e)
+        {
+            if (this.eventScroll) return;
+            if (e)
+            {
+                var $el = $K.dom(e.target);
+                var el = $el.get();
+                var isClickable = (el.tagName === 'A' ||el.tagName === 'BUTTON');
+            	if (!isClickable || el === this.$element.get())
+                {
+                    e.stopPropagation();
+                    e.preventDefault();
+                }
+            }
+
+            this.app.broadcast('offcanvas.close', this);
+
+            return (this.isSlide) ? this._closeSlide() : this._closePush();
+        },
+        // private
+        _build: function()
+        {
+            this.isSlide = !(this.$target.hasClass('is-offcanvas-push'));
+            this.slideDirection = (this.$target.hasClass('is-offcanvas-right')) ? 'Right' : 'Left';
+            this.pushSign = (this.slideDirection === 'Left') ? '' : '-';
+            this.eventScroll = false;
+        },
+        _handleKeyboard: function(e)
+    	{
+    		if (e.which === 27) this.close();
+    	},
+
+        _openSlide: function()
+        {
+            this.animate.run(this.$target, 'slideIn' + this.slideDirection, this._opened.bind(this));
+        },
+        _openPush: function()
+        {
+            this.$target.show();
+            this._pushBody(this.pushSign + this.targetWidth + 'px', this._opened.bind(this));
+        },
+        _opened: function()
+        {
+            this.$doc.on('touchmove.kube.offcanvas', function() { this.eventScroll = true; }.bind(this));
+            this.$doc.on('touchstart.kube.offcanvas', function() { this.eventScroll = false; }.bind(this));
+            this.$doc.on('keyup.kube.offcanvas', this._handleKeyboard.bind(this));
+
+            if (this.params.clickOutside)
+            {
+                this.$doc.on('click.kube.offcanvas touchend.kube.offcanvas', this.close.bind(this));
+            }
+
+            this.app.broadcast('offcanvas.opened', this);
+        },
+        _closeSlide: function()
+        {
+            this.animate.run(this.$target, 'slideOut' + this.slideDirection, this._closed.bind(this));
+        },
+        _closePush: function()
+        {
+            this._pushBody('0', this._closed.bind(this));
+        },
+        _closed: function()
+        {
+            this.$doc.off('.kube.offcanvas');
+            this.$body.removeClass('is-no-scroll-x');
+            this.transition.remove(this.$body);
+            this.$target.removeClass('is-offcanvas');
+            this.$target.hide();
+
+            this.app.broadcast('offcanvas.closed', this);
+        },
+        _pushBody: function(transform, callback)
+        {
+            var params = {
+                classname: 'is-offcanvasTransition',
+                css: { transform: 'translateX(' + transform + ')' },
+                callback: callback
+            };
+
+            this.transition.run(this.$body, params, callback);
+        },
+        _resize: function()
+        {
+            var resize = function()
+            {
+                this.$target.height(this.$doc.height());
+            }.bind(this);
+
+            resize();
+            this.$doc.on('resize.kube.offcanvas', resize);
+        },
+        _clear: function()
+        {
+            this.$doc.off('.kube.offcanvas');
+            this.transition.remove(this.$body);
+
+            $K.dom('.is-offcanvas').each(function(node)
+            {
+                var $el = $K.dom(node);
+
+                this.animate.remove($el);
+
+                $el.hide();
+                $el.removeClass('is-offcanvas');
+
+            }.bind(this));
+        }
+    });
+})(Kube);
+(function($K)
+{
+    $K.add('module', 'tabs', {
+        init: function(app, context)
+        {
+            this.app = app;
+            this.$body = app.$body;
+
+            // defaults
+            var defaults = {
+                equal: false
+            };
+
+            // context
+            this.context = context;
+            this.params = context.getParams(defaults);
+            this.$element = context.getElement();
+
+            // local
+            this.$boxes = $K.dom([]);
+            this.$tabActive = false;
+            this.$boxActive = false;
+        },
+        start: function()
+        {
+            this._buildControls();
+            this._buildBoxes();
+            this._setEqualBoxes();
+
+            this._open();
+        },
+        stop: function()
+        {
+            this.$tabsControls.off('.kube.tabs');
+        },
+        // api
+        getActiveTab: function()
+        {
+            return this.$tabActive;
+        },
+        getActiveBox: function()
+        {
+            return this.$boxActive;
+        },
+        // private
+        _toggle: function(e)
+        {
+            if (e)
+            {
+                e.stopPropagation();
+                e.preventDefault();
+            }
+
+            var $tab = $K.dom(e.target);
+            var $box = this._getBox($tab);
+
+            if ($tab.hasClass('is-active')) return;
+
+            this._open($tab);
+            this.app.broadcast('tabs.opened', this);
+        },
+        _buildControls: function()
+        {
+            this.$tabsControls = this.$element.find('a');
+            this.$tabsControls.on('click.kube.tabs', this._toggle.bind(this));
+        },
+        _buildBoxes: function()
+        {
+            this.$tabsControls.each(function(node, i)
+            {
+                var $tab = $K.dom(node);
+                var $box = this._getBox($tab);
+
+                this.$boxes.add($box);
+
+                if (i === 0) this.$tabActive = $tab;
+                if ($tab.hasClass('is-active')) this.$tabActive = $tab;
+
+            }.bind(this));
+        },
+        _open: function($tab)
+        {
+            this.$tabActive = ($tab) ? $tab : this.$tabActive;
+
+            this.$tabsControls.removeClass('is-active');
+            this.$tabActive.addClass('is-active');
+            this.$boxActive = this._getBox(this.$tabActive);
+
+            this.$boxes.addClass('is-hidden').removeClass('is-open');
+            this.$boxActive.removeClass('is-hidden').addClass('is-open');
+        },
+        _getBox: function($tab)
+        {
+            return $K.dom($tab.attr('href'));
+        },
+        _setEqualBoxes: function()
+    	{
+        	if (!this.params.equal) return;
+
+    		var minHeight = this._getItemMaxHeight() + 'px';
+
+	    	this.$boxes.css('min-height', minHeight);
+    	},
+    	_getItemMaxHeight: function()
+    	{
+    		var max = 0;
+    		this.$boxes.each(function(node)
+    		{
+        		var $node = $K.dom(node);
+    			var h = $node.height();
+    			max = (h > max) ? h : max;
+    		});
+
+    		return max;
+    	}
+    });
+})(Kube);
+(function($K)
+{
+    $K.add('module', 'dropdown', {
+        init: function(app, context)
+        {
+            this.app = app;
+            this.$doc = app.$doc;
+            this.$win = app.$win;
+            this.$body = app.$body;
+            this.utils = app.utils;
+            this.animate = app.animate;
+
+            // defaults
+            var defaults = {
+                target: false
+            };
+
+            // context
+            this.context = context;
+            this.params = context.getParams(defaults);
+            this.$element = context.getElement();
+            this.$target = context.getTarget();
+
+            // local
+            this.animationOpen = 'slideDown';
+            this.animationClose = 'slideUp';
+        },
+        // public
+        start: function()
+        {
+            this.$element.on('click.kube.dropdown', this.toggle.bind(this));
+        },
+        stop: function()
+        {
+            this.animate.clear(this.$target);
+            this.$target.hide();
+
+            this.$element.off('.kube.dropdown');
+            this.$doc.off('.kube.dropdown');
+            this.$win.off('.kube.dropdown');
+        },
+        toggle: function(e)
+        {
+            return (this.$target.isOpened()) ? this.close(e) : this.open(e);
+        },
+        open: function(e)
+        {
+            if (this.$target.isOpened()) return;
+            if (e)
+            {
+                e.stopPropagation();
+                e.preventDefault();
+            }
+
+            this.$doc.off('.kube.dropdown');
+            this.$win.off('.kube.dropdown');
+
+            // hide all
+            this.$body.find('.dropdown').each(function(node)
+            {
+                var $el = $K.dom(node);
+
+                this.animate.remove($el);
+                $el.hide();
+
+            }.bind(this));
+
+            this._openCaret();
+            this._setPosition();
+
+            this.$element.addClass('dropdown-in');
+            this.app.broadcast('dropdown.open', this);
+            this.animate.run(this.$target, this.animationOpen, this._opened.bind(this));
+        },
+        close: function(e)
+        {
+            if (this.$target.isClosed()) return;
+            if (e)
+            {
+                var el = e.target;
+                var $el = $K.dom(el);
+                var isClickable = (el.tagName === 'A' || el.tagName === 'BUTTON');
+                if (!isClickable || el === this.$element.get() || (el.tagName === 'A' && $el.hasClass('is-active')))
+                {
+                    e.stopPropagation();
+                    e.preventDefault();
+                }
+            }
+
+            this.app.broadcast('dropdown.close', this);
+            this.animate.run(this.$target, this.animationClose, this._closed.bind(this));
+        },
+
+        // private
+    	_getPlacement: function()
+    	{
+        	var pos = this.$element.position();
+        	var height = parseFloat(this.$element.css('height')) + pos.top + parseFloat(this.$target.css('height'));
+    		return (this.$doc.height() < height) ? 'top' : 'bottom';
+    	},
+    	_setPosition: function()
+    	{
+        	var elHeight = parseFloat(this.$element.css('height'));
+            var pos = this.$element.offset();
+            var top = pos.top + elHeight;
+            var left = pos.left;
+            var height = parseFloat(this.$target.css('height'));
+            var placement = this._getPlacement();
+            var width = parseFloat(this.$target.css('width'));
+            var borderWidth = parseFloat(this.$element.css('border-left-width')) + parseFloat(this.$element.css('border-right-width'));
+            var leftFix = (this.$win.width() < (left + width)) ? (width - this.$element.width() - borderWidth) : 0;
+
+            if (placement === 'top')
+            {
+                 top = top - height - elHeight;
+                 this.animationOpen = 'show';
+                 this.animationClose = 'hide';
+            }
+            else
+            {
+                 this.animationOpen = 'slideDown';
+                 this.animationClose = 'slideUp';
+            }
+
+            this.$target.css({ 'top': top + 'px', 'left': (left - leftFix) + 'px' });
+    	},
+        _handleKeyboard: function(e)
+    	{
+    		if (e.which === 27) this.close();
+    	},
+        _opened: function()
+        {
+            this.$doc.on('keyup.kube.dropdown', this._handleKeyboard.bind(this));
+            this.$doc.on('click.kube.dropdown touchstart.kube.dropdown', this.close.bind(this));
+    		this.$doc.on('scroll.kube.dropdown', this._setPosition.bind(this));
+    		this.$win.on('resize.kube.dropdown', this._setPosition.bind(this));
+
+            this.app.broadcast('dropdown.opened', this);
+        },
+        _closed: function()
+        {
+            this.$doc.off('.kube.dropdown');
+            this.$win.off('.kube.dropdown');
+
+            this._closeCaret();
+            this.$element.removeClass('dropdown-in');
+            this.app.broadcast('dropdown.closed', this);
+        },
+        _openCaret: function()
+        {
+            var $caret = this.$element.find('.caret');
+            $caret.removeClass('is-down').addClass('is-left');
+        },
+        _closeCaret: function()
+        {
+            var $caret = this.$element.find('.caret');
+            $caret.removeClass('is-left').addClass('is-down');
+        }
+    });
+})(Kube);

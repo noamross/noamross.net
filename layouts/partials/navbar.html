@@ -1,16 +1,29 @@
 <div id="topbar">
-<div class="wrapper">
-	<header>
-		<nav class="navbar">
-			<ul>
-				<li class="hd"><a href="{{ .Site.BaseURL }}">NR</a></li>
-				<li><span><a href="{{ .Site.BaseURL }}/musings">Musings</a></span></li>
-				<li><a href="{{ .Site.BaseURL }}/works">Works</a></li>
-				<li><a href="{{ .Site.BaseURL }}/vitae">Vitae</a></li>
-				<li><a href="#searchsite">Search</a></li>
-				<li><a href="#about">About</a></li>
-			</ul>
-		</nav>
-	</header>
-</div>
+	<div class="wrapper">
+		<header>
+			<div class="is-navbar-container">
+				<nav>
+				<div class="is-brand">
+					<a class="logo" href="{{ .Site.BaseURL }}"><i>NR</i></a>
+					<a href="#"
+						 class="nav-toggle is-push-right-mobile is-shown-mobile icon-kube-menu"
+						 data-kube="toggle"
+						 data-target="#navbar-main"></a>
+				</div>
+				</nav>
+				<div id="navbar-main" class="is-navbar is-hidden-mobile">
+					<nav>
+						<ul>
+							<li><span><a href="{{ .Site.BaseURL }}/musings">Musings</a></span></li>
+							<li><a href="{{ .Site.BaseURL }}/works">Works</a></li>
+							<li><a href="{{ .Site.BaseURL }}/vitae">Vitae</a></li>
+						</ul>
+					</nav>
+					<nav class="is-push-right" class="is-hidden-mobile">
+						{{ partial "searchform.html" . }}
+					</nav>
+				</div>
+			</div>
+		</header>
+	</div>
 </div>

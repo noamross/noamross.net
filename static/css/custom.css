@@ -24,10 +24,13 @@ blockquote p {
   font-size: 4em;
   font-style: normal;
   float: left;
-  line-height: 1.0 !important;
   padding-right: 0.1em;
-  padding-bottom: 0em;
+  margin-bottom: -0.24em;
   text-transform: uppercase
+}
+
+.bigger {
+  font-size: 110%;
 }
 
 pre code {
@@ -49,6 +52,7 @@ p code {
 
 form, input[type="search"], select[multiple="multiple"] {
   font-family: 'Alegreya', 'Trebuchet MS', Helvetica, Arial, sans-serif;
+  border-radius:50px;
 }
 
 /*body {
@@ -102,14 +106,6 @@ nav {
   font-family: 'IM Fell English';
 }
 
-.hd {
-  font-family: 'IM Fell English';
-  color: #b24;
-  font-style: italic;
-  letter-spacing: -5px;
-  font-size: 1.8em;
-}
-
 .caps {
   font-family: 'Alegreya SC';
 }
@@ -144,26 +140,28 @@ h2 {
 #topbar {
   background: #ffffff00;
   padding: 0px;
+  padding-bottom: 10px;
   margin-bottom: 40px;
   border-bottom: 1px solid #bbbbbbbb;
+  font-family: 'IM Fell English';
+  color: #b24;
 }
 
-.navbar {
-  padding-bottom: 14px;
-  font-size: 120%;
-  margin-bottom: 0px;
+#topbar .is-brand {
+  letter-spacing: -5px;
+  font-size: 1.9em;
 }
 
-#topbar li a {
-  color: #222222;
+#topbar .icon-kube-menu::before {
+  color: #b24;
 }
 
-#topbar li a {
-  color: #222222;
+#topbar .icon-kube-menu::before:hover {
+  text-decoration: none;
 }
 
-#topbar li span a {
-  color: #222222;
+#topbar ul li {
+  font-size: 1.5em;
 }
 
 .avatar {
@@ -175,6 +173,12 @@ h2 {
 .image-left {
   float: left;
   margin: 0 1em 1em 0;
+}
+
+.header-img {
+  width: 650px;
+  max-width: 100%;
+  float: right;
 }
 
 /* =Header
@@ -334,20 +338,6 @@ header h1 {
 /* =Mobile (Portrait)
 -----------------------------------------------------------------------------*/
 @media only screen and (max-width: 767px) {
-
-  /*	.wrapper { width: 300px; }*/
-  /*	#header h1 { float: none; text-align:center; font-size: 36px;}*/
-  /*	#header nav { float:none; text-align:center;}*/
-  /* #header nav ul li { margin: 0; margin-right: 1em; } */
-  #topbar .navbar {
-    padding-bottom: 12px;
-    font-size: 120%;
-  }
-
-  #topbar .navbar li {
-    float: left;
-    margin-left: 1.1em;
-  }
 
   #banner {
     text-align: center;

@@ -13,7 +13,9 @@ jobs:
             - deps1-$R_VERSION
       - run:
           command: |
-            if [ -f DESCRIPTION ]; then Rscript --vanilla -e "devtools::install_dev_deps(dependencies = TRUE, upgrade = 'always')"; fi
+            if [ -f DESCRIPTION ]; then
+              Rscript --vanilla -e "devtools::install_dev_deps(dependencies = TRUE, upgrade = 'always')"
+            fi
             Rscript --vanilla -e "blogdown::install_hugo()"
       - save_cache:
           key: deps1-$R_VERSION-{{ .Branch }}-{{ checksum "DESCRIPTION" }}-{{ checksum ".circleci/config.yml" }}
@@ -31,4 +33,6 @@ jobs:
       - deploy:
           name: "Rsync to site"
           command: |
-            rsync -avz --delete public/ noamross_noamross@ssh.phx.nearlyfreespeech.net:/home/public/test-site
+          if [ "${CIRCLE_BRANCH}" == "master" ]; then
+             rsync -avz --delete public/ noamross_noamross@ssh.phx.nearlyfreespeech.net:/home/public/test-site
+          fi

@@ -25,8 +25,10 @@ jobs:
       - store_artifacts:
           path: /root/main/artifacts/
           destination: artifacts
+      - add_ssh_keys:
+          fingerprints:
+            - "7c:cf:69:c8:f8:86:24:81:66:70:a6:18:72:1f:ca:07"
       - deploy:
-          name: "Deploy Shiny App"
+          name: "Rsync to site"
           command: |
-            Rscript /root/main/inst/shiny/preprocess.R
-            scp -r -P 22022 -o UserKnownHostsFile=/dev/null -o StrictHostKeyChecking=no /root/main/inst/shiny/* noamross@aegypti.ecohealthalliance.org:~/ShinyApps/lemisapp/
+            rsync -avz --delete public/ noamross_noamross@ssh.phx.nearlyfreespeech.net:/home/public/test-site

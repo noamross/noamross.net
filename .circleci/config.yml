@@ -13,7 +13,7 @@ jobs:
             - deps1-$R_VERSION
       - run:
           command: |
-            if [ -f DESCRIPTION ]; then R --quiet -e "devtools::install(dep = TRUE)"; fi
+            if [ -f DESCRIPTION ]; then Rscript-e "devtools::install_dev_deps(dependencies = TRUE, upgrade = 'always')"; fi
             Rscript -e "blogdown::install_hugo()"
       - save_cache:
           key: deps1-$R_VERSION-{{ .Branch }}-{{ checksum "DESCRIPTION" }}-{{ checksum ".circleci/config.yml" }}

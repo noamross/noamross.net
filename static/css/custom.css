@@ -207,10 +207,6 @@ header h1 {
   /*	color: #ffffff;*/
 }
 
-#topbar form {
-  float: right;
-  display: inline-block;
-}
 
 /* =Promo
 -----------------------------------------------------------------------------*/
@@ -338,6 +334,10 @@ header h1 {
 /* =Mobile (Portrait)
 -----------------------------------------------------------------------------*/
 @media only screen and (max-width: 767px) {
+
+  #topbar #navbar-main {
+    text-align: center;
+  }
 
   #banner {
     text-align: center;

@@ -1,0 +1,4 @@
+AuthType Basic
+AuthName "Log In to See Development Site"
+AuthUserFile /home/private/.htpasswd
+require valid-user

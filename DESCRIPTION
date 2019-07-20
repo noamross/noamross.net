@@ -6,7 +6,12 @@ Imports:
   blogdown,
   rorcid,
   rcrossref,
-  here
+  here,
+  dplyr,
+  janitor,
+  purrr,
+  yaml,
+  jsonlite
 Maintainer: Noam Ross <noam.ross@gmail.com>
 License: MIT + file LICENSE
 Encoding: UTF-8

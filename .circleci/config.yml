@@ -19,11 +19,6 @@ jobs:
               Rscript --vanilla -e "devtools::install_dev_deps(dependencies = NA, upgrade = 'never')"
             fi
             Rscript --vanilla -e "if (inherits(blogdown::hugo_version(), 'try-error')) blogdown::install_hugo()"
-      - save_cache:
-          key: deps1-$R_VERSION-{{ .Branch }}-{{ checksum "DESCRIPTION" }}-{{ checksum ".circleci/config.yml" }}
-          paths:
-            - "/usr/local/lib/R/site-library"
-            - "blogdown"
       - run:
           name: "Get ORCiD Records"
           command: |
@@ -32,6 +27,11 @@ jobs:
           name: "Render R Markdown"
           command: |
             Rscript -e "blogdown::build_site(run_hugo = FALSE)" || true
+      - save_cache:
+          key: deps1-$R_VERSION-{{ .Branch }}-{{ checksum "DESCRIPTION" }}-{{ checksum ".circleci/config.yml" }}
+          paths:
+            - "/usr/local/lib/R/site-library"
+            - "blogdown"
       - run:
           name: "Build Hugo Site"
           command: |

@@ -38,6 +38,7 @@ jobs:
             if [ "${CIRCLE_BRANCH}" == "master" ]; then
               Rscript -e "blogdown::hugo_build()"
             else
+              mkdir -p branch/${CIRCLE_BRANCH}
               Rscript -e "blogdown::hugo_cmd('--baseURL', 'https://www.noamross.net/branch/${CIRCLE_BRANCH}')"
             fi
       - add_ssh_keys:

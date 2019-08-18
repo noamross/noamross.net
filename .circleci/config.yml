@@ -14,11 +14,11 @@ jobs:
       - run:
           name: "Install Dependencies"
           command: |
-            apt-get update -qq && apt-get install -y --no-install-recommends rsync
+            apt-get update -qq && apt-get install -y --no-install-recommends --no-upgrade rsync
+            dpkg -l hugo || (wget -q https://github.com/gohugoio/hugo/releases/download/v0.57.2/hugo_0.57.2_Linux-64bit.deb && dpkg -i hugo_0.57.2_Linux-64bit.deb)
             if [ -f DESCRIPTION ]; then
               Rscript --vanilla -e "devtools::install_dev_deps(dependencies = NA, upgrade = 'never')"
             fi
-            Rscript --vanilla -e "blogdown::install_hugo()"
       - run:
           name: "Get ORCiD Records"
           command: |
@@ -36,10 +36,9 @@ jobs:
           name: "Build Hugo Site"
           command: |
             if [ "${CIRCLE_BRANCH}" == "master" ]; then
-              Rscript -e "blogdown::hugo_build()"
+              hugo
             else
-              mkdir -p branch/${CIRCLE_BRANCH}
-              Rscript -e "blogdown::hugo_cmd('--baseURL', 'https://www.noamross.net/branch/${CIRCLE_BRANCH}')"
+              hugo --baseURL https://www.noamross.net/branch/${CIRCLE_BRANCH}
             fi
       - add_ssh_keys:
           fingerprints:

@@ -15,7 +15,10 @@ Imports:
   noamtools
   tidyverse,
   broom,
-  lubridate
+  lubridate,
+  noamtools
+Remotes:
+  noamross/noamtools
 Maintainer: Noam Ross <noam.ross@gmail.com>
 License: MIT + file LICENSE
 Encoding: UTF-8

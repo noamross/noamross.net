@@ -2,7 +2,7 @@ ErrorDocument 404 /404.html
 
 RewriteEngine on
 Redirect 301 /publications.html /vitae/
-Redirect 301 /about.html
+Redirect 301 /about.html /index.html
 Redirect 301 /connect.html  /#connect
 Redirect 301 /tags.html  /musings/
 

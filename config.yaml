@@ -11,10 +11,6 @@ permalinks:
   musings: "/:year/:month/:slug/"
   archives: "/archives/:filename/"
 
-blackfriday:
-  extensions:
-   - "hardLineBreak"
-
 author:
   name: "Noam Ross"
   email: "noam.ross@gmail.com"

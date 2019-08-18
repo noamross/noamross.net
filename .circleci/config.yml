@@ -27,11 +27,6 @@ jobs:
           name: "Render R Markdown"
           command: |
             Rscript -e "blogdown::build_site(run_hugo = FALSE)" || true
-      - save_cache:
-          key: deps1-$R_VERSION-{{ .Branch }}-{{ checksum "DESCRIPTION" }}-{{ checksum ".circleci/config.yml" }}
-          paths:
-            - "/usr/local/lib/R/site-library"
-            - "blogdown"
       - run:
           name: "Build Hugo Site"
           command: |
@@ -52,6 +47,11 @@ jobs:
             else
                rsync -avz --delete public/ noamross_noamross@ssh.phx.nearlyfreespeech.net:/home/public/branch/${CIRCLE_BRANCH} --exclude=/img --exclude=/old-blog-stuff --exclude=/fontawesome --exclude=.htaccess
             fi
+      - save_cache:
+          key: deps1-$R_VERSION-{{ .Branch }}-{{ checksum "DESCRIPTION" }}-{{ checksum ".circleci/config.yml" }}
+          paths:
+            - "/usr/local/lib/R/site-library"
+            - "blogdown"
 
 workflows:
    version: 2

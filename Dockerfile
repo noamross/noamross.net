@@ -1,4 +1,4 @@
-FROM rocker/geopatial:latest
+FROM rocker/geospatial:latest
 MAINTAINER Noam Ross noam.ross@gmail.com
 
 COPY DESCRIPTION /pkg/DESCRIPTION

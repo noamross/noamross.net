@@ -14,11 +14,11 @@ jobs:
       - run:
           name: "Install Dependencies"
           command: |
-            apt-get update -qq && apt-get install -y --no-install-recommends rsync
+            apt-get update -qq && apt-get install -y --no-install-recommends rsync hugo
             if [ -f DESCRIPTION ]; then
               Rscript --vanilla -e "devtools::install_dev_deps(dependencies = NA, upgrade = 'never')"
             fi
-            Rscript --vanilla -e "if (inherits(blogdown::hugo_version(), 'try-error')) blogdown::install_hugo()"
+            Rscript --vanilla -e "blogdown::install_hugo()"
       - run:
           name: "Get ORCiD Records"
           command: |

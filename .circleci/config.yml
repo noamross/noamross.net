@@ -14,11 +14,7 @@ jobs:
       - run:
           name: "Install Dependencies"
           command: |
-            apt-get update -qq && apt-get install -y --no-install-recommends --no-upgrade rsync git ssh wget
-            dpkg -l hugo || (wget -q https://github.com/gohugoio/hugo/releases/download/v0.57.2/hugo_0.57.2_Linux-64bit.deb && dpkg -i hugo_0.57.2_Linux-64bit.deb)
-            if [ -f DESCRIPTION ]; then
-              Rscript --vanilla -e "devtools::install_dev_deps(dependencies = NA, upgrade = 'never')"
-            fi
+            install.sh
       - run:
           name: "Get ORCiD Records"
           command: |

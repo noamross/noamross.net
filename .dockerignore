@@ -3,4 +3,4 @@
 
 # Allow files and directories
 !/DESCRIPTION
-
+!/install.sh

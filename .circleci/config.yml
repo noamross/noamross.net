@@ -38,7 +38,7 @@ jobs:
             if [ "${CIRCLE_BRANCH}" == "master" ]; then
               hugo
             else
-              hugo --baseURL https://www.noamross.net/branch/${CIRCLE_BRANCH}
+              hugo --baseURL https://www.noamross.net/branch/${CIRCLE_BRANCH/}
             fi
       - add_ssh_keys:
           fingerprints:

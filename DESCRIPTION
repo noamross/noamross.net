@@ -16,6 +16,7 @@ Imports:
   tidyverse,
   broom,
   lubridate,
+  humaniformat,
   noamtools
 Remotes:
   noamross/noamtools

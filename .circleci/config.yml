@@ -16,7 +16,7 @@ jobs:
           command: |
             apt-get update -qq && apt-get install -y --no-install-recommends rsync
             if [ -f DESCRIPTION ]; then
-              Rscript --vanilla -e "devtools::install_dev_deps(dependencies = TRUE, upgrade = 'always')"
+              Rscript --vanilla -e "devtools::install_dev_deps(dependencies = TRUE, upgrade = 'never')"
             fi
             Rscript --vanilla -e "if (inherits(blogdown::hugo_version(), 'try-error')) blogdown::install_hugo()"
       - save_cache:

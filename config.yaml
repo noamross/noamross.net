@@ -1,0 +1,26 @@
+baseurl: "https://www.noamross.net/"
+languageCode: "en-us"
+title: "noamross.net"
+enableEmoji: true
+enableRobotsTXT: true
+pygmentsCodefences: true
+pygmentsStyle: "lovelace"
+ignoreFiles: ["\\.Rmd$", "\\.Rmarkdown$", "_files$", "_cache$"]
+
+permalinks:
+  musings: "/:year/:month/:slug/"
+  archives: "/archives/:filename/"
+
+blackfriday:
+  extensions: "hardLineBreak"
+author:
+  name: "Noam Ross"
+  email: "noam.ross@gmail.com"
+copyright: "This work is licensed under a Creative Commons Attribution-ShareAlike 4.0 International License."
+
+params:
+  description: "noamross.net"
+  author:
+    name: "Noam Ross"
+  rssLimit: 50
+

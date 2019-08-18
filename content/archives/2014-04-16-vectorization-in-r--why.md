@@ -1,0 +1,335 @@
+---
+title: "Vectorization in R: Why?"
+author: "Noam Ross"
+tags: [R, D-RUG, vectorization]
+date: 2014-04-16T11:05:35
+
+--- 
+
+
+*Here are my notes from a recent talk I gave on vectorization at a
+[Davis R Users' Group](http://www.noamross.net/davis-r-users-group.html)
+meeting. Thanks to [Vince Buffalo](https://twitter.com/vsbuffalo), [John
+Myles White](http://twitter.com/johnmyleswhite), and [Hadley
+Wickham](http://twitter.com/hadleywickham) for their input as I was
+preparing this. Feedback welcome!*
+
+Beginning R users are often told to "vectorize" their code. Here, I try
+to explain *why* vectorization can be advantageous in R by showing how R
+works under the hood.
+
+Now, remember, [premature optimization is the root of all evil
+(Knuth)](http://c2.com/cgi/wiki?PrematureOptimization). Don't start
+re-writing your code unless the time saved is going to be worth the time
+invested. [Other approaches, like finding a bigger machine or
+parallelization](http://www.noamross.net/blog/2013/4/25/faster-talk.html),
+could give you more bang for the buck in terms of programming time. But
+if you understand the nuts and bolts of vectorization in R, it may help
+you write shorter, simpler, safer, and yes, faster code in the first
+place.
+
+First, let's acknowledge that vectorization can seem like voodoo.
+Consider a two math problems, one vectorized, and one not:
+
+$$\begin{bmatrix} 1 \\ 2 \\ 3 \end{bmatrix} + 
+\begin{bmatrix} 1 \\ 2 \\ 3 \end{bmatrix} =
+\begin{bmatrix} 2 \\ 4 \\ 6 \end{bmatrix}$$
+
+$$\begin{aligned}
+1 + 1 = 2 \\
+2 + 2 = 4 \\
+3 + 3 = 6
+\end{aligned}$$
+
+Why on earth should these take a different amount of time to calculate?
+Linear algebra isn't magic. In both cases there are three addition
+operations to perform. So what's up?
+
+1. What on earth is R actually doing?
+-------------------------------------
+
+R is a *high-level*, *interpreted* computer language. This means that R
+takes care of a lot of basic computer tasks for you. For instance, when
+you type
+
+        i <- 5.0
+
+you *don't* have to tell your computer:
+
+-   That "5.0" is a floating-point number
+-   That "i" should store numeric-type data
+-   To find a place in memory for to put "5"
+-   To register "i" as a pointer to that place in memory
+
+You also don't have to convert `i <- 5.0` to binary code. That's done
+automatically when you hit 'Enter'.
+
+When you then type
+
+    i <- "foo"
+
+you don't have to tell the computer that `i` no longer stores an integer
+but a series of characters that form a *string*, to store "f", "o", and
+"o", consecutively, etc.
+
+R figures these things on it's own, on the fly, as you type commands or
+source them from a file. This means that running a command in R takes a
+*relatively* longer time than it might in a lower-level language, such
+as C. If I am writing in C, I might write
+
+    int i
+    i = 5
+
+This tells the computer the `i` will store data of the type `int`
+(integers), and assign the value 5 to it. If I try to assign 5.5 to it,
+something will go wrong. Depending on my set-up, it might throw an
+error, or just silently assign 5 to `i`. But C doesn't have to figure
+out what type of data is is represented by `i` and this is part of what
+makes it faster.
+
+Here's another example. If, in R, you type:
+
+    2L + 3.5
+
+The computer asks:
+
+> "OK, what's the first thing?"
+>
+> "An integer"
+>
+> "The second thing?"
+>
+> "A a floating-point number"
+>
+> "Do we have a way to deal with adding an integer and a floating-point
+> number?"
+>
+> "Yes! Convert the integer to a floating-point number, then add the two
+> floating point numbers"
+>
+> [converts integer]
+>
+> [finds a place in memory for the answer]
+>
+> etc.
+
+If R were a *compiled* computer language, like C or FORTRAN, much of
+this "figuring out" would be accomplished during the compilation step, not when
+the program was run. Compiled programs are translated into binary
+computer language after they are written, but before they are run, and
+this occurs over the *whole program*, rather than line-by-line. This
+allows the compiler to organize the binary machine code in an optimal
+way for the computer to interpret.
+
+What does this have to do with vectorization in R? Well, **many R
+functions are actually written in a a compiled language**, such as C,
+C++, and FORTRAN, and have a small R "wrapper". For instance, when you
+inspect the code for `fft`, the fast Fourier transform, you see
+
+    > fft
+    function (z, inverse = FALSE) 
+    .Call(C_fft, z, inverse)
+    <bytecode: 0x7fc261e1b910>
+    <environment: namespace:stats>
+
+R is passing the data onto a C function called `C_fft`. You'll see this
+in many R functions. If you look at their source code, it will include
+`.C()`, `.Call()`, or sometimes `.Internal()` or `.Primitive()`. These
+means R is calling a C, C++, or FORTRAN program to carry out operations.
+However, R still has to interpret the input of the function before
+passing it to the compiled code. In `fft()` the compiled code runs only
+*after* R figures out the data type in `z`, and also whether to use the
+default value of `inverse`. The compiled code is able to run faster than
+code written in pure R, because the "figuring out" stuff is done first,
+and it can zoom ahead without the "translation" steps that R needs.
+
+If you need to run a function over all the values in a vector, you could
+pass a whole vector through the R function to the compiled code, or you
+could call the R function repeatedly for each value. If you do the
+latter, R has to do the "figuring out" stuff, as well as the
+translation, *each time*. But if you call it once, with a vector, the
+"figuring out" part happens just once.
+
+Inside the C or FORTRAN code, vectors are actually processed using loops
+or a similar construct. This is inevitable; somehow the computer is going
+to need to operate on each element of your vector. Since this occurs in
+the compiled code, though, without the overhead of R functions, this is
+much faster.
+
+Another important component of the speed of vectorized operations is
+that vectors in R are *typed*. Despite all of its flexibility, R does
+have some restrictions on what we can do. All elements of a vector must
+be the same data type. If I try to do this
+
+    a <- c(1, 2, FALSE, "hello")
+
+I get
+
+    > a
+    [1] "1"     "2"     "FALSE" "hello"
+    > class(a)
+    [1] "character"
+
+R converts all my data to characters. It can't handle a vector with
+different data types.
+
+So when R needs to perform an operation like
+
+    c(1, 2, 3) + c(1, 2, 3)
+
+R only has to ask what types of data are in *each vector* (2) rather
+than *each element* (6).
+
+One consequence of all this is that fast R code is short. If you can
+express what you want to do in R in a line or two, with just a few
+function calls that are actually calling compiled code, it'll be more
+efficient than if you write long program, with the added overhead of
+many function calls. This is not the case in all other languages. Often,
+in compiled languages, you want to stick with lots of very simple
+statements, because that allows the compiler to figure out the most
+efficient translation of the code.
+
+2. Everything is a vector
+-------------------------
+
+In R *everything* is a vector. To quote Tim Smith in ["aRrgh: a
+newcomer's (angry) guide to R"](http://tim-smith.us/arrgh/)
+
+> All naked numbers are double-width floating-point atomic vectors of
+> length one. You're welcome.
+
+This means that, in R, typing "6" tells R something like
+
+    <start vector, type=numeric, length=1>6<end vector>
+
+While in other languages, "6" might just be
+
+    <numeric>6
+
+So, while in other languages, it might be more efficient to express
+something as a single number rather than a length-one vector, in R this
+is impossible. There's no *advantage* to NOT organizing your data as
+vector. In other languages, short vectors might be better expressed as
+scalars.
+
+3. Linear algebra is a special case
+-----------------------------------
+
+Linear algebra is one of the core functions of a lot of computing, so
+there are highly optimized programs for linear algebra. Such a program
+is called a BLAS - basic linear algebra system. R, and a lot of other
+software, relies on these specialized programs and outsources linear
+algebra to them. A BLAS is generally designed to be highly efficient and has things like
+built-in parallel processing, hardware-specific implementation, and a host of other tricks. So if your calculations can be expressed in
+actual linear algebra terms, such as matrix multiplication, than it is
+almost certainly faster to vectorize them because the BLAS will be doing
+most of the heavy lifting.
+
+There are faster and slower linear algebra libraries, and you can
+install new ones on your computer and tell R to use them instead of the
+defaults. This used to be like putting a new engine in your car, but
+[it's gotten considerably
+easier](http://moderntoolmaking.blogspot.com/2013/07/for-faster-r-on-mac-use-veclib.html).
+For certain problems, a shiny new BLAS can considerably speed up code, but
+results vary depending on the specific linear algebra operations you are
+using.
+
+4. Functionals: Pre-allocating memory, avoiding side effects.
+-------------------------------------------------------------
+
+There are a whole family of functions in R called *functionals*, or
+`apply` functions, which take vectors (or matrices, or lists) of values
+and apply arbitrary functions to each. Because these can use *arbitrary*
+functions, they are NOT compiled. Functionals mostly are written in pure
+R, and they speed up code only in certain cases.
+
+One operation that is slow in R, and somewhat slow in all languages, is
+memory allocation. So one of the slower ways to write a `for` loop is to
+resize a vector repeatedly, so that R has to re-allocate memory
+repeatedly, like this:
+
+    j <- 1
+    for (i in 1:10) {
+        j[i] = 10
+    }
+
+Here, in each repetition of the `for` loop, R has to re-size the vector
+and re-allocate memory. It has to find the vector in memory, create a
+new vector that will fit more data, copy the old data over, insert the
+new data, and erase the old vector. This can get very slow as vectors
+get big.
+
+If one pre-allocates a vector that fits all the values, R doesn't have
+to re-allocate memory each iteration, and the results can be much
+faster. Here's how you'd do that for the above case:
+
+    j <- rep(NA, 10)
+    for (i in 1:10) {
+        j[i] = 10
+    }
+
+The `apply` or `plyr::*ply` functions all actually have `for` loops
+inside, but they automatically do things like pre-allocating vector size
+so you don't screw it up. This is the main reason that they can be
+faster.
+
+Another thing that "ply" functions help with is avoiding what are known
+as *side effects*. When you run a *ply* function, everything happens
+inside that function, and nothing changes in your working environment
+(this is known as "functional programming"). In a `for` loop, on the
+other hand, when you do something like `for(i in 1:10)`, you get the
+leftover `i` in your environment. This is considered bad practice
+sometimes. Having a bunch of temporary variables like `i` lying around
+could cause problems in your code, especially if you use `i` for
+something else later.
+
+I've seen arguments that `ply` functions make for more expressive,
+easier to read code, but I've seen the same argument for `for` loops.
+Once you are used to writing vectorized code in general, though, `for`
+loops in R will can seem odd.
+
+So when might `for` loops make sense over vectorization?
+--------------------------------------------------------
+
+There are still situations that it may make sense to use `for` loops
+instead of vectorized functions, though. These include:
+
+-   Using functions that don't take vector arguments
+-   Loops where each iteration is dependent on the results of previous
+    iterations
+
+Note that the second case is tricky. In some cases where the *obvious*
+implementation of an algorithm uses a `for` loop, there's a vectorized
+way around it. For instance, [here is a good example of implementing a
+random walk using vectorized code](https://www.stat.auckland.ac.nz/~ihaka/downloads/Taupo-handouts.pdf). In these cases, you often want to call functions
+that are essentially C/FORTRAN implementations of loop operations to
+avoid the loop in R. Examples of such functions include `cumsum`
+(cumulative sums), `rle` (counting number of repeated value), and
+`ifelse` (vectorized if...else statements).
+
+Your performance penalty for using a `for` loop instead a vector will be
+small if the number of iterations is relatively small, and the functions
+called *inside* your for loop are slow. In these cases, looping and
+overhead from function calls make up a small fraction of your
+computational time. It may make sense to use a `for` loop in such cases,
+especially if they are more intuitive or easier to read *for you*.
+
+Some resources on vectorization
+-------------------------------
+
+-   Good discussion in a couple of [blog](http://www.johnmyleswhite.com/notebook/2013/01/24/writing-better-statistical-programs-in-r/) [posts](http://www.johnmyleswhite.com/notebook/2013/12/22/the-relationship-between-vectorized-and-devectorized-code/)
+    by John Myles White.
+-   Some relevant chapters of Hadley Wickham's Advanced R book:
+    [Functionals](http://adv-r.had.co.nz/Functionals.html) and [code
+    profiling](http://adv-r.had.co.nz/Profiling.html#vectorise)
+-   Vectorization is covered in chapters 3 and 4 of the classic text on
+    R's idiosyncrasies - [The R
+    Inferno](http://www.burns-stat.com/pages/Tutor/R_inferno.pdf), by
+    Patrick Burns
+-   Here are a bunch of assorted blog posts with good examples of
+    speeding up code with vectorization
+    -   <http://www.r-bloggers.com/how-to-use-vectorization-to-streamline-simulations/>
+    -   <http://nesterko.com/blog/2011/04/29/drastic-r-speed-ups-via-vectorization-and-bug-fixes/>
+    -   <http://blog.revolutionanalytics.com/2014/04/a-look-a-r-vectorization-through-the-collatz-conjecture.html>
+    -   <http://rpubs.com/daspringate/vectorisation>
+    -   <http://quanttrader.info/public/FasterRCode.pdf>

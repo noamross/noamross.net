@@ -3,7 +3,7 @@ jobs:
   build:
     working_directory: ~/main
     docker:
-      - image: noamross/noam:latest
+      - image: noamross/noamrossnet:latest
     steps:
       - checkout
       - restore_cache:
@@ -25,9 +25,21 @@ jobs:
             - "/usr/local/lib/R/site-library"
             - "blogdown"
       - run:
-          name: "Build Site"
+          name: "Get ORCiD Records"
           command: |
-            Rscript -e "blogdown::build_site()"
+            Rscript assets/get-orcid-data.R || true
+      - run:
+          name: "Render R Markdown"
+          command: |
+            Rscript -e "blogdown::build_site(run_hugo = FALSE)" || true
+      - run:
+          name: "Build Hugo Site"
+          command: |
+            if [ "${CIRCLE_BRANCH}" == "master" ]; then
+              hugo
+            else
+              hugo --baseURL https://www.noamross.net/branch/${CIRCLE_BRANCH}
+            fi
       - add_ssh_keys:
           fingerprints:
             - "7c:cf:69:c8:f8:86:24:81:66:70:a6:18:72:1f:ca:07"
@@ -36,7 +48,24 @@ jobs:
           command: |
             ssh-keyscan -t "ecdsa" ssh.phx.nearlyfreespeech.net >> ~/.ssh/known_hosts
             if [ "${CIRCLE_BRANCH}" == "master" ]; then
-               rsync -avz --delete public/ noamross_noamross@ssh.phx.nearlyfreespeech.net:/home/public/test-site
+               rsync -avz --delete public/ noamross_noamross@ssh.phx.nearlyfreespeech.net:/home/public/ --exclude=/branch --exclude=/img --exclude=/old-blog-stuff --exclude=/fontawesome
             else
-               rsync -avz --delete public/ noamross_noamross@ssh.phx.nearlyfreespeech.net:/home/public/test-site/branch/${CIRCLE_BRANCH}
+               rsync -avz --delete public/ noamross_noamross@ssh.phx.nearlyfreespeech.net:/home/public/branch/${CIRCLE_BRANCH} --exclude=/img --exclude=/old-blog-stuff --exclude=/fontawesome --exclude=.htaccess
             fi
+
+workflows:
+   version: 2
+   commit:
+     jobs:
+       - build
+
+   nightly:
+     triggers:
+       - schedule:
+           cron: "0 10 * * *"
+           filters:
+             branches:
+               only:
+                 - master
+     jobs:
+       - build

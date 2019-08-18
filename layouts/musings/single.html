@@ -1,58 +1,45 @@
 {{ $baseurl := .Site.BaseURL }}
-{{ partial "headwithcard.html" . }}
+
+<!DOCTYPE html>
+<html>
+{{ partial "head.html" . }}
+<body>
+
 {{ partial "navbar.html" . }}
 
 <div class="wrapper">
-<div class="units-row">
-<div class="unit-10">&nbsp;</div>
-<div class="unit-80"><h2><a href="">{{ .Title }}</a></h2></div>
-</div>
-<div class="units-row">
-<div class="unit-10 dateblock">{{if not (isset .Params "grlog") }}<h4>{{ .Date.Format "January 2, 2006" }}</h4>{{ else }}&nbsp;{{ end }}</div>
-<div class="unit-60 story">
-{{ .Content }}
+  <div class="is-row is-stack-20">
+    <div class="is-col is-10">&nbsp;</div>
+    <div class="is-col is-60">
+    <h1 class="is-text-center"><a href="">{{ .Title }}</a></h1>
+    <h4 class="is-bigger is-text-center">{{ .Date.Format "January 2, 2006" }}</h4>
+    </div>
+    <div class="is-col is-30">&nbsp;</div>
+  </div>
+  <div class="is-row is-stack-20">
+  </div>
+  <div class="is-row is-stack-20">
+    <div class="is-col is-10 is-stack-20">
+    </div>
+    <div class="is-col is-60">
+      <div class="story">
+      {{ .Content }}
+      </div>
+      <hr>
+      {{ if .PrevInSection }}
+      <a href="{{.PrevInSection.Permalink}}"><span class="pointer">2</span>&nbsp;{{.PrevInSection.Title}}</a> |
+      {{ end }}
+      <a href="{{ $baseurl }}/musings/ }}">All posts</a>
+      {{ if .NextInSection }}
+      | <a href="{{.NextInSection.Permalink}}">{{.NextInSection.Title}}&nbsp;<span class="pointer">1</span></a>
+      {{ end }}
+    </div>
+    <div class="is-col is-30"></div>
 
-{{ partial "tweetlink.html" . }}
-
-<hr>
-{{ if .PrevInSection }}
-<a href="{{.PrevInSection.Permalink}}"> &larr;&nbsp;{{.PrevInSection.Title}}</a> |
-{{ end }}
-<a href="{{ $baseurl }}/musings/#{{ .Date.Format "2006" }}">All posts</a>
-{{ if .NextInSection }}
-| <a href="{{.NextInSection.Permalink}}">{{.NextInSection.Title}}&nbsp;&rarr;</a>
-{{ end }}
-
-<script src="https://utteranc.es/client.js"
-        repo="noamross/utter-test"
-        issue-term="title"
-        label="site-comments"
-        theme="github-light"
-        crossorigin="anonymous"
-        async>
-</script>
-
-<script async>
-var frame = document.querySelector('.utterances-frame');
-    frame.onload = function () {
-        var body = frame.contentWindow.document.querySelector('body');
-        body.style.color = 'red';
-        body.style.fontSize = '20px';
-        body.style.lineHeight = '20px';
-    };
-</script>
+  </div>
 </div>
 
+{{ partial "footer.html" . }}
 
-</div>
-</div>
-
-<hr class="separator">
-
-{{ partial "whatisthis.html" . }}
-
-{{ partial "foot.html" . }}
 </body>
 </html>
-
-

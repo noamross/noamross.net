@@ -1,0 +1,16 @@
+uc_davis_2015:
+  name: uc_davis_2015
+  type: degree
+  title: Ph.D.
+  university: UC Davis
+  department: Graduate Group in Ecology
+  location: Davis, CA
+  date: '2015-09-23'
+brown_university_2006:
+  name: brown_university_2006
+  type: degree
+  title: B.Sc.
+  university: Brown University
+  department: Center for Environmental Studies
+  location: Providence, RI
+  date: '2006-05-30'

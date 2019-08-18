@@ -1,35 +1,72 @@
-<!DOCTYPE html>
-<html>
 <head>
-    <link href="https://gmpg.org/xfn/11" rel="profile">
-    <meta http-equiv="content-type" content="text/html; charset=utf-8">
-	<meta name="viewport" content="width=device-width, initial-scale=1.0" />
-	<title>{{ .Title }}</title>
-    <!-- CSS -->
-	<link rel="stylesheet" href="{{ .Site.BaseURL }}/css/kube.css" />
-	<link rel="stylesheet" href="{{ .Site.BaseURL }}/css/custom.css" />
-	<link rel="stylesheet" href="{{ .Site.BaseURL }}/css/tufte.css" />
- 	<link href='https://fonts.googleapis.com/css?family=Alegreya:400italic,400,700,700italic&subset=latin,latin-ext' rel='stylesheet' type='text/css'>
- 	<link href='https://fonts.googleapis.com/css?family=Alegreya+SC:400&subset=latin,latin-ext' rel='stylesheet' type='text/css'>
- 	<link href="https://fonts.googleapis.com/css?family=IM+Fell+English:400,400i&display=swap" rel="stylesheet">
- 	<link href="https://fonts.googleapis.com/css?family=IM+Fell+English+SC&display=swap" rel="stylesheet">
-	<link href="https://maxcdn.bootstrapcdn.com/font-awesome/4.3.0/css/font-awesome.min.css" rel="stylesheet">
-	<link rel="stylesheet" href="//cdn.jsdelivr.net/npm/hack-font@3/build/web/hack-subset.css">
-   <!-- Icons -->
-   <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png">
-   <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
-   <link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png">
-   <link rel="manifest" href="/site.webmanifest">
-   <link rel="mask-icon" href="/safari-pinned-tab.svg" color="#5bbad5">
-   <meta name="msapplication-TileColor" content="#2b5797">
-   <meta name="theme-color" content="#ffffff">
-    <!-- RSS -->
-{{ if .RSSLink }}
-  <link href="{{ .RSSLink }}" rel="alternate" type="application/rss+xml" title="{{ .Site.Title }}" />
-  <link href="{{ .RSSLink }}" rel="feed" type="application/rss+xml" title="{{ .Site.Title }}" />
-{{ end }}
-<script
-  type="text/javascript"
-  src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-AMS-MML_HTMLorMML">
-</script>
+  <link href="https://gmpg.org/xfn/11" rel="profile">
+  <meta http-equiv="content-type" content="text/html; charset=utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>{{ .Title }}</title>
+  <link rel="canonical" href="{{ .Permalink }}" />
+
+  <!-- CSS -->
+  <link rel="stylesheet" href="{{ .Site.BaseURL }}css/kube.css" />
+  <link rel="stylesheet" href="{{ .Site.BaseURL }}css/custom.css" />
+  <link rel="stylesheet" href="{{ .Site.BaseURL }}css/tufte.css" />
+
+  <!-- Fonts -->
+  <link href='https://fonts.googleapis.com/css?family=Alegreya:400italic,400,700,700italic&subset=latin,latin-ext' rel='stylesheet' type='text/css'>
+  <link href='https://fonts.googleapis.com/css?family=Alegreya+SC:400&subset=latin,latin-ext' rel='stylesheet' type='text/css'>
+  <link href="https://fonts.googleapis.com/css?family=IM+Fell+English:400,400i&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css?family=IM+Fell+English+SC&display=swap" rel="stylesheet">
+  <link href="http://allfont.net/allfont.css?fonts=im-fell-flowers-2" rel="stylesheet" type="text/css" />
+  <link rel="stylesheet" href="//cdn.jsdelivr.net/npm/hack-font@3/build/web/hack-subset.css">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/academicons/1.8.0/css/academicons.min.css">
+  <link href="/fontawesome/css/all.css" rel="stylesheet">
+  <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+
+  <!-- Icons -->
+  <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png">
+  <link rel="shortcut icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
+  <link rel="shortcut icon" type="image/png" sizes="16x16" href="/favicon-16x16.png">
+  <link rel="manifest" href="/site.webmanifest">
+  <link rel="mask-icon" href="/safari-pinned-tab.svg" color="#5bbad5">
+  <meta name="msapplication-TileColor" content="#2b5797">
+  <meta name="theme-color" content="#ffffff">
+
+  <!-- RSS -->
+  {{ with .OutputFormats.Get "rss" -}}
+      {{ printf `<link rel="%s" type="%s" href="%s" title="%s" />` .Rel .MediaType.Type .Permalink $.Site.Title | safeHTML }}
+  {{ end }}
+
+  <!-- Social -->
+
+  <meta name="description" content="{{ if .Description }}{{ .Description }}{{ else }}{{ .Summary }}{{ end }}
+" />
+
+  <meta name="twitter:card" content="{{ if .Params.largeimage }}summary_large_image{{ else }}summary{{ end }}">
+  <meta name="twitter:url" content="{{ .Permalink }}">
+  <meta name="twitter:title" content="{{ .Title }}">
+  <meta name="twitter:description" content="{{ if .Description }}{{ .Description }}{{ else }}{{ .Summary }}{{ end }}">
+  {{ if .Params.largeimage }}
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:image" content="{{ .Site.BaseURL }}{{ .Params.largeimage }}">
+  {{ else }}
+    <meta name="twitter:card" content="summary" />
+    {{ if .Params.image }}
+        <meta name="twitter:image" content="{{ .Site.BaseURL }}{{ .Params.image }} ">
+    {{ else }}
+       <meta name="twitter:image" content="{{ .Site.BaseURL }}img/nr.png">
+    {{ end }}
+  {{ end }}
+
+  <meta name="twitter:site" content="noamross.net">
+  <meta name="twitter:creator" content="@noamross">
+
+  <meta property="og:title" content="{{ .Title }}" />
+  <meta property="og:locale" content="en_US" />
+  <meta property="og:site_name" content="noamross.net" />
+  <meta property="og:description" content="  {{ if .Description }}{{ .Description }}{{ else }}{{ .Summary }}{{ end }}" />
+  <meta property="og:url" content="{{ .Permalink }}" />
+  <script type="application/ld+json">
+    {"@type":"WebSite","url":"{{ .Permalink }}","headline":"{{ .Title }}", "name":"noamross.net","description":"{{ if .Description }}{{ .Description }}{{ else }}{{ .Summary }}{{ end }}","@context":"http://schema.org"}
+  </script>
 </head>

@@ -1,0 +1,263 @@
+Fuller_2013:
+  name: Fuller_2013
+  doi: 10.1016/b978-0-12-375067-9.00114-5
+  type: paper
+  title: Economics and Ecology of Open-Access Fisheries
+  authors:
+  - K. Fuller
+  - D. Kling
+  - K. Kroetz
+  - N. Ross
+  - J.N. Sanchirico
+  date: '2013-04-03'
+  exurl: https://dx.doi.org/10.1016/b978-0-12-375067-9.00114-5
+Boettiger_2013:
+  name: Boettiger_2013
+  doi: 10.1007/s12080-013-0192-6
+  type: paper
+  title: 'Early warning signals: the charted and uncharted territories'
+  authors:
+  - Carl Boettiger
+  - Noam Ross
+  - Alan Hastings
+  date: '2013-06-20'
+  exurl: https://dx.doi.org/10.1007/s12080-013-0192-6
+Schreiber_2016:
+  name: Schreiber_2016
+  doi: 10.1111/2041-210x.12537
+  type: paper
+  title: 'Individual-based integral projection models: the role of size-structure
+    on extinction risk and establishment success'
+  authors:
+  - Sebastian J. Schreiber
+  - Noam Ross
+  date: '2016-01-25'
+  exurl: https://dx.doi.org/10.1111/2041-210x.12537
+Hartman_2014:
+  name: Hartman_2014
+  doi: 10.1101/004226
+  type: paper
+  title: 'Building a better frog trap: The benefits of mal-adaptive habitat choice
+    for metapopulations with different life history strategies'
+  authors:
+  - Rosemary Hartman
+  - Noam Ross
+  date: '2014-04-16'
+  exurl: https://dx.doi.org/10.1101/004226
+  preprint: yes
+Cobb_2017:
+  name: Cobb_2017
+  doi: 10.5399/osu/fp.7.1.4021
+  type: paper
+  title: 'Resiliency or restoration: management of sudden oak death before and after
+    outbreak'
+  authors:
+  - Richard Cobb
+  - Peter Hartsough
+  - Noam Ross
+  - Janet Klein
+  - David LaFever
+  - Susan Frankel
+  - David Rizzo
+  date: '2017-10-06'
+  exurl: https://dx.doi.org/10.5399/osu/fp.7.1.4021
+Olival_2017:
+  name: Olival_2017
+  doi: 10.1038/nature22975
+  type: paper
+  title: Host and viral traits predict zoonotic spillover from mammals
+  authors:
+  - Kevin J. Olival
+  - Parviez R. Hosseini
+  - Carlos Zambrana-Torrelio
+  - Noam Ross
+  - Tiffany L. Bogich
+  - Peter Daszak
+  date: '2017-06-20'
+  exurl: https://dx.doi.org/10.1038/nature22975
+Machalaba_2017:
+  name: Machalaba_2017
+  doi: 10.1093/trstmh/trx039
+  type: paper
+  title: One Health Economics to confront disease threats
+  authors:
+  - Catherine Machalaba
+  - Kristine M Smith
+  - Lina Awada
+  - Kevin Berry
+  - Franck Berthe
+  - Timothy A Bouley
+  - Mieghan Bruce
+  - Jose Cortiñas Abrahantes
+  - Anas El Turabi
+  - Yasha Feferholtz
+  - Louise Flynn
+  - Giullaume Fournié
+  - Amanda Andre
+  - Delia Grace
+  - Olga Jonas
+  - Tabitha Kimani
+  - François Le Gall
+  - Juan Jose Miranda
+  - Marisa Peyre
+  - Julio Pinto
+  - Noam Ross
+  - Simon R Rüegg
+  - Robert H Salerno
+  - Richard Seifman
+  - Carlos Zambrana-Torrelio
+  - William B Karesh
+  date: '2017-07-13'
+  exurl: https://dx.doi.org/10.1093/trstmh/trx039
+Rostal_2018:
+  name: Rostal_2018
+  doi: 10.1016/j.onehlt.2018.01.001
+  type: paper
+  title: 'Benefits of a one health approach: An example using Rift Valley fever'
+  authors:
+  - Melinda K. Rostal
+  - Noam Ross
+  - Catherine Machalaba
+  - Claudia Cordel
+  - Janusz T. Paweska
+  - William B. Karesh
+  date: '2018-01-11'
+  exurl: https://dx.doi.org/10.1016/j.onehlt.2018.01.001
+Salerno_2017:
+  name: Salerno_2017
+  doi: 10.1007/s10393-017-1286-1
+  type: paper
+  title: Human–Wildlife Interactions Predict Febrile Illness in Park Landscapes of
+    Western Uganda
+  authors:
+  - Jonathan Salerno
+  - Noam Ross
+  - Ria Ghai
+  - Michael Mahero
+  - Dominic A. Travis
+  - Thomas R. Gillespie
+  - Joel Hartter
+  date: '2017-11-27'
+  exurl: https://dx.doi.org/10.1007/s10393-017-1286-1
+Epstein_2016:
+  name: Epstein_2016
+  doi: 10.1016/j.ijid.2016.11.056
+  type: paper
+  title: Nipah virus ecology and infection dynamics in its bat reservoir, Pteropus
+    medius, in Bangladesh
+  authors:
+  - J.H. Epstein
+  - S.J. Anthony
+  - A. Islam
+  - A.M. Kilpatrick
+  - S. Ali Khan
+  - N. Ross
+  - I. Smith
+  - J. Barr
+  - C. Zambrana-Torrelio
+  - Y. Tao
+  - A. Islam
+  - P.L. Quan
+  - K. Olival
+  - E. Gurley
+  - M.J. Hossain
+  - H.E. Field
+  - M. Fielder
+  - T. Briese
+  - M. Rahman
+  - G. Crameri
+  - L.-F. Wang
+  - S. Luby
+  - W.I. Lipkin
+  - P. Daszak
+  date: '2016-12-23'
+  exurl: https://dx.doi.org/10.1016/j.ijid.2016.11.056
+Olival_2016:
+  name: Olival_2016
+  doi: 10.1016/j.ijid.2016.11.023
+  type: paper
+  title: 'Identifying the next Zika: An analysis of zoonotic potential in Flaviviridae'
+  authors:
+  - K. Olival
+  - K. Wiens
+  - C. Rosenthal
+  - A. Willoughby
+  - C. Zambrana-Torrelio
+  - N. Ross
+  - P. Daszak
+  date: '2016-12-23'
+  exurl: https://dx.doi.org/10.1016/j.ijid.2016.11.023
+Cobb_2018:
+  name: Cobb_2018
+  doi: 10.1094/phyto-04-18-0142-r
+  type: paper
+  title: Promise and Pitfalls of Endemic Resistance for Cultural Resources Threatened
+    by Phytophthora ramorum
+  authors:
+  - Richard C. Cobb
+  - Noam Ross
+  - Katherine J. Hayden
+  - Catherine A. Eyre
+  - Richard S. Dodd
+  - Susan J. Frankel
+  - Matteo Garbelotto
+  - David M. Rizzo
+  date: '2018-10-10'
+  exurl: https://dx.doi.org/10.1094/phyto-04-18-0142-r
+Ram_2018:
+  name: Ram_2018
+  doi: 10.1109/mcse.2018.2882753
+  type: paper
+  title: A Community of Practice Around Peer Review for Long-Term Research Software
+    Sustainability
+  authors:
+  - Karthik Ram
+  - Carl Boettiger
+  - Scott Chamberlain
+  - Noam Ross
+  - Maelle Salmon
+  - Stefanie Butland
+  date: '2018-11-30'
+  exurl: https://dx.doi.org/10.1109/mcse.2018.2882753
+Pedersen_2019:
+  name: Pedersen_2019
+  doi: 10.7717/peerj.6876
+  type: paper
+  title: 'Hierarchical generalized additive models in ecology: an introduction with
+    mgcv'
+  authors:
+  - Eric J. Pedersen
+  - David L. Miller
+  - Gavin L. Simpson
+  - Noam Ross
+  date: '2019-05-27'
+  exurl: https://dx.doi.org/10.7717/peerj.6876
+  long_description: |
+    This is my first and only paper that [actually started on a bar napkin](https://twitter.com/noamross/status/684231556777443328)
+Ross_2019:
+  name: Ross_2019
+  doi: 10.21105/joss.01483
+  type: paper
+  title: 'citesdb: An R package to support analysis of CITES Trade Database shipment-level
+    data'
+  authors:
+  - Noam Ross
+  - Evan Eskew
+  - Nicolas Ray
+  date: '2019-05-31'
+  exurl: https://dx.doi.org/10.21105/joss.01483
+Albery_2019:
+  name: Albery_2019
+  doi: 10.1101/732255
+  type: paper
+  title: Predicting the global mammalian viral sharing network using phylogeography
+  authors:
+  - Gregory F Albery
+  - Evan A Eskew
+  - Noam Ross
+  - Kevin J Olival
+  date: '2019-08-12'
+  exurl: https://dx.doi.org/10.1101/732255
+  preprint: yes
+  long_description: |
+    [Greg Albery](https://www.gregalbery.me/) interned at EcoHealth Alliance for the end of his Ph.D. and did this excellent work using GAMs to understand basic patterns in what mammals carry common viruses.

@@ -1,0 +1,3 @@
+Crawl-Delay: 10
+User-agent: *
+Disallow: /branch/

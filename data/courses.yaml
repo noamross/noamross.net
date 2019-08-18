@@ -1,0 +1,47 @@
+gams-in-r:
+  name: gams-in-r
+  type: course
+  exurl: https://noamross.github.io/gams-in-r-course/
+  description: "Generalized Additive Models in R: A Free Interactive Course"
+  venue: "(online)"
+  long_description: >
+    You can take this course online! Originally created for a commerical online
+    learning company, I've ported this course to a free, interactive website
+    that allows you to exercises live.
+  date: 2019-05-30
+ehn-2017:
+  name: ehn-2017
+  type: course
+  exurl: https://github.com/ecohealthalliance/2017-06-16-ehn-workshop/blob/master/script.md
+  description: Simulating Epidemiological Models with R
+  venue: EcoHealth Net Workshop, Tufts University, Meford, Massachusettss
+  date: 2017-06-05
+ehn-2019:
+  name: ehn-2019
+  type: course
+  exurl: https://github.com/ecohealthalliance/2019-06-06-ehn-workshop
+  description: Simulating Epidemiological Models with R
+  venue: EcoHealth Net Workshop, George Mason University, Fairfax, Virgina
+  date: 2019-06-04
+  long_description: >
+    The [EcoHealth Net program](https://www.ecohealthalliance.org/program/ecohealthnet)
+    brings together scientists and STEM undergraduate and graduate students
+    for internships and a week-long intensive workshop on One Health research.
+mgcv-esa-2018:
+  name: mgcv-esa-2018
+  type: course
+  exurl: https://noamross.github.io/mgcv-esa-2018/
+  description: Fitting Non-Linear Models in R with the mgcv Package
+  venue: Ecological Society of America Annual Meeting, New Orleans, Louisiana
+  date: 2018-05-10
+  long_description: >
+    This course is designed and run in conjucation with David Miller, Gavin Simpson,
+    and Eric Pedersen and has run at ESA for a number of years. Lots of materials
+    and resources available at the link!
+mgcv-esa-2017:
+  name: mgcv-esa-2017
+  type: course
+  exurl: https://noamross.github.io/mgcv-esa-workshop/
+  description: Fitting Non-Linear Models in R with the mgcv Package
+  venue: Ecological Society of America Annual Meeting, New Orleans, Louisiana
+  date: 2017-05-10

@@ -1,5 +1,9 @@
 /* =Typography
 -----------------------------------------------------------------------------*/
+.pointer {
+  font-family: 'IM FELL FLOWERS 2';
+}
+
 body {
   font-family: 'Alegreya', 'Hoefler Text', Times, Serif;
   font-size: 1.05em;
@@ -9,17 +13,21 @@ body {
   background-repeat: repeat-x; */
 }
 
+blockquote {
+  border-left: 3px solid #AFAFB0;
+}
+
 blockquote p {
   line-height: 1.5em;
 }
 
-.story>p:first-of-type:first-line {
+div:not(.summary)>.story>p:first-of-type:first-line {
   font-family: "IM Fell English SC", "Times New Roman", Times, serif;
   font-size: 1.5em;
   line-height: 1
 }
 
-.story>p:first-of-type:first-letter {
+div:not(.summary)>.story>p:first-of-type:first-letter {
   font-family: "IM Fell English", Georgia, "Times New Roman", Times, serif;
   font-size: 4em;
   font-style: normal;
@@ -29,8 +37,38 @@ blockquote p {
   text-transform: uppercase
 }
 
-.bigger {
-  font-size: 110%;
+.story hr, .summary hr {
+    background: none;
+    margin: 0;
+    border: none;
+    margin-bottom: 0.5em;
+}
+
+.story hr::before, .summary hr::before {
+    font-family: 'IM FELL FLOWERS 2';
+    content: 'N';
+    display: block;
+    text-align: center;
+    opacity: 0.8;
+    margin-top: -1.25em;
+    line-height: 2.5em;
+    font-size: 2.5em;
+}
+
+.story .footnotes hr {
+  border-top: 1px solid #ecc;
+  margin-top: 5ex;
+  margin-bottom: 5ex;
+}
+
+.story .footnotes hr::before {
+    display: none;
+}
+
+pre  {
+  padding: 0;
+  border-radius: 0;
+  border: none;
 }
 
 pre code {
@@ -40,6 +78,8 @@ pre code {
   background-color: #f0f3f3;
   padding: 8px;
   width: 100%;
+  border-radius: 0;
+
 }
 
 p code {
@@ -55,18 +95,12 @@ form, input[type="search"], select[multiple="multiple"] {
   border-radius:50px;
 }
 
-/*body {
-  background: #ffffff;
-  color: #333333;
-  font-size: 0.875em;
-  line-height: 1.65em;
-  font-family: 'PT Sans', "Helvetica Neue", Helvetica, Tahoma, sans-serif;
-}
-*/
 h1, h2, h3, h4, h5 {
   font-family: 'IM Fell English', 'Trebuchet MS', Helvetica, Arial, sans-serif;
-  font-style: italic;
+  font-style: normal;
   color: #b24;
+  font-weight: normal;
+
 }
 
 h2, h3, h4, h5 {
@@ -204,6 +238,7 @@ header h1 {
   font-size: 24px;
   margin-top: 1px;
   margin-bottom: 0;
+  font-weight: 400;
   /*	color: #ffffff;*/
 }
 
@@ -288,39 +323,31 @@ header h1 {
 /* =Footer
 -----------------------------------------------------------------------------*/
 #footer {
-  color: #ecc;
   margin-top: 3ex;
   padding-bottom: 20px;
-  font-size: .9em;
   padding-top: 1em;
-  background-color: #b33;
   overflow: hidden;
-  /*	box-shadow: 0 2px 4px #bbb inset;*/
-  /*	background: #f0f0f0;*/
-  border-top: 3px solid #b24;
+  border-top: 1px solid #bbbbbbbb;
 }
 
-#footer a {
-  color: #fff;
-}
-
-#footer section {
-  float: none;
+#footer h3 {
   text-align: center;
 }
 
-#footer nav {
-  float: right;
+#footer p {
+  margin-bottom: 0.5em;
 }
 
-#footer nav ul {
-  list-style: none;
-  margin: 0;
+#footer a {
+  color: #b24;
 }
 
-#footer nav ul li {
-  float: left;
-  margin-left: 2em;
+.fa-li {
+  color: rgb(238, 136, 136);
+}
+
+a .fa, .far, .fab, .fas {
+  color: rgb(238, 136, 136);
 }
 
 /* =Tablet (Portrait)

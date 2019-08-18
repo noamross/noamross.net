@@ -1,0 +1,93 @@
+docker-user:
+  type: presentation
+  name: docker-user
+  slides: https://github.com/noamross/nyhackr-docker-talk
+  video: https://www.youtube.com/watch?v=803oZI5dvAU
+  description: DockeR for the UseR
+  venue: New York Open Statistical Programming Meetup
+  exurl: https://www.meetup.com/nyhackr/events/251652534/
+  long_description: >
+     An introduction to Docker with demonstration of different workflows and
+     applications for R users. Lots of resources and links included.
+  date: 2018-07-11
+rladies-office:
+  type: presentation
+  name: rladies-office
+  slides: https://github.com/noamross/2018-11-06-rladies-talk
+  description: "Reproducibility in an Office world: a brief history of failures"
+  venue: R-Ladies NYC
+  date: 2018-11-06
+joint-vir-bat-esa:
+  type: presentation
+  name: joint-vir-bat-esa
+  description: Joint circulation of viral diseases in a bat population
+  slides: https://doi.org/10.6084/m9.figshare.2584564.v7
+  exurl: https://eco.confex.com/eco/2016/webprogram/Paper59457.html
+  venue: Ecological Society of America Annual Meeting,  Ft. Lauderdale., Florida
+  date: 2016-08-09
+ibipm-esa:
+  type: presentation
+  name: ibipm-esa
+  slides: https://doi.org/10.6084/m9.figshare.1312935.v2
+  exurl:  https://eco.confex.com/eco/2015/webprogram/Paper50716.html
+  description: Optimal control of disease with individual-based models
+  venue: Ecological Society of America Annual Meeting, Baltimore, Maryland
+  date: 2015-08-11
+macroparasite-esa:
+  type: presentation
+  name: macroparasite-esa
+  slides: https://doi.org/10.6084/m9.figshare.938247.v3
+  exurl: https://eco.confex.com/eco/2014/webprogram/Paper48999.html
+  description: Modeling forest disease using a macroparasite framework
+  venue: Ecological Society of America Annual Meeting, Sacramento, California
+  date: 2014-08-13
+amr-ai-esa:
+  type: presentation
+  name: amr-ai-esa
+  exurl: https://eco.confex.com/eco/2018/meetingapp.cgi/Paper/70541
+  slides: https://doi.org/10.6084/m9.figshare.9642104.v1
+  description: "Generating better macroecological data from literature: a case study of antimicrobial resistance emergence"
+  venue: Ecological Society of America Annual Meeting, New Orleans, Louisiana
+  date: 2018-08-10
+nyhackr-mgcv:
+  type: presentation
+  name: nyhackr-mgcv
+  exurl: https://www.meetup.com/nyhackr/events/244638496/
+  slides: https://github.com/noamross/gam-resources/blob/master/2017-11-14-noamross-gams-nyhackr.pdf
+  video: https://youtu.be/q4_t8jXcQgc
+  description: "Nonlinear models in R: the wonderful world of mgcv"
+  venue: New York Open Statistical Programming Meetup
+  date: 2017-11-21
+bohrn-data:
+  type: presentation
+  name: bohrn-data
+  description: "One Health Surveillance Data: Sharing, Standards, and Stories"
+  long_description: >
+    This presentation kicked off the [BOHRN](https://www.bohrn.net) working sessions
+    on data sharing for synthesis and collaboration. How can we structure disease
+    surveillance data so we can better integrate them for macro-level insights?
+  venue: Bat One Health Research Network Meeting, Phuket, Thailand
+  date: 2019-08-28
+  slides: https://doi.org/10.6084/m9.figshare.9642113.v1
+nyr-2017-review:
+  type: presentation
+  name: nyr-2017-review
+  video: https://youtu.be/Dc6qnwbJbTU
+  venue: New York R Conference
+  date: 2017-04-22
+  description: "Better packages through peer review: lessons from rOpenSci"
+nyr-2018-data-pkg:
+  type: presentation
+  name: nyr-2018-data-pkg
+  video: https://youtu.be/zsEsh5QpN0U
+  venue: New York R Conference
+  date: 2018-04-21
+  description: "The Modern R Data Package"
+nyr-2019-redoc:
+  type: presentation
+  name: nyr-2019-redoc
+  video: https://youtu.be/sNLNTbiFsmE
+  venue: New York R Conference
+  date: 2019-05-11
+  description: "Reproducibility in an Office world: tools for crossing the abyss"
+

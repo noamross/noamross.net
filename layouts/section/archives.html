@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html>
+{{ $baseurl := .Site.BaseURL }}
+{{ partial "head.html" . }}
+<body>
+  {{ partial "navbar.html" . }}
+  <div class="wrapper">
+    <div class="is-row is-stack-20">
+      <div class="is-col is-60">
+        <h1 class="is-text-center">Archive</h1>
+        <p class="is-text-center"><em>Content from my old website for posterity</em><p>
+      </div>
+    </div>
+    {{ range (where .Data.Pages.ByDate "Section" "archive").Reverse }}
+    <div class="is-row">
+      <div class="is-col is-20  is-stack-20 dateblock">&nbsp</div>
+      <div class="is-col is-60 is-stack-20">
+        <h2><a href="{{ .Permalink }}">{{ .Title }}</a></h2>
+      </div>
+      <div class="is-col is-20">&nbsp</div>
+    </div>
+    <div class="is-row">
+      <div class="is-col is-20 is-stack-20 dateblock">
+          <h4>{{ .Date.Format "2 January 2006" }}</h4>
+      </div>
+      <div class="is-col is-60">
+        {{ if .Truncated }}
+        {{ .Summary }}
+        <p class="is-text-right is-text-center-mobile"><a href="{{ .RelPermalink }}">Read More…</a></p>
+        {{ else }}
+        {{ .Content | plainify }}
+        {{ end }}
+      </div>
+      <div class="is-col is-20">&nbsp</div>
+    </div>
+    {{ end }}
+</div>
+{{ partial "footer.html" . }}
+</body>
+</html>

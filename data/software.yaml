@@ -1,0 +1,46 @@
+rchie:
+  name: rchie
+  type: software
+  cran: https://cran.r-project.org/package=rchie
+  github: https://github.com/noamross/rchie
+  description: An R parser for ArchieML
+  long_description: >
+    “Structured text, for an unstructured world.” **rchie** parses a free-text data format developed by the New York Times interactives team,
+    designed to allow writers and developers to collaborate on data-driven outputs
+    like apps and infographics.  Paired with **googledrive** package, it allows
+    rapid iteration and collaboration.
+  date: 2018-11-27
+  version: 1.0.2
+  exurl: http://noamross.github.io/rchie
+redoc:
+  name: redoc
+  type: software
+  github: https://github.com/noamross/redoc
+  description: Reversible reproducible documents with R Markdown and Microsoft Word
+  long_description: >
+    **redoc** is an attempt at the holy grail of mixed-workflow collaboration: it
+    enables analysts to produce Microsoft Word douments using R Markdown that can
+    be edited and then de-compiled into R Markdown again witout loss of information.
+    It's goal is for teams with different tools to be able to work
+    together with minimal need to adopt each other's workflows.
+  date: 2019-05-11
+  version: 0.1.0
+  exurl: https://noamross.github.io/redoc/
+fasterize:
+  name: fasterize
+  type: software
+  cran: https://cran.r-project.org/package=fasterize
+  github: https://github.com/ecohealthalliance/fasterize
+  description: High performance raster conversion for modern spatial data
+  date: 2018-03-18
+  version: 1.0.2
+citesdb:
+  name: citesdb
+  type: software
+  github: https://github.com/ropensci/citesdb
+  description: A high-performance database of shipment-level CITES trade data
+  date: 2019-05-19
+  version: 1.0.2
+  exurl: https://ropensci.github.io/citesdb
+
+

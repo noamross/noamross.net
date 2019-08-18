@@ -1,12 +1,15 @@
 ErrorDocument 404 /404.html
 
 RewriteEngine on
-Redirect 301 /publications.html /vitae/
-Redirect 301 /about.html /index.html
-Redirect 301 /connect.html  /#connect
-Redirect 301 /tags.html  /musings/
 
-RedirectMatch 301 /blog/(\d\d\d\d)/(\d\d)/(\d\d)/([^\.]*)\.html /archives/$1-$2-$3-$4/
+RewriteRule ^blog/(\d+)/(\d)/(\d)/([^\.]*)\.html /branch/hugo/archives/$1-0$2-0$3-$4/ [L,R=301]
+RewriteRule ^blog/(\d+)/(\d)/(\d+)/([^\.]*)\.html /branch/hugo/archives/$1-0$2-$3-$4/ [L,R=301]
+RewriteRule ^blog/(\d+)/(\d+)/(\d)/([^\.]*)\.html /branch/hugo/archives/$1-$2-0$3-$4/ [L,R=301]
+RewriteRule ^blog/(\d+)/(\d+)/(\d+)/([^\.]*)\.html /branch/hugo/archives/$1-$2-$3-$4/ [L,R=301]
 
-RewriteRule /(old-blog-stuff|img|fontawesome)/(.*)$ http://noamross.github.io/noamross.net/static/$1/$2 [L,R=301]
-RewriteRule /branch/(\w+)/(old-blog-stuff|img|fontawesome)/(.*)$ https://raw.githubusercontent.com/noamross/noamross.net/$1/static/$2/$3 [L,R=301]
+RewriteRule ^about\.html /branch/hugo/index\.html [L,R=301]
+#RewriteRule /publications.html /vitae/ [L,R=301]
+#RewriteRule /connect.html  /#connect [L,R=301]
+#RewriteRule /tags.html  /musings/ [L,R=301]
+RewriteRule ^(old-blog-stuff|img|fontawesome)/(.*)$ http://noamross.github.io/noamross.net/static/$1/$2 [L,R=301]
+RewriteRule ^branch/(\w+)/(old-blog-stuff|img|fontawesome)/(.*)$ https://raw.githubusercontent.com/noamross/noamross.net/$1/static/$2/$3 [L,R=301]

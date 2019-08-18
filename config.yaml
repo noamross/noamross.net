@@ -12,15 +12,13 @@ permalinks:
   archives: "/archives/:filename/"
 
 blackfriday:
-  extensions: "hardLineBreak"
+  extensions:
+   - "hardLineBreak"
+
 author:
   name: "Noam Ross"
   email: "noam.ross@gmail.com"
 copyright: "This work is licensed under a Creative Commons Attribution-ShareAlike 4.0 International License."
-
-params:
-  description: "noamross.net"
-  author:
-    name: "Noam Ross"
-  rssLimit: 50
+description: "noamross.net"
+rssLimit: 50
 

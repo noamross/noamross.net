@@ -1,4 +1,4 @@
-FROM rocker/verse:latest
+FROM rocker/tidyverse:latest
 MAINTAINER Noam Ross noam.ross@gmail.com
 
 COPY DESCRIPTION /pkg/DESCRIPTION

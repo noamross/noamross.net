@@ -1,3 +1,9 @@
+---
+title: Dr. Noam Ross
+description: "Senior Research Scientist, @EcoHealthNYC. Editor, @rOpenSci. Disease and theoretical ecology, #rstats, open science + code. Also fun, love, progress + justice."
+---
+
+
 Hello! I'm Dr. Noam Ross, and welcome to my personal website.  I'm a Senior
 Research Scientist and computational disease ecologist at [EcoHealth
 Alliance](https://www.ecohealthalliance.org). I study the dynamics of wildlife

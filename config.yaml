@@ -14,7 +14,8 @@ permalinks:
 author:
   name: "Noam Ross"
   email: "noam.ross@gmail.com"
+title: "Dr. Noam Ross"
 copyright: "This work is licensed under a Creative Commons Attribution-ShareAlike 4.0 International License."
-description: "noamross.net"
+description: "Senior Research Scientist, @EcoHealthNYC. Editor, @rOpenSci. Disease and theoretical ecology, #rstats, open science + code. Also fun, love, progress + justice."
 rssLimit: 50
 

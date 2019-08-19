@@ -53,11 +53,11 @@
   <meta name="twitter:description" content="{{ if .Description }}{{ .Description }}{{ else }}{{ .Summary }}{{ end }}">
   {{ if .Params.largeimage }}
     <meta name="twitter:card" content="summary_large_image">
-    <meta name="twitter:image" content="{{ .Site.BaseURL }}{{ .Params.largeimage }}">
+    <meta name="twitter:image" content="{{ .Params.largeimage }}">
   {{ else }}
     <meta name="twitter:card" content="summary" />
     {{ if .Params.image }}
-        <meta name="twitter:image" content="{{ .Site.BaseURL }}{{ .Params.image }} ">
+        <meta name="twitter:image" content="{{ .Params.image }} ">
     {{ else }}
        <meta name="twitter:image" content="{{ $asset_base }}assets/img/nr.png">
     {{ end }}

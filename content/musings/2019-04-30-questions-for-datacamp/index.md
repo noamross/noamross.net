@@ -8,7 +8,7 @@ image: img/card-img-2.png
 
 <p></p>
 
-See my [original post](/musings/2019/datacamp-sexual-assault/) for background and [updates](/musings/2019/datacamp-sexual-assault#significant-updates-2019-04-24).
+See my [original post](/musings/2019/04/12/datacamp-sexual-assault/) for background and [updates](/musings/2019/04/12/datacamp-sexual-assault#significant-updates-2019-04-24).
 
 {{% drop %}}
 I was glad to see [the announcement](https://www.datacamp.com/community/blog/board-update) from the DataCamp Board that, after a long period of silence and inaction, the company is taking seriously an incident of sexual misconduct and re-examining its approach to the issue and its relationship with concerned instructors. The CEO's leave of absence and the engagement of Ms. Bhargava indicate a turn in the right direction. An investigation into the management missteps that have led to this point is necessary.

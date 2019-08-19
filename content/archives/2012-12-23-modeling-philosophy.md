@@ -1,7 +1,7 @@
 ---
 title: "Quals Reading: Modeling Philosophy"
 author: "Noam Ross"
-tags: [quals, modeling]
+tags: [quals, modeling, ecobloggers]
 date: 2012-12-23T07:44:27
 
 --- 

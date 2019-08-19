@@ -1,28 +1,38 @@
 ---
 title: "Dave Harris on Maximum Likelihood Estimation"
-author: "David J. Harris"
-tags: [R, likelihood, bbmle]
+author: "Noam Ross"
+tags: [R, D-RUG, optimization]
 date: 2013-06-17T15:11:17
 
---- 
+---
 
 
-Editor's Note: *At our last [Davis R Users'
+*At our last [Davis R Users'
 Group](http://www.noamross.net/davis-r-users-group.html) meeting of the
-quarter, **[Dave Harris](http://davharris.github.io/)**
+quarter, [Dave Harris](https://sihlab.wordpress.com/david-j-harris/)
 gave a talk on how to use the `bbmle` package to fit mechanistic models
-to ecological data. Here are his script and notes (helpfully generated with the the `spin`
-function in `knitr`*).
+to ecological data. Here's his script, which I ran throgh the `spin`
+function in `knitr`:*
 
 ~~~~ {.r}
 # Load data
 library(emdbook)
+~~~~
+
+    ## Loading required package: MASS Loading required package: lattice
+
+~~~~ {.r}
 library(bbmle)
+~~~~
+
+    ## Loading required package: stats4
+
+~~~~ {.r}
 data(ReedfrogFuncresp)
 plot(ReedfrogFuncresp, xlim = c(0, 100), xaxs = "i")
 ~~~~
 
-![]({{% asseturl %}}assets/old-blog-stuff/unnamed-chunk-1.png)
+![]({{% asseturl %}}assets/old-blog-stuff/h1.png)
 
 Statistical models are stories about how the data came to be. The
 deterministic part of the story is a (slightly mangled) version of what
@@ -52,7 +62,7 @@ curve(disk(x, 2, 0.02), add = TRUE, from = 0, to = 100, col = 2)
 curve(disk(x, 0.5, 0.02), add = TRUE, from = 0, to = 100, col = 4)
 ~~~~
 
-![]({{% asseturl %}}assets/old-blog-stuff/unnamed-chunk-3.png)
+![]({{% asseturl %}}assets/old-blog-stuff/h3.png)
 
 The blue curve looks plausible, but is it optimal? Does it tell the best
 possible story about how the data could have been generated?
@@ -73,7 +83,7 @@ determined by the disk equation.
 
 ~~~~ {.r}
 NLL = function(a, h) {
-    -sum(dbinom(ReedfrogFuncresp$Killed, size = ReedfrogFuncresp$Initial, prob = disk(ReedfrogFuncresp$Initial, 
+    -sum(dbinom(ReedfrogFuncresp$Killed, size = ReedfrogFuncresp$Initial, prob = disk(ReedfrogFuncresp$Initial,
         a, h)/ReedfrogFuncresp$Initial, log = TRUE))
 }
 ~~~~
@@ -111,14 +121,14 @@ model.
 fit
 ~~~~
 
-    ## 
+    ##
     ## Call:
     ## mle2(minuslogl = NLL, start = list(a = 1, h = 1))
-    ## 
+    ##
     ## Coefficients:
-    ##       a       h 
-    ## 0.52652 0.01666 
-    ## 
+    ##       a       h
+    ## 0.52652 0.01666
+    ##
     ## Log-likelihood: -46.72
 
 ~~~~ {.r}
@@ -127,14 +137,25 @@ fit
 summary(fit)
 ~~~~
 
-    ## Length  Class   Mode 
-    ##      1   mle2     S4
+    ## Maximum likelihood estimation
+    ##
+    ## Call:
+    ## mle2(minuslogl = NLL, start = list(a = 1, h = 1))
+    ##
+    ## Coefficients:
+    ##   Estimate Std. Error z value   Pr(z)    
+    ## a  0.52652    0.07112    7.40 1.3e-13 ***
+    ## h  0.01666    0.00488    3.41 0.00065 ***
+    ## ---
+    ## Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
+    ##
+    ## -2 log L: 93.44
 
 ~~~~ {.r}
 coef(fit)
 ~~~~
 
-    ##       a       h 
+    ##       a       h
     ## 0.52652 0.01666
 
 Here's the curve associated with the most likely combination of a and
@@ -142,11 +163,11 @@ Here's the curve associated with the most likely combination of a and
 
 ~~~~ {.r}
 plot(ReedfrogFuncresp, xlim = c(0, 100), xaxs = "i")
-curve(disk(x, a = coef(fit)["a"], h = coef(fit)["h"]), add = TRUE, lwd = 4, 
+curve(disk(x, a = coef(fit)["a"], h = coef(fit)["h"]), add = TRUE, lwd = 4,
     from = 0, to = 100)
 ~~~~
 
-![]({{% asseturl %}}assets/old-blog-stuff/unnamed-chunk-7.png)
+![]({{% asseturl %}}assets/old-blog-stuff/h7.png)
 
 The rethinking package has a few convenient functions for summarizing
 and visualizing the output of an mle2 object. It's not on CRAN, but you
@@ -155,6 +176,15 @@ github.](https://github.com/rmcelreath/rethinking)
 
 ~~~~ {.r}
 library(rethinking)
+~~~~
+
+    ## Attaching package: 'rethinking'
+    ##
+    ## The following object is masked _by_ '.GlobalEnv':
+    ##
+    ## x
+
+~~~~ {.r}
 precis(fit)
 ~~~~
 
@@ -176,7 +206,7 @@ points(as.data.frame(as.list(coef(fit))), col = 2, pch = 20)
 points(0.5, 0.02, col = 4, pch = 20)
 ~~~~
 
-![]({{% asseturl %}}assets/old-blog-stuff/unnamed-chunk-9.png)
+![]({{% asseturl %}}assets/old-blog-stuff/h9.png)
 
 * * * * *
 
@@ -215,7 +245,7 @@ curve(dnorm(x, sd = 1/2), from = -5, to = 5, ylab = "likelihood", xlab = "estima
 curve(dnorm(x, sd = 3), add = TRUE, col = 2)
 ~~~~
 
-![]({{% asseturl %}}assets/old-blog-stuff/unnamed-chunk-11.png)
+![]({{% asseturl %}}assets/old-blog-stuff/h11.png)
 
 The black curve shows a model with low variance for its estimate. This
 means that the likelihood would fall off quickly if we tried a bad
@@ -231,7 +261,7 @@ away from the best estimate:
 plot(profile(fit))
 ~~~~
 
-![]({{% asseturl %}}assets/old-blog-stuff/unnamed-chunk-12.png)
+![]({{% asseturl %}}assets/old-blog-stuff/h12.png)
 
 Keep in mind that all of this is based on a Gaussian approximation. It
 works well when you have lots of data and you aren't estimating
@@ -302,7 +332,7 @@ value of lambda doesn't go negative, which isn't allowed (it would imply
 a negative number of occurrences for our outcome of interest).
 
 ~~~~ {.r}
-fit0 = mle2(y ~ dpois(lambda = exp(intercept + slope * x)), start = list(intercept = mean(y), 
+fit0 = mle2(y ~ dpois(lambda = exp(intercept + slope * x)), start = list(intercept = mean(y),
     slope = 0), data = d)
 ~~~~
 
@@ -357,12 +387,12 @@ Sure enough, the coefficients are a bit smaller
 coef(fit)  # MLE
 ~~~~
 
-    ##       a       h 
+    ##       a       h
     ## 0.52652 0.01666
 
 ~~~~ {.r}
 coef(fit2)  # MAP estimate
 ~~~~
 
-    ##       a       h 
+    ##       a       h
     ## 0.47931 0.01375

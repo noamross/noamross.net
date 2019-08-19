@@ -1,7 +1,8 @@
 ---
-date: "2019-07-07"
+date: "2019-08-09"
 title: "A New Website"
 slug: a-new-website
+draft: true
 ---
 
 For me, the task of building a personal website is fraught with so many of my technical, aesthetic,
@@ -35,7 +36,7 @@ Here are some of the pieces that I used to build it:
 
 I made a few tweaks to the typical Blogdown setup that I think are neat and you may find useful, esoteric, or maddening:
 
--   To make R Markdown documents work with Hugo's native syntax highlighter, I made a [lua filter](https://github.com/noamross/noamross.net/blob/hugo/scripts/syntax-highlight-hugo.lua) that wraps code outputs in `<highlight>` tags set the site to [use it for all posts](https://github.com/noamross/noamross.net/blob/hugo/_output.yml).
+-   To make R Markdown documents work with Hugo's native syntax highlighter, I made a [lua filter](https://github.com/noamross/noamross.net/blob/hugo/scripts/syntax-highlight-hugo.lua) that wraps code outputs in Hugo's `<highlight>` tags, and set the site to [use it for all posts](https://github.com/noamross/noamross.net/blob/hugo/_output.yml).
 -   The R Markdown posts are built on CircleCI, but to improve perforance [the knitr cache is saved in the CI cache](https://github.com/noamross/noamross.net/blob/hugo/.circleci/config.yml#L56).
 -   Branches of the site deploy and can be viewed under the `/branch/` subdirectory.  This is done by [setting the site BaseURL to vary by branch on CircleCI](https://github.com/noamross/noamross.net/blob/hugo/.circleci/config.yml#L56) and then [pushing the branch to that subdirectory.](https://github.com/noamross/noamross.net/blob/hugo/.circleci/config.yml#L56).
 -   The [**rorcid** download script](https://github.com/noamross/noamross.net/blob/hugo/scripts/get-orcid-data.R) merges ORCiD data with [custom annotations](https://github.com/noamross/noamross.net/blob/hugo/data/papers_manual.yaml) and then saves it in the Hugo [`data/`](https://github.com/noamross/noamross.net/blob/hugo/data/) folder for use in building the site.

@@ -8,9 +8,9 @@ jobs:
       - checkout
       - restore_cache:
           keys:
-            - deps1-$R_VERSION-{{ .Branch }}-{{ checksum "DESCRIPTION" }}-{{ checksum ".circleci/config.yml" }}
-            - deps1-$R_VERSION-{{ .Branch }}
-            - deps1-$R_VERSION
+            - deps2-$R_VERSION-{{ .Branch }}-{{ checksum "DESCRIPTION" }}-{{ checksum ".circleci/config.yml" }}
+            - deps2-$R_VERSION-{{ .Branch }}
+            - deps2-$R_VERSION
       - run:
           name: "Install Dependencies"
           command: |
@@ -46,7 +46,7 @@ jobs:
                rsync -avz --delete public/ noamross_noamross@ssh.phx.nearlyfreespeech.net:/home/public/branch/${CIRCLE_BRANCH} --exclude=/img --exclude=/assets --exclude=.htaccess
             fi
       - save_cache:
-          key: deps1-$R_VERSION-{{ .Branch }}-{{ checksum "DESCRIPTION" }}-{{ checksum ".circleci/config.yml" }}
+          key: deps2-$R_VERSION-{{ .Branch }}-{{ checksum "DESCRIPTION" }}-{{ checksum ".circleci/config.yml" }}
           paths:
             - "/usr/local/lib/R/site-library"
             - "blogdown"

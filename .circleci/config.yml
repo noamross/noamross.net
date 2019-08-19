@@ -57,7 +57,7 @@ jobs:
   calc_stats:
     working_directory: ~/main
     docker:
-      - image: noamross/noamrossnet:latest
+      - image: krlmlr/debian-ssh:latest
     steps:
       - add_ssh_keys:
           fingerprints:
@@ -83,3 +83,15 @@ workflows:
                  - master
      jobs:
        - build
+
+    hourly:
+      triggers:
+         - schedule:
+             cron: "0 31 * * *"
+             filters:
+               branches:
+                 only:
+                   - master
+      jobs:
+        - calc_stats
+

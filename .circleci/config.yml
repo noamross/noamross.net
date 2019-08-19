@@ -43,13 +43,29 @@ jobs:
             if [ "${CIRCLE_BRANCH}" == "master" ]; then
                rsync -avz --delete public/ noamross_noamross@ssh.phx.nearlyfreespeech.net:/home/public/ --exclude=/branch --exclude=/assets
             else
-               rsync -avz --delete public/ noamross_noamross@ssh.phx.nearlyfreespeech.net:/home/public/branch/${CIRCLE_BRANCH} --exclude=/img --exclude=/assets --exclude=.htaccess
+               rsync -avz --delete public/ noamross_noamross@ssh.phx.nearlyfreespeech.net:/home/public/branch/${CIRCLE_BRANCH} --exclude=/img --exclude=/assets --exclude=.htaccess --exclude=awstats
             fi
+      - run:
+          name: "Calculate Stats"
+          command: |
+            ssh noamross_noamross@ssh.phx.nearlyfreespeech.net /usr/local/www/awstats/tools/awstats_buildstaticpages.pl -config=nfsn -update -dir=/home/public/awstats
       - save_cache:
           key: deps2-$R_VERSION-{{ .Branch }}-{{ checksum "DESCRIPTION" }}-{{ checksum ".circleci/config.yml" }}
           paths:
             - "/usr/local/lib/R/site-library"
             - "blogdown"
+  calc_stats:
+    working_directory: ~/main
+    docker:
+      - image: noamross/noamrossnet:latest
+    steps:
+      - add_ssh_keys:
+          fingerprints:
+            - "7c:cf:69:c8:f8:86:24:81:66:70:a6:18:72:1f:ca:07"
+      - run:
+          name: "Calculate Stats"
+          command: |
+            ssh noamross_noamross@ssh.phx.nearlyfreespeech.net /usr/local/www/awstats/tools/awstats_buildstaticpages.pl -config=nfsn -update -dir=/home/public/awstats
 
 workflows:
    version: 2

@@ -215,6 +215,14 @@ h2 {
   float: right;
 }
 
+@media screen and (max-width: 960px) {
+.header-img {
+   float:none !important;
+   display: block;
+   margin-left: auto;
+   margin-right: auto;
+}}
+
 /* =Header
 -----------------------------------------------------------------------------*/
 header {

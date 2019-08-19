@@ -1,3 +1,7 @@
+{{ $asset_base := .Site.BaseURL }}
+{{ if ne (getenv "HUGO_ASSET_BASEURL") "" }}
+  {{ $asset_base = (getenv "HUGO_ASSET_BASEURL") }}
+{{ end }}
 <footer id="footer" class="is-hidden-print">
   <div class="wrapper">
     <div class="is-row .is-small is-muted">
@@ -40,7 +44,7 @@
   </div>
 </footer>
 
-<script type="text/javascript" src="{{ .Site.BaseURL }}js/kube.js"></script>
+<script type="text/javascript" src="{{ $asset_base }}assets/js/kube.js"></script>
 <script>
   $K.dom(window).on('load', $K.init);
 </script>

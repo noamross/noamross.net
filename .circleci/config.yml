@@ -26,7 +26,8 @@ jobs:
       - run:
           name: "Build Hugo Site"
           command: |
-            export HUGO_ASSETS_URL=https://cdn.jsdelivr.net/gh/noamross/noamross.net@${CIRCLE_SHA1}/
+            export HUGO_ASSET_BASEURL=https://cdn.jsdelivr.net/gh/noamross/noamross.net@${CIRCLE_SHA1}/static/
+            echo $HUGO_ASSET_BASEURL
             if [ "${CIRCLE_BRANCH}" == "master" ]; then
               hugo
             else

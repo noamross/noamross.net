@@ -43,7 +43,6 @@
   {{ end }}
 
   <!-- Social -->
-
   <meta name="description" content="{{ if .Description }}{{ .Description }}{{ else }}{{ .Summary }}{{ end }}
 " />
 
@@ -63,4 +62,7 @@
   <script type="application/ld+json">
     {"@type":"WebSite","url":"{{ .Permalink }}","headline":"{{ .Title }}", "name":"noamross.net","description":"{{ if .Description }}{{ .Description }}{{ else }}{{ .Summary }}{{ end }}","@context":"http://schema.org"}
   </script>
+
+  <!-- Indexing -->
+  {{ if and (ne (getenv "CIRCLE_BRANCH") "master") (ne (getenv "CIRCLE_BRANCH") "") }}<meta name="robots" content="noindex" />{{ end }}
 </head>

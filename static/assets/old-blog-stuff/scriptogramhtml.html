@@ -1,0 +1,189 @@
+<!DOCTYPE html> 
+<!--
+	Basic scriptogr.am theme
+-->
+<html lang="en">
+<head>
+  <title>{{author}} {{title}} on scriptogr.am</title>
+  <meta name="description" content="{{author}} {{blog_title}}" />
+  <meta name="viewport" content="width=device-width; initial-scale=1; maximum-scale=1.0;">
+  <meta name="apple-mobile-web-app-capable" content="yes"/>
+  <meta name="ROBOTS" content="INDEX,FOLLOW">
+  <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta charset="utf-8">
+  <meta name="description" content="{{author}} | {{blog_title}}">
+  <meta property="og:url" content="{{home_link}}">
+  <meta property="og:site_name" content="{{author}} on scriptogr.am">
+  <link rel="shortcut icon" href="http://scriptogr.am/lib/img/favicon.ico">
+  <link rel="alternate" type="application/rss+xml" title="RSS" href="{{base_url}}/feed" />
+  <link href="/themes/reset.css" type="text/css" rel="stylesheet">
+  <script type="text/javascript" src="http://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"> </script> 
+  <script type="text/x-mathjax-config">  MathJax.Hub.Config({ "HTML-CSS": { availableFonts: ["TeX"], webfont: [null] }} ); </script>
+  <script type="text/x-mathjax-config">  MathJax.Hub.Config({ TeX: { extensions: ["autobold.js"] }} ); </script>
+  <script type="text/x-mathjax-config">  MathJax.Hub.Config({ tex2jax: {inlineMath: [['$','$'], ['\\(','\\)']] }}); </script>
+  <script type="text/x-mathjax-config">  MathJax.Hub.Config({ tex2jax: {displayMath: [['$$','$$'], ['\\[','\\]']] }}); </script>
+  <script type="text/javascript">
+    /* * * CONFIGURATION VARIABLES: EDIT BEFORE PASTING INTO YOUR WEBPAGE * * */
+    var disqus_shortname = 'noamross'; // required: replace example with your forum shortname
+
+    /* * * DON'T EDIT BELOW THIS LINE * * */
+    (function() {
+        var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+        dsq.src = 'http://' + disqus_shortname + '.disqus.com/embed.js';
+        (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+    })();
+</script>
+ {{css}}
+</head>
+<body>
+<div class="wrapper">
+  <div class="blog">
+  <h1><a href="{{home_link}}">{{author}}</a></h1>
+    <span class="blog-description">{{blog_title}}</span>
+ 
+      <div id="menu">
+      {{#pages}}
+        <a href="{{permalink}}">{{title}}</a>
+      {{/pages}}
+      </div>
+ 
+      <div class="container">
+      {{#posts}}
+     
+       <!-- index -->
+       {{#is_index}}
+        <div class="post">
+          <div class="content">
+            <div class="title"><h3><a href="{{permalink}}">{{title}}</a> {{#post_permalink}}<a href="{{post_permalink}}">#</a>{{/post_permalink}}</h3></div>
+            {{#date}}
+            <div class="meta">
+              <span class="date">{{prettydate}}</span>
+            </div>
+            {{/date}}
+            <div class="body-post">
+              <!--if excerpt-->
+              {{#excerpt}}<span class="introduction">{{excerpt}}</span>{{/excerpt}}
+              <!--endif-->
+              {{content}}
+              <!-- if tags -->
+              {{#if_tags}}
+              <ul class="tags">
+                {{#tags}}
+                  <li><a href="{{base_url}}/tag/{{name}}">{{name}}</a></li>
+                {{/tags}}
+              </ul>  
+              {{/if_tags}}
+              <!-- endif -->
+            </div><!--end body-->
+          </div><!--end content-->
+          <div class="clear"></div>
+        </div><!--end post-->
+      {{/is_index}}
+
+      <!-- post permalink -->
+      {{#is_post}}
+        <div class="post">
+          <div class="content">
+            <div class="title"><h3><a href="{{permalink}}">{{title}}</a></h3></div>
+            {{#date}}
+            <div class="meta">
+              <span class="date">{{prettydate}}</span>
+            </div>
+            {{/date}}
+            <div class="body-post">
+              <!--if excerpt-->
+              {{#excerpt}}<span class="introduction">{{excerpt}}</span>{{/excerpt}}
+              <!--endif-->
+              {{content}}
+              <!-- if tags -->
+              {{#if_tags}}
+              <ul class="tags">
+                {{#tags}}
+                  <li><a href="{{base_url}}/tag/{{name}}">{{name}}</a></li>
+                {{/tags}}
+              </ul>  
+              {{/if_tags}}
+              <!-- endif -->
+              <!-- social buttons -->
+               <div class="share-buttons">
+                <div class="share-twitter">
+                  <a href="https://twitter.com/share" class="twitter-share-button" data-url="{{permalink}}" data-via="scriptogram">Tweet</a><script>!function(d,s,id){var js,fjs=d.getElementsByTagName(s)[0];if(!d.getElementById(id)){js=d.createElement(s);js.id=id;js.src="//platform.twitter.com/widgets.js";fjs.parentNode.insertBefore(js,fjs);}}(document,"script","twitter-wjs");</script>             
+                 </div>
+                <div class="share-facebook">
+                  <div class="fb-like" data-href="{{permalink}}" data-send="false" data-layout="button_count" data-width="50" data-show-faces="false" data-font="arial"></div>
+                </div>
+                <div class="share-gplus">
+                  <g:plusone size="medium" href="{{permalink}}"></g:plusone>
+                 </div>
+               </div>
+            </div><!--end body-->
+          </div><!--end content-->
+          <div class="clear"></div>
+        </div><!--end post-->
+      {{/is_post}}
+      <!-- endif -->
+
+      <!-- page permalink -->
+      {{#is_page}}
+        <div class="post">
+          <div class="content">
+            <div class="title"><h3><a href="{{permalink}}">{{title}}</a></h3></div>
+              <div class="body-page">
+              <!--if excerpt-->
+              {{#excerpt}}<span class="introduction">{{excerpt}}</span>{{/excerpt}}
+              <!--endif-->
+              {{content}}
+              <!-- if tags -->
+              {{#if_tags}}
+              <ul class="tags">
+                {{#tags}}
+                  <li><a href="{{base_url}}/tag/{{name}}">{{name}}</a></li>
+                {{/tags}}
+              </ul>  
+              {{/if_tags}}
+              <!-- endif -->
+            </div><!--end body-->
+          </div><!--end content-->
+          <div class="clear"></div>
+        </div><!--end post-->
+      {{/is_page}}
+      <!-- endif -->
+    
+      <!-- archive -->
+      {{#is_archive}}
+        <div class="post">
+          {{#archive_divider}}<div class="archive-divider {{archive_divider_index}}"><h2>{{archive_divider}}</h2></div>{{/archive_divider}}
+          <div class="archive-content">
+            <div class="archive-title"><h3><a href="{{permalink}}">{{title}}</a></h3></div>
+            <div class="meta"><span class="date">{{prettydate}}</span></div>
+          </div><!--end archive-content-->
+          <div class="clear"></div>
+        </div><!--end achive-->
+      {{/is_archive}}
+      
+    {{/posts}}
+    <div class="pagination">{{pagination}}</div>
+    </div><!-- end container -->
+  </div><!-- end blog -->
+</div><!-- end wrapper --> 
+<div class="scriptogram-link"><a href="http://scriptogr.am/" title="Built with scriptogr.am" >scriptogr.am</a></div>
+<div id="fb-root"></div>
+<script type="text/javascript" src="http://ajax.googleapis.com/ajax/libs/jquery/1.6.1/jquery.min.js"></script>
+<script type="text/javascript" src="/themes/{{theme}}/app.js"></script>
+<script type="text/javascript">
+(function() {
+    var po = document.createElement('script'); po.type = 'text/javascript'; po.async = true;
+    po.src = 'https://apis.google.com/js/plusone.js';
+    var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(po, s);
+})();
+(function(d, s, id) {
+var js, fjs = d.getElementsByTagName(s)[0];
+if (d.getElementById(id)) return;
+js = d.createElement(s); js.id = id;
+js.src = "//connect.facebook.net/en_US/all.js#xfbml=1&appId=241164325961701";
+fjs.parentNode.insertBefore(js, fjs);
+}(document, 'script', 'facebook-jssdk'));
+</script>
+</body>
+</html>

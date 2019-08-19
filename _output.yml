@@ -1,2 +1,2 @@
 blogdown::html_page:
-  pandoc_args: ["--lua-filter=$HERE/assets/syntax-highlight-hugo.lua", "--no-highlight"]
+  pandoc_args: ["--lua-filter=$HERE/scripts/syntax-highlight-hugo.lua", "--no-highlight"]

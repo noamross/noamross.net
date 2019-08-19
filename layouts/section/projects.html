@@ -1,0 +1,26 @@
+<!DOCTYPE html>
+<html>
+{{ partial "head.html" . }}
+<body>
+  {{ partial "navbar.html" . }}
+  <div class="wrapper">
+    <div class="is-row">
+      <h1 class="is-center">Projects</h1>
+    </div>
+    <div class="is-row">
+      <div class="is-center">
+      {{ range sort .Site.Data.projects "index"}}
+      <div class="is-row">
+        <h2>{{ .title }}</h2>
+      </div>
+      <div class="is-row story">
+        <p>{{.description}}</p>
+      </div>
+      {{ end }}
+      </div>
+    </div>
+
+ </div>
+{{ partial "footer.html" . }}
+</body>
+</html>

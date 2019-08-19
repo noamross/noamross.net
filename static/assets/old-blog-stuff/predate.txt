@@ -1,0 +1,29 @@
+ moobilenet6-72 : ~/Dropbox/code/esaprog >  find eco.confex.com/eco/*/webprogram -name "Paper*.html" -print0 | xargs -0 -n3000 ack -li "\bpredate"
+eco.confex.com/eco/2010/webprogram/Paper23723.html
+eco.confex.com/eco/2010/webprogram/Paper24050.html
+eco.confex.com/eco/2011/webprogram/Paper28286.html
+eco.confex.com/eco/2011/webprogram/Paper30921.html
+eco.confex.com/eco/2012/webprogram/Paper35372.html
+eco.confex.com/eco/2012/webprogram/Paper37206.html
+eco.confex.com/eco/2013/webprogram/Paper40385.html
+eco.confex.com/eco/2013/webprogram/Paper40488.html
+eco.confex.com/eco/2013/webprogram/Paper42033.html
+eco.confex.com/eco/2013/webprogram/Paper43784.html
+eco.confex.com/eco/2013/webprogram/Paper44217.html
+eco.confex.com/eco/2014/webprogram/Paper48006.html
+eco.confex.com/eco/2014/webprogram/Paper48359.html
+eco.confex.com/eco/2014/webprogram/Paper48504.html
+eco.confex.com/eco/2014/webprogram/Paper48514.html
+eco.confex.com/eco/2014/webprogram/Paper48517.html
+eco.confex.com/eco/2014/webprogram/Paper49342.html
+eco.confex.com/eco/2014/webprogram/Paper50249.html
+ moobilenet6-72 : ~/Dropbox/code/esaprog >  find eco.confex.com/eco/*/webprogram -name "Paper*.html" -print0 | xargs -0 -n3000 ack -li "depredate"
+eco.confex.com/eco/2012/webprogram/Paper37813.html
+eco.confex.com/eco/2012/webprogram/Paper38186.html
+eco.confex.com/eco/2012/webprogram/Paper38842.html
+eco.confex.com/eco/2012/webprogram/Paper38970.html
+eco.confex.com/eco/2013/webprogram/Paper41706.html
+eco.confex.com/eco/2013/webprogram/Paper45020.html
+eco.confex.com/eco/2014/webprogram/Paper46957.html
+eco.confex.com/eco/2014/webprogram/Paper48250.html
+eco.confex.com/eco/2014/webprogram/Paper50453.html

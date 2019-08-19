@@ -1,0 +1,28 @@
+eco_health_alliance_2017:
+  name: eco_health_alliance_2017
+  title: Senior Research Scientist
+  organization: EcoHealth Alliance
+  location: New York, NY
+  start_date: '2017-06-01'
+  end_date: []
+eco_health_alliance_2015:
+  name: eco_health_alliance_2015
+  title: Disease Ecologist
+  organization: EcoHealth Alliance
+  location: New York, NY
+  start_date: '2015-10-01'
+  end_date: '2017-05-31'
+green_order_2008:
+  name: green_order_2008
+  title: Senior Analyst
+  organization: GreenOrder
+  location: New York, NY
+  start_date: '2008-09-26'
+  end_date: '2009-09-01'
+green_order_2006:
+  name: green_order_2006
+  title: Analyst
+  organization: GreenOrder
+  location: New York, NY
+  start_date: '2006-09-01'
+  end_date: '2008-09-25'

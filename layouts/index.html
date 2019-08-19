@@ -1,69 +1,64 @@
-{{ $baseurl := .Site.BaseURL }}
+{{ $asset_base := .Site.BaseURL }}
+{{ if ne (getenv "HUGO_ASSET_BASEURL") "" }}
+  {{ $asset_base = (getenv "HUGO_ASSET_BASEURL") }}
+{{ end }}
+<!DOCTYPE html>
+<html>
 {{ partial "head.html" . }}
 <body>
-
-{{ partial "navbar.html" . }}
-
-<div class="wrapper">
-  <div class="is-row is-stack-40">
-    <div class="is-col is-100 story bigger">
-      <img class="header-img is-stack-20" src="{{ .Site.BaseURL }}/img/header-pic.jpg">
-      {{ .Content }}
-  </div>
-  <div class="is-row">
-    <div class="is-col is-66 is-stack-20">
-    <div class="is-row is-stack-20">
-	        <h2 class="is-center">Musings, Explorations, and Announcements</h2>
-    </div>
-    {{ range first 5 ((where .Data.Pages.ByDate "Section" "musings").Reverse) }}
-    <div class="is-row">
-      <div class="is-col is-33 dateblock">
-      <h3><a href="{{ .Permalink }}">{{ .Title }}</a></h3>
-      <h4>{{ .Date.Format "2 January 2006" }}</h4>
-    </div>
-      <div class="is-col is-66">
-      {{ if .Truncated }}
-        {{ .Summary }}
-        <p class="text-right"><a href="{{ .RelPermalink }}">Read More…</a></p>
-      {{ else }}
+  {{ partial "navbar.html" . }}
+  <div class="wrapper">
+    <div class="is-row is-stack-40">
+      <div class="is-col is-100 story is-big">
+        <img class="header-img is-stack-20" src="{{ $asset_base }}assets/img/header-pic.jpg">
         {{ .Content }}
-      {{ end }}
-     </div>
-    </div>
-    {{ end }}
-    <div class="is-col is-33 dateblock">&nbsp;</div>
-    <div class="is-col is-66">
-        <nav class="navbar navbar-right"><a href="musings">&rarr; All musings</a></nav>
-    </div>
-  </div>
-    <div class="is-col is-33 is-stack-20">
-      <div class="is-row is-stack-20">
-        <h2 class="is-center">Recent Works</h2>
       </div>
-      <ul class="compact fa-ul">
-        {{ range first 5 (where .Data.Pages.ByDate "Section" "writing").Reverse }}
-        <li>
-          <i class="fa-li fa  {{ if eq .Type "unpublished" }}fa-file-o {{ else if eq .Params.kind "book" }}fa-book {{ else }}fa-file {{ end }} fa-fw" style="color:#e88;font-size:80%;padding-top:6px;"></i>
-            {{ .Params.citation | safeHTML }}
-            <a href="{{ .Permalink }}" class="badge badge-small">Abstract</a>
-            {{ if isset .Params "file" }}<a href="{{.Site.BaseURL}}/papers/{{ .Params.file }}" class="badge badge-small"><i class="fa fa-file-pdf-o"></i>&nbsp;pdf</a>{{ end }}
-        </li>
-		    {{ end }}
-      </ul>
-      <footer class="group">
-        <nav class="navbar navbar-right"><a href="writing">&rarr; All works</a></nav>
-      </footer>
-   </div>
-</div>
-</div>
-<!-- /end .wrapper -->
-
-
-<hr class="separator">
-
-{{ partial "whatisthis.html" . }}
-
-{{ partial "foot.html" . }}
-
+    </div>
+      <div class="is-row">
+        <div class="is-col is-66 is-stack-20">
+          <div class="is-row is-stack-20">
+            <h2 class="is-center">Musings, Explorations, and Announcements</h2>
+          </div>
+          {{ range first 5 ((where .Data.Pages.ByDate "Section" "musings").Reverse) }}
+          <div class="is-row is-stack-20">
+            <div class="is-col is-33 dateblock">
+              <h3><a href="{{ .Permalink }}">{{ .Title }}</a></h3>
+              <h4>{{ .Date.Format "2 January 2006" }}</h4>
+            </div>
+            <div class="is-col is-66 summary">
+              {{ if .Truncated }}
+              {{ .Summary }}
+              <p class="is-text-right"><a href="{{ .RelPermalink }}">Read More…</a></p>
+              {{ else }}
+              {{ .Content }}
+              {{ end }}
+            </div>
+          </div>
+          {{ end }}
+          <div class="is-col is-33 dateblock">&nbsp;</div>
+          <div class="is-col is-100">
+            <p class="is-text-right is-big"><a href="musings">All musings&nbsp;<span class="pointer">1</span></a></p>
+          </div>
+        </div>
+        <div class="is-col is-33 is-stack-20">
+          <div class="is-row is-stack-20">
+            <h2 class="is-center">Recent Works</h2>
+          </div>
+          <ul class="compact fa-ul">
+            {{ $works := (merge (merge (merge .Site.Data.papers .Site.Data.presentations) .Site.Data.courses) .Site.Data.software) }}
+            {{ range first 10 (sort $works "date" "desc")  }}
+              {{ if not .exclude_latest }}
+                {{ partial "work.html" .}}
+              {{ end }}
+            {{ end }}
+          </ul>
+          <footer class="group">
+            <p class="is-text-right is-big"><a href="vitae">All Works&nbsp;<span class="pointer">1</span></a></p>
+          </footer>
+        </div>
+      </div>
+    </div>
+ </div>
+{{ partial "footer.html" . }}
 </body>
 </html>

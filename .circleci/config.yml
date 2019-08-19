@@ -3,31 +3,36 @@ jobs:
   build:
     working_directory: ~/main
     docker:
-      - image: noamross/noam:latest
+      - image: noamross/noamrossnet:latest
     steps:
       - checkout
       - restore_cache:
           keys:
-            - deps1-$R_VERSION-{{ .Branch }}-{{ checksum "DESCRIPTION" }}-{{ checksum ".circleci/config.yml" }}
-            - deps1-$R_VERSION-{{ .Branch }}
-            - deps1-$R_VERSION
+            - deps2-$R_VERSION-{{ .Branch }}-{{ checksum "DESCRIPTION" }}-{{ checksum ".circleci/config.yml" }}
+            - deps2-$R_VERSION-{{ .Branch }}
+            - deps2-$R_VERSION
       - run:
           name: "Install Dependencies"
           command: |
-            apt-get update -qq && apt-get install -y --no-install-recommends rsync
-            if [ -f DESCRIPTION ]; then
-              Rscript --vanilla -e "devtools::install_dev_deps(dependencies = TRUE, upgrade = 'always')"
-            fi
-            Rscript --vanilla -e "if (inherits(blogdown::hugo_version(), 'try-error')) blogdown::install_hugo()"
-      - save_cache:
-          key: deps1-$R_VERSION-{{ .Branch }}-{{ checksum "DESCRIPTION" }}-{{ checksum ".circleci/config.yml" }}
-          paths:
-            - "/usr/local/lib/R/site-library"
-            - "blogdown"
+            ./install.sh
       - run:
-          name: "Build Site"
+          name: "Get ORCiD Records"
           command: |
-            Rscript -e "blogdown::build_site()"
+            Rscript assets/get-orcid-data.R || true
+      - run:
+          name: "Render R Markdown"
+          command: |
+            Rscript -e "blogdown::build_site(run_hugo = FALSE)" || true
+      - run:
+          name: "Build Hugo Site"
+          command: |
+            export HUGO_ASSET_BASEURL=https://cdn.jsdelivr.net/gh/noamross/noamross.net@${CIRCLE_SHA1}/static/
+            echo $HUGO_ASSET_BASEURL
+            if [ "${CIRCLE_BRANCH}" == "master" ]; then
+              hugo
+            else
+              hugo --baseURL https://www.noamross.net/branch/${CIRCLE_BRANCH}/
+            fi
       - add_ssh_keys:
           fingerprints:
             - "7c:cf:69:c8:f8:86:24:81:66:70:a6:18:72:1f:ca:07"
@@ -36,7 +41,54 @@ jobs:
           command: |
             ssh-keyscan -t "ecdsa" ssh.phx.nearlyfreespeech.net >> ~/.ssh/known_hosts
             if [ "${CIRCLE_BRANCH}" == "master" ]; then
-               rsync -avz --delete public/ noamross_noamross@ssh.phx.nearlyfreespeech.net:/home/public/test-site
+               rsync -avz --delete public/ noamross_noamross@ssh.phx.nearlyfreespeech.net:/home/public/ --exclude=/branch --exclude=/assets
             else
-               rsync -avz --delete public/ noamross_noamross@ssh.phx.nearlyfreespeech.net:/home/public/test-site/branch/${CIRCLE_BRANCH}
+               rsync -avz --delete public/ noamross_noamross@ssh.phx.nearlyfreespeech.net:/home/public/branch/${CIRCLE_BRANCH} --exclude=/img --exclude=/assets --exclude=.htaccess --exclude=awstats
             fi
+      - run:
+          name: "Calculate Stats"
+          command: |
+            ssh noamross_noamross@ssh.phx.nearlyfreespeech.net /usr/local/www/awstats/tools/awstats_buildstaticpages.pl -config=nfsn -update -dir=/home/public/awstats
+      - save_cache:
+          key: deps2-$R_VERSION-{{ .Branch }}-{{ checksum "DESCRIPTION" }}-{{ checksum ".circleci/config.yml" }}
+          paths:
+            - "/usr/local/lib/R/site-library"
+            - "blogdown"
+  calc_stats:
+    working_directory: ~/main
+    docker:
+      - image: krlmlr/debian-ssh:latest
+    steps:
+      - add_ssh_keys:
+          fingerprints:
+            - "7c:cf:69:c8:f8:86:24:81:66:70:a6:18:72:1f:ca:07"
+      - run:
+          name: "Calculate Stats"
+          command: |
+            ssh noamross_noamross@ssh.phx.nearlyfreespeech.net /usr/local/www/awstats/tools/awstats_buildstaticpages.pl -config=nfsn -update -dir=/home/public/awstats
+
+workflows:
+  version: 2
+  commit:
+    jobs:
+      - build
+  nightly:
+    triggers:
+      - schedule:
+          cron: "0 10 * * *"
+          filters:
+            branches:
+              only:
+                - master
+    jobs:
+      - build
+  hourly:
+    triggers:
+      - schedule:
+          cron: "45 * * * *"
+          filters:
+              branches:
+                only:
+                  - master
+    jobs:
+       - calc_stats

@@ -1,0 +1,4 @@
+User-agent: *
+Disallow: /awstats/
+Disallow: /branch/
+Crawl-Delay: 10

@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html>
+{{ partial "head.html" . }}
+<body>
+  {{ partial "navbar.html" . }}
+  <div class="wrapper">
+    <div class="is-row is-stack-20">
+      <div class="is-col is-60">
+        <h1 class="is-text-center">Musings, Explorations, and Announcements</h1>
+        <div class="is-large is-text-center">{{ partial "pagination.html" . }}</div>
+      </div>
+    </div>
+    {{ $paginator := .Paginate (where .Site.RegularPages "Section" "in" (slice "musings" "archives")) 5 }}
+    {{ range $paginator.Pages }}
+    <div class="is-row">
+      <div class="is-col is-20  is-stack-20 dateblock">&nbsp</div>
+      <div class="is-col is-60 is-stack-20">
+        <h2><a href="{{ .Permalink }}">{{ .Title }}</a></h2>
+      </div>
+      <div class="is-col is-20">&nbsp</div>
+    </div>
+    <div class="is-row">
+      <div class="is-col is-20 is-stack-20 dateblock">
+          <h4>{{ .Date.Format "2 January 2006" }}</h4>
+      </div>
+      <div class="is-col is-60 summary">
+        {{ if .Truncated }}
+        {{ .Summary }}
+        <p class="is-text-right is-text-center-mobile"><a href="{{ .RelPermalink }}">Read More…</a></p>
+        {{ else }}
+        {{ .Content }}
+        {{ end }}
+      </div>
+      <div class="is-col is-20">&nbsp</div>
+    </div>
+    {{ end }}
+    <div class="is-large is-text-center">{{ partial "pagination.html" . }}</div>
+</div>
+{{ partial "footer.html" . }}
+</body>
+</html>

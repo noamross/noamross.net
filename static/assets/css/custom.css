@@ -1,0 +1,458 @@
+/* =Typography
+-----------------------------------------------------------------------------*/
+.pointer {
+  font-family: 'IM FELL FLOWERS 2';
+}
+
+body {
+  font-family: 'Alegreya', 'Hoefler Text', Times, Serif;
+  font-size: 1.05em;
+  line-height: 1.6em;
+  background-color: #ffffff;
+  /*	background-image: url(../img/grid-18px-masked.png);
+  background-repeat: repeat-x; */
+}
+
+blockquote {
+  border-left: 3px solid #AFAFB0;
+}
+
+blockquote p {
+  line-height: 1.5em;
+}
+
+div:not(.summary)>.story>p:first-of-type:first-line {
+  font-family: "IM Fell English SC", "Times New Roman", Times, serif;
+  font-size: 1.5em;
+  line-height: 1
+}
+
+div:not(.summary)>.story>p:first-of-type:first-letter {
+  font-family: "IM Fell English", Georgia, "Times New Roman", Times, serif;
+  font-size: 4em;
+  font-style: normal;
+  float: left;
+  padding-right: 0.1em;
+  margin-bottom: -0.24em;
+  text-transform: uppercase
+}
+
+.story hr, .summary hr {
+    background: none;
+    margin: 0;
+    border: none;
+    margin-bottom: 0.5em;
+}
+
+.story hr::before, .summary hr::before {
+    font-family: 'IM FELL FLOWERS 2';
+    content: 'N';
+    display: block;
+    text-align: center;
+    opacity: 0.8;
+    margin-top: -1.25em;
+    line-height: 2.5em;
+    font-size: 2.5em;
+}
+
+.story .footnotes hr {
+  border-top: 1px solid #ecc;
+  margin-top: 5ex;
+  margin-bottom: 5ex;
+}
+
+.story .footnotes hr::before {
+    display: none;
+}
+
+pre  {
+  padding: 0;
+  border-radius: 0;
+  border: none;
+}
+
+pre code {
+  line-height: 1.4em;
+  font-size: 85%;
+  font-family: "Hack", Menlo, Monaco, Consolas, "Courier New", monospace;
+  background-color: #f0f3f3;
+  padding: 8px;
+  width: 100%;
+  border-radius: 0;
+
+}
+
+p code {
+  font-family: "Hack", Menlo, Monaco, Consolas, "Courier New", monospace;
+  background-color: #f0f3f3;
+  font-size: 85%;
+  padding: 3px;
+  border: none;
+}
+
+form, input[type="search"], select[multiple="multiple"] {
+  font-family: 'Alegreya', 'Trebuchet MS', Helvetica, Arial, sans-serif;
+  border-radius:50px;
+}
+
+h1, h2, h3, h4, h5 {
+  font-family: 'IM Fell English', 'Trebuchet MS', Helvetica, Arial, sans-serif;
+  font-style: normal;
+  color: #b24;
+  font-weight: normal;
+
+}
+
+h2, h3, h4, h5 {
+  font-weight: normal;
+  font-style: italic;
+}
+
+h2, h3 {
+  text-transform: lowercase;
+  font-family: 'Alegreya SC';
+  font-style: normal;
+}
+
+.label-red {
+  background-color: #b24;
+}
+
+a {
+  color: #b24;
+  text-decoration: none;
+}
+
+a:hover {
+  text-decoration: underline;
+}
+
+/* =Common
+-----------------------------------------------------------------------------*/
+img,
+#feedback,
+#banner,
+#intro li {
+  border-radius: 3px;
+}
+
+nav {
+  font-family: 'IM Fell English';
+}
+
+.caps {
+  font-family: 'Alegreya SC';
+}
+
+.compact {
+  margin: 0 0 0 1.3em;
+}
+
+hr {
+  border-top: 1px solid #ecc;
+  margin-top: 5ex;
+  margin-bottom: 5ex;
+}
+
+.separator {
+  border-top: 5px solid #ecc;
+}
+
+h2 {
+  border-bottom: 1px solid #ecc;
+}
+
+/* =Layout
+-----------------------------------------------------------------------------*/
+.wrapper {
+  padding: 0 10px;
+  width: 94%;
+  max-width: 1300px;
+  margin: auto;
+}
+
+#topbar {
+  background: #ffffff00;
+  padding: 0px;
+  padding-bottom: 10px;
+  margin-bottom: 40px;
+  border-bottom: 1px solid #bbbbbbbb;
+  font-family: 'IM Fell English';
+  color: #b24;
+}
+
+#topbar .is-brand {
+  letter-spacing: -5px;
+  font-size: 1.9em;
+}
+
+#topbar .icon-kube-menu::before {
+  color: #b24;
+}
+
+#topbar .icon-kube-menu::before:hover {
+  text-decoration: none;
+}
+
+#topbar ul li {
+  font-size: 1.5em;
+}
+
+.avatar {
+  -webkit-border-radius: 50em;
+  -moz-border-radius: 50em;
+  border-radius: 50em;
+}
+
+.image-left {
+  float: left;
+  margin: 0 1em 1em 0;
+}
+
+.header-img {
+  width: 650px;
+  max-width: 100%;
+  float: right;
+}
+
+@media screen and (max-width: 960px) {
+.header-img {
+   float:none !important;
+   display: block;
+   margin-left: auto;
+   margin-right: auto;
+}}
+
+/* =Header
+-----------------------------------------------------------------------------*/
+header {
+  padding-top: 15px;
+  margin-bottom: 0em;
+}
+
+/* #header h1 {
+	float: left;
+	font-size: 48px;
+	margin-top: 1px;
+	margin-bottom: 0;
+	color: #ffffff;
+} */
+/* #header nav {
+	margin-top: 1.2em;
+	margin-bottom: 0;
+	float: right;
+} */
+header h1 {
+  font-size: 24px;
+  margin-top: 1px;
+  margin-bottom: 0;
+  font-weight: 400;
+  /*	color: #ffffff;*/
+}
+
+
+/* =Promo
+-----------------------------------------------------------------------------*/
+#promo {
+  margin-bottom: 1.5em;
+}
+
+/* =Intro
+-----------------------------------------------------------------------------*/
+#intro .subheader {
+  color: rgba(0, 0, 0, .4);
+  padding-bottom: .3em;
+  border-bottom: 1px solid #ccc;
+}
+
+#intro li {
+  /*	background-color: #e9e6da;*/
+}
+
+/* =Feedback
+-----------------------------------------------------------------------------*/
+#feedback {
+  background-color: rgba(0, 0, 0, .5);
+  padding: 2em 3em;
+}
+
+/* =Banner
+-----------------------------------------------------------------------------*/
+#banner {
+  line-height: 0;
+  padding: 1.5em;
+  background-color: #e9e6da;
+}
+
+/* =Blocks
+-----------------------------------------------------------------------------*/
+#blocks dl {
+  overflow: hidden;
+  margin: 0;
+  padding-bottom: 1.5em;
+}
+
+#blocks dt {
+  float: left;
+  width: 22%;
+  margin-right: 4%;
+}
+
+#blocks dt img {
+  padding: 4px;
+  background-color: #fff;
+  border: 1px solid #000;
+  box-shadow: 4px 4px 0 #000;
+}
+
+#blocks dd {
+  margin: 0;
+  float: left;
+  width: 74%;
+  padding-bottom: 1.5em;
+}
+
+/* =Partners
+-----------------------------------------------------------------------------*/
+#partners {
+  padding-top: 1.5em;
+}
+
+#partners h4 {
+  color: #666;
+}
+
+/* =Footer
+-----------------------------------------------------------------------------*/
+.dateblock {
+  text-align: right;
+}
+
+/* =Footer
+-----------------------------------------------------------------------------*/
+#footer {
+  margin-top: 3ex;
+  padding-bottom: 20px;
+  padding-top: 1em;
+  overflow: hidden;
+  border-top: 1px solid #bbbbbbbb;
+}
+
+#footer h3 {
+  text-align: center;
+}
+
+#footer p {
+  margin-bottom: 0.5em;
+}
+
+#footer a {
+  color: #b24;
+}
+
+.fa-li {
+  color: rgb(238, 136, 136);
+}
+
+a .fa, .far, .fab, .fas {
+  color: rgb(238, 136, 136);
+}
+
+/* =Tablet (Portrait)
+-----------------------------------------------------------------------------*/
+@media only screen and (min-width: 768px) and (max-width: 959px) {
+  .wrapper {
+    width: 748px;
+  }
+}
+
+/* =Mobile (Portrait)
+-----------------------------------------------------------------------------*/
+@media only screen and (max-width: 767px) {
+
+  #topbar #navbar-main {
+    text-align: center;
+  }
+
+  #banner {
+    text-align: center;
+    margin-bottom: 1.5em;
+  }
+
+  #footer section, #footer nav {
+    float: none;
+    text-align: center;
+  }
+
+  #footer nav ul {
+    margin-top: 1em;
+    text-align: center;
+  }
+
+  #footer nav ul li {
+    margin: 0;
+    margin-right: 1em;
+  }
+
+  .dateblock {
+    text-align: center;
+  }
+
+  h1, h2, h3, h4, h5, form, input {
+    text-align: center;
+  }
+}
+
+/* =Mobile (Landscape)
+-----------------------------------------------------------------------------*/
+@media only screen and (min-width: 480px) and (max-width: 767px) {
+  .wrapper {
+    width: 420px;
+  }
+}
+
+/* -------------- */
+.grlog blockquote {
+  font-style: normal;
+  border: 0px;
+  font-size: 1em;
+}
+
+.grlog blockquote blockquote {
+  border-left: 2px solid #dddddd;
+}
+
+.grlog .datestamp {
+  text-transform: lowercase;
+  font-family: 'Alegreya SC';
+}
+
+.grlog img {
+  margin-left: 12px;
+  margin-bottom: 12px;
+  margin-top: 12px;
+}
+
+.grlog p {
+  padding-top: 0.5em;
+}
+
+.oldcons img {
+  margin-left: 0px;
+  margin-bottom: 24px;
+  margin-top: 12px;
+}
+
+.oldcons p {
+  padding-top: 0.5em;
+}
+
+.oldcons h3 {
+  padding-top: 0.2em;
+}
+
+.logician {
+  float: left;
+  margin-right: 16px;
+}
+

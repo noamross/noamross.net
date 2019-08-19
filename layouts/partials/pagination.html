@@ -1,0 +1,17 @@
+{{ $paginator := .Paginate (where .Site.RegularPages "Section" "in" (slice "musings" "archives")) 5 }}
+
+{{ if or ($paginator.HasPrev) ($paginator.HasNext) }}
+<nav class="pagination" role="pagination">
+  {{ if $paginator.HasPrev }}
+  <a href="{{ $paginator.Prev.URL }}"><span class="pointer">2</span></a>
+  {{ else }}
+  <span class="pointer">2</span>
+  {{ end }}
+  <span>&nbsp;{{ $paginator.PageNumber }} / {{ $paginator.TotalPages }}&nbsp;</span>
+  {{ if $paginator.HasNext }}
+  <a href="{{ $paginator.Next.URL }}"><span class="pointer">1</span></a>
+  {{ else }}
+  <span class="pointer">1</span>
+  {{ end }}
+</nav>
+{{ end }}

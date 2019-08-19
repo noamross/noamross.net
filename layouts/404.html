@@ -1,56 +1,37 @@
-{{ $baseurl := .Site.BaseURL }}
+{{ $asset_base := .Site.BaseURL }}
+{{ if ne (getenv "HUGO_ASSET_BASEURL") "" }}
+  {{ $asset_base = (getenv "HUGO_ASSET_BASEURL") }}
+{{ end }}
+<!DOCTYPE html>
+<html>
 {{ partial "head.html" . }}
-{{ partial "navbar.html" . }}
+<body>
+  {{ partial "navbar.html" . }}
+  <div class="wrapper">
+		<h2 class="is-stack-40">404: Page Not Found</h2>
 
-<div class="wrapper">
-
-<div class="units-row">
-
-<div class="unit-50">
-<h2>404: Page Not Found</h2>
-<p class="big">
-	There is no page here at the address you requested. Perhaps try a search to find what you are looking for?
-</p>
-				<form method="get" action="http://duckduckgo.com/">
-				<input type="search" name="q" maxlength="255" placeholder="Search consequently.org">
-			<input type="hidden" name="sites" value="consequently.org"/>
-			   <input type="hidden" name="ka" value="Alegreya"/>
-			   <input type="hidden" name="k7" value="#faf8f8"/>
-			   <input type="hidden" name="kj" value="#b33"/>
-			   <input type="hidden" name="ky" value="#fafafa"/>
-			   <input type="hidden" name="kx" value="b"/>
-			   <input type="hidden" name="ko" value="-1"/>
-			   <input type="hidden" name="k1" value="-1"/>
-			   <input type="hidden" name="kt" value="Alegreya Sans"/>
-			   <input type="submit" value="DuckDuckGo Search" style="visibility: hidden;" /></form>
-</div>
-
-<div class="unit-50">
-<h2>Recent Musings, Explorations, and Announcements</h2>
-<ul class="compact fa-ul">
-        {{ range first 10 (where .Data.Pages.ByDate "Section" "musings").Reverse }}
-<li><i class="fa-li fa fa-newspaper-o fa-fw" style="color:#b00;font-size:80%;padding-top:6px;"></i> <a href="{{ .Permalink }}">{{ .Title | safeHTML }}</a>{{if not (isset .Params "grlog") }}, <time><em>{{ .Date.Format "January 2, 2006" }}</em></time>{{ end }} </li>
-		{{ end }}
-</ul>
-
-
-
-<footer class="group">
-<nav class="navbar navbar-right"><a href="musings">&rarr; All Musings</a></nav>
-</footer>
-
-
-
-</div>
-</div>
-
-</div><!-- /end .wrapper -->
-
-
-<hr class="separator">
-
-{{ partial "whatisthis.html" . }}
-
-{{ partial "foot.html" . }}
+		<div class="is-row is-stack-40">
+			<div class="is-col is-50 story bigger">
+				<p class="is-big">
+					Fie! There is no page here at the address you requested.
+					Sorry about that. Perhaps try a search to find what you are looking
+					for?
+				</p>
+				{{ partial "searchform.html" . }}
+			</div>
+		<div class="is-col is-50">
+			<img src="{{ $asset_base }}assets/icarus.jpg" style="background:#ffffff00;">
+			<em><p class="is-small is-text-center">
+				Icarus, By Hendrik Goltzius (Holland, Mülbracht, 1558-1617) - <a href="https://collections.lacma.org/node/171116">lacma.org</a></p></em>
+		</div>
+  </div>
+  </div>
+{{ partial "footer.html" . }}
 </body>
 </html>
+
+
+
+
+
+

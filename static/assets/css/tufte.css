@@ -1,0 +1,91 @@
+body {
+  counter-reset: sidenote-counter;
+}
+
+.sidenote,
+.marginnote {
+  float: right;
+  clear: right;
+  margin-right: -45%;
+  width: 40%;
+  margin-top: 0;
+  margin-bottom: 0;
+  font-size: 0.8rem;
+  line-height: 1.3;
+  vertical-align: baseline;
+  position: relative;
+  font-style: normal;
+}
+
+.sidenote-number {
+  counter-increment: sidenote-counter;
+}
+
+.sidenote-number:after,
+.sidenote:before {
+  position: relative;
+  vertical-align: baseline;
+}
+
+.sidenote:before {
+  margin-left: -0.5rem;
+}
+
+input.margin-toggle {
+  display: none;
+}
+
+label.sidenote-number {
+  display: inline;
+}
+
+label.margin-toggle:not(.sidenote-number) {
+  display: none;
+}
+
+.sidenote-number:after {
+  content: counter(sidenote-counter);
+  font-size: 0.65rem;
+  top: -0.5rem;
+  left: -0.1rem;
+}
+
+.sidenote:before {
+  content: counter(sidenote-counter) " ";
+  font-size: 0.8rem;
+  top: -0.25rem;
+}
+
+@media only screen and (max-width: 767px) {
+  .sidenote, .marginnote {
+    display: none;
+  }
+
+  label.sidenote-number {
+    display: inline;
+    color: #b24;
+  }
+
+
+  label.margin-toggle:not(.sidenote-number) {
+    display: inline;
+    color: #b24;
+    font-style: normal;
+  }
+
+  .margin-toggle:checked+.sidenote,
+  .margin-toggle:checked+.marginnote {
+    display: block;
+    float: left;
+    left: 2.5%;
+    clear: both;
+    width: 87.5%;
+    margin: 1rem 5%;
+    vertical-align: baseline;
+    position: relative;
+  }
+
+  label {
+    cursor: pointer;
+  }
+}

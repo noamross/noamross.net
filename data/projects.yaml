@@ -1,0 +1,16 @@
+viral-dynamics:
+  title: Understanding Dynamics of Disease in Wildlife Reservoirs
+  description: >
+  index: 1
+disease-forecasting:
+  title: Forecasting Global Veterinary Disease
+  description: >
+  index: 2
+software-review:
+  title: Peer Review of Scientific Software
+  description: >
+  index: 3
+reproducible-workflows:
+  title: Practical Reproducible Workflows for Scientists
+  description: >
+  index: 4

@@ -6,8 +6,9 @@ if (file.exists("~/.Rprofile")) {
 options(
   blogdown.ext = ".md",
   blogdown.author = "Noam Ross",
-  blogdown.subdir = file.path("musings", as.character(Sys.Date(), "%Y")),
-  blogdown.yaml.empty = TRUE
+  blogdown.subdir = "musings",
+  blogdown.yaml.empty = TRUE,
+  blogdown.new_bundle = TRUE
   )
 
 Sys.setenv(

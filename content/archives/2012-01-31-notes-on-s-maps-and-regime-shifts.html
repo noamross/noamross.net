@@ -1,0 +1,87 @@
+---
+
+title: Notes on S-maps and regime shifts
+tags: open-lab-notebook
+date: 2012-01-31
+---
+<h1>General Problem and Approach</h1>
+
+<p>Shifts between "states" in ecological systems are shifts between dynamical regimes, or between different attractors within a dynamical regime.</p>
+
+<p>The warning signals approach attempts to detect characteristics of a system undergoing a transition between dynamical regimes.  This transition may have common properties in many systems [#Scheffer2009;], but not all systems [#Hastings2010;].</p>
+
+<p>Another approach would be to characterize the properties of the dynamic regime over a period of time, and attempt to detect if those properties change, irrespective of whether the change takes the particular form.  This approach would be useful in determining whether past systems have undergone regime shifts, or potentially detecting if systems are currently undergoing regime shifts in real time.</p>
+
+<p>One way to implement this approach would be to using simplex/s-map methods, described by [#Sugihara1994;].  These are non-parametric techniques for forecasting from time-series data.  By fitting these models to training data and determining the goodness of fit to test data or cross validation, one can estimate several properties of a dynamical regime without knowledge of underlying mechanism.  These include:</p>
+
+<ul>
+<li><strong>Dimensionality:</strong> that is, how many variables drive the dynamics of the system</li>
+<li><strong>Chaos:</strong> the degree to which similar points diverge over time</li>
+<li><strong>Nonlinearity</strong>:  The degree to which dynamics are determined locally, rather than globally.</li>
+</ul>
+
+<p>There are other techniques for estimating these and similar characteristics, such as measures of fractal dimension, the Lyapunov exponent, and DVS tests.</p>
+
+<p>In my examination of the literature thus far, I have not found an example of attempting to evaluate the change these characteristics over time in ecological systems using s-maps.  (Sugihara has compared changes in EKG data over time, and I'm unsure about fractal dimension/Lyapunov exponents).   </p>
+
+<p>I can test this approach by using s-maps to characterize time-series of pollen records from the forest-prairie transition in the Upper Midwest.  [#Williams2010c;] and [#Williams2011;] describe this transition as ranging from abrupt to gradual at different sites, and suggest that regime shifts occurred at some, but not all sites in response to environmental changes.  However, the only way this difference has been evaluated is by visual inspection of the rates of change in species composition (specifically % arboreal pollen) in the stratigraphic pollen records.  By estimating the change in various characteristics of the dynamical regime in this time-series, it may be possible to distinguish between regime changes and linear responses to environmental change.</p>
+
+<h1>Status</h1>
+
+<ul>
+<li>I have implemented the [#Sugihara1990;] technique in R, and attempted to reproduce their analysis.  I am getting similar, but not identical results.  These may be due to different data pre-processing, a difference in how I handle boundary cases, or some other bug in code.  I've written Dr. Sugihara for clarification on data processing and their boundary method.</li>
+</ul>
+
+<h1>Potential extensions of the S-Map technique</h1>
+
+<ul>
+<li>Finding a robust way to estimate the likelihoods of the measures of dimensionality, chaos, and nonlinearity</li>
+<li>Implement a sliding-window method using cross-validation rather than a training-and-test method so as to measure these characteristics through time</li>
+<li>Extending the analysis to multivariate time-series. (The pollen data are multi species.) [#Hsieh2008;] attempted this by stringing together time-series of qualitatively similar species populations, but I may be to do this in a more quantitatively defensible way.</li>
+<li>Evaluate data requirements compared to techniques measuring fractal dimension and Lyapunov exponents</li>
+</ul>
+
+<h1>Questions</h1>
+
+<ul>
+<li>What other relevant ways are there for characterizing the dynamical regime? (Mutual information, autocorrelation?)
+<ul>
+<li>I'm not sure I understand the difference between embedded and fractal dimension</li>
+</ul></li>
+<li>Would we expect these measures to detect regime changes better/sooner than either warning signals or simpler measures?  In what cases?</li>
+<li>Would we expect this method to do better than the warning signals approach at detecting changes in systems without smooth potentials?</li>
+<li>What else should I read up on?</li>
+</ul>
+
+<h1>Road Map</h1>
+
+<ul>
+<li>Finish replicating the analyses from [#Sugihara1990;] and [#Sugihara1994;]</li>
+<li>Generate the relevant time series from pollen data, compare how s-map measures of nonlinearity compare to qualitative assessments of intrinsic/extrinsic change.</li>
+<li>Attempt a sliding-window method.  Examine its data requirements</li>
+</ul>
+
+<h1>Small methodological issues</h1>
+
+<ul>
+<li>How to handle boundary cases.  Right now, points without an enclosing simplex are forecast using nearest neighbors.  What are the consequences of this.  I think that the ultimate results should be robust to these choices, as they are arbitrary decisions in determining the local neighborhood of a predicted.</li>
+<li>What to do about repeated values?  Probably remove from embedded data, but might be useful when characterizing uncertainty.</li>
+<li>What about transformations of the time series (e.g. differencing, log transformation?) to improve fit?  To some extent, transformations are based on assumptions of the underlying processes.  I wish to avoid such assumptions.</li>
+<li>I could explore other measures of "leaving the attractor"</li>
+<li>It may be useful to apply the method [#Wood2010;] for estimating the error around the dynamic characteristic measures</li>
+</ul>
+
+<h1>Programming issues and to-dos</h1>
+
+<ul>
+<li>Set up the code as a package in order to manage it better</li>
+<li>Create a data library in the package</li>
+<li>Implement the DVS plot test</li>
+<li>Look at current packages for estimating fractal dimension and Lyapunov exponents</li>
+<li>Set up efficiency testing; next steps will get computationally intense</li>
+</ul>
+
+
+
+
+

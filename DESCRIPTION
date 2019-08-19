@@ -3,15 +3,28 @@ Title: Noam Ross Hugo Website
 Version: 0.0.1
 Author: Noam Ross
 Imports:
-  blogdown,
-  rorcid,
-  rcrossref,
-  here,
-  dplyr,
-  janitor,
-  purrr,
-  yaml,
-  jsonlite
+ dplyr,
+ here,
+ humaniformat,
+ janitor,
+ jsonlite,
+ purrr,
+ rcrossref,
+ rorcid,
+ snakecase,
+ yaml,
+ rmarkdown,
+ broom,
+ knitr,
+ lubridate,
+ noamtools,
+ stringi,
+ tidyverse,
+ blogdown,
+ roxygen2,
+ devtools
+Remotes:
+  noamross/noamtools
 Maintainer: Noam Ross <noam.ross@gmail.com>
 License: MIT + file LICENSE
 Encoding: UTF-8

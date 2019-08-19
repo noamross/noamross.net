@@ -9,8 +9,6 @@ RewriteEngine on
 #RewriteRule ^publications.html /vitae/ [L,R=301]
 #RewriteRule /connect.html  /#connect [L,R=301]
 #RewriteRule /tags.html  /musings/ [L,R=301]
-RewriteRule ^(old-blog-stuff|img|fontawesome)/(.*)$ https://rawcdn.githack.com/noamross/noamross.net/master/static/$1/$2 [L,R=301]
-RewriteRule ^branch/(\w+)/(old-blog-stuff|img|fonts|css|js|musings)/(.*)$ https://raw.githack.com/noamross/noamross.net/$1/static/$2/$3 [L,R=301]
 
 ErrorDocument 404 /404.html
-ErrorDocument 403 /404.html
+ErrorDocument 403 /403.html

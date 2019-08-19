@@ -16,10 +16,10 @@ Date: Feb 22, 2012 15:30
 <li>Create linear functions between floodplain habitat and \(P_{spawn}\) and YOY recruitment by using values from Moyle et al. <span class="citation">(2004)</span> model for “wet”, “normal”, and “dry” years.</li>
 </ul>
 <div class="figure">
-<img src="blogstuff/splitwhite.png" alt="Whiteboard of Model 1" /><p class="caption">Whiteboard of Model 1</p>
+<img src="{{% asseturl %}}assets/old-blog-stuff/splitwhite.png" alt="Whiteboard of Model 1" /><p class="caption">Whiteboard of Model 1</p>
 </div>
 <div class="figure">
-<img src="blogstuff/splitwhite2.png" alt="Whiteboard of some hypothetical functions" /><p class="caption">Whiteboard of some hypothetical functions</p>
+<img src="{{% asseturl %}}assets/old-blog-stuff/splitwhite2.png" alt="Whiteboard of some hypothetical functions" /><p class="caption">Whiteboard of some hypothetical functions</p>
 </div>
 <p>Things to examine:</p>
 <ul>

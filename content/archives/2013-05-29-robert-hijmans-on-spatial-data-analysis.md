@@ -26,7 +26,7 @@ slides:
 <iframe src="http://www.slideshare.net/slideshow/embed_code/22149457" width="714" height="575" frameborder="0" marginwidth="0" marginheight="0" scrolling="no"></iframe>
 
 Robert has also written an [introduction to spatial modeling for R
-beginners]({{< baseurl >}}/old-blog-stuff/Introduction%20to%20spatial%20data%20handling%20in%20R.pdf)
+beginners]({{% asseturl %}}assets/old-blog-stuff/Introduction%20to%20spatial%20data%20handling%20in%20R.pdf)
 which reviews very basic data handling and the `sp` and `raster`
 packages. Finally, his package vignettes are great resources for specific
 topics:

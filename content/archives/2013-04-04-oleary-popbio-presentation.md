@@ -672,7 +672,7 @@ hist(log(apply(nodrought, 1, sum)), col = "green3", density = 50, ylim = c(0,
 abline(v = log10(200), lty = 3)
 ~~~~
 
-![]({{< baseurl >}}/old-blog-stuff/unnamed-chunk-21.png)
+![]({{% asseturl %}}assets/old-blog-stuff/unnamed-chunk-21.png)
 
 you can get fancy and put these on the same graph too to compare
 outcomes. y axis is frequency of final population size at tmax.
@@ -701,7 +701,7 @@ matplot(drt, ylab = "Quasi-extinction probability", ylim = c(0, 1.1), type = "l"
     lty = 1, col = rainbow(10), las = 1, main = "Double drought", xlab = "Years")
 ~~~~
 
-![]({{< baseurl >}}/old-blog-stuff/unnamed-chunk-22.png)
+![]({{% asseturl %}}assets/old-blog-stuff/unnamed-chunk-22.png)
 
 8. SENSITIVITY AND ELASTICITY
 -----------------------------
@@ -921,7 +921,7 @@ abline(h = 0)
 legend("topright", mynames, fill = grey.colors(2))
 ~~~~
 
-![]({{< baseurl >}}/old-blog-stuff/unnamed-chunk-25.png)
+![]({{% asseturl %}}assets/old-blog-stuff/unnamed-chunk-25.png)
 
 APPENDIX A. HOW I GENERATED A FECUNDITY ESTIMATE
 ------------------------------------------------

@@ -90,7 +90,7 @@ $$\begin{aligned}
 
 This is a vertical line at $\frac{c+\theta}{pq}$.  At higher stock levels, there will be entry.  At lower stock levels, effort will decrease. 
 
-![]({{< baseurl >}}/old-blog-stuff/generallogisticphase.png)
+![]({{% asseturl %}}assets/old-blog-stuff/generallogisticphase.png)
 
 ***(b)** Determine the trajectories at the $E$ and $N$ axes
 

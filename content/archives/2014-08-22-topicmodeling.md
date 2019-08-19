@@ -45,7 +45,7 @@ Back to the ESA program: LDA requires that we specify the number of
 topics, and it then allocates words among those topics. So I fit a
 series of models and used AIC to determine the best fit:
 
-![]({{< baseurl >}}/old-blog-stuff/LDA_AIC.png)
+![]({{% asseturl %}}assets/old-blog-stuff/LDA_AIC.png)
 
 The model with the lowest AIC breaks the ESA program into 56 different
 topics. We can explore this model with an interactive visualization

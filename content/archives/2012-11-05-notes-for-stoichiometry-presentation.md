@@ -39,7 +39,7 @@ $$U_n = \frac{S_nV_n En}{k_n + E_n}$$
 with $S_n=B_n^{2/3}$, the biomass made up of the respective nutrient.
 
 ![The saturating Michalis-Menton
-function]({{< baseurl >}}/old-blog-stuff/mm.png)
+function]({{% asseturl %}}assets/old-blog-stuff/mm.png)
 
 $V$ changes over time as the plant attempts to optimize uptake to
 balance the ratio in its biomass to reach an optimal value, $Q$:
@@ -73,7 +73,7 @@ biomass.
 
 ![From Fig. 1 of Rastetter and Shaver (1992) - simulation with
 undepletable
-nutrients]({{< baseurl >}}/old-blog-stuff/sim1.png)
+nutrients]({{% asseturl %}}assets/old-blog-stuff/sim1.png)
 
 Case 2: With nutrients depletable, plants experienced *initial*
 increases in growth and biomass, but returned to previous levels in
@@ -81,7 +81,7 @@ order to balance nutrient levels. Only when both nutrients were added
 was higher biomass sustained.
 
 ![From Fig.2 Rastetter and Shaver (1992) - simulation with depletable
-nutrients]({{< baseurl >}}/old-blog-stuff/sim4.png)
+nutrients]({{% asseturl %}}assets/old-blog-stuff/sim4.png)
 
 Case 3: In the mixed case, plants responded as in Case \#2 until $R$ was
 above the critical replenishment rate, then responded as in Case \#1.
@@ -109,7 +109,7 @@ is stable on its own).
 ![Fig. 1 from Klausmeier et al. (2007), showing zero-net growth curves
 under three allocation strategies. $A*$ is the continiously stable
 strategy, while species with $A'$ could be out-competed by $A''$ or
-$A^*$]({{< baseurl >}}/old-blog-stuff/optimaltradeoffA.png)
+$A^*$]({{% asseturl %}}assets/old-blog-stuff/optimaltradeoffA.png)
 
 ### Dynamics
 
@@ -132,7 +132,7 @@ from changes in nutrient levels.
 ![Figure 4 from Klausmeier et al. (2007). Simulated plankton nutrient
 ratios $(Q_N/Q_P)$ vs. nutrient supply ratios $(R_N/R_P)$ at differing
 sampling time from a change in nutrient supply
-ratios.]({{< baseurl >}}/old-blog-stuff/timesampratios.png)
+ratios.]({{% asseturl %}}assets/old-blog-stuff/timesampratios.png)
 
 Secondly, the relationship between allocation rate and growth response
 to nutrients is not simple. In simulations, organisms with *no*
@@ -145,7 +145,7 @@ different acclimation rates $(c)$ to a pulse on one nutrient. From left
 to right, $c$ increases, while variables from top to bottom are biomass
 $(B)$, nutrient supply $(R)$, allocation of uptake to P $(A_P)$, and
 species biomass nutrient ratio
-$(Q_N/Q_P)$]({{< baseurl >}}/old-blog-stuff/klausgrid.png)
+$(Q_N/Q_P)$]({{% asseturl %}}assets/old-blog-stuff/klausgrid.png)
 
 The high growth rates of slow-acclimation organisms in response to a
 pulse suggest that this strategy may be superior in a fluctuating
@@ -174,7 +174,7 @@ reaches an equilibrium faster, while the Liebig model is sloweest.
 
 ![Fig. 2 in Rastetter (2011). Forest and soil nutrient accumulation
 under the four nutrient coupling
-models]({{< baseurl >}}/old-blog-stuff/rastetter2011succession.png)
+models]({{% asseturl %}}assets/old-blog-stuff/rastetter2011succession.png)
 
 Under the climate change simulations, the concurrent limitation leads to
 more rapid changes following temperature and CO~2~ increases. The
@@ -183,7 +183,7 @@ though.
 
 ![Fig. 4 in Rastetter (2011). Forest response to climate changes under
 the four nutrient coupling
-models]({{< baseurl >}}/old-blog-stuff/rastetter2011GW.png)
+models]({{% asseturl %}}assets/old-blog-stuff/rastetter2011GW.png)
 
 Some thoughts
 -------------

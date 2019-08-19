@@ -26,6 +26,7 @@ jobs:
       - run:
           name: "Build Hugo Site"
           command: |
+            export HUGO_ASSETS_URL=https://cdn.jsdelivr.net/gh/noamross/noamross.net@${CIRCLE_SHA1}/
             if [ "${CIRCLE_BRANCH}" == "master" ]; then
               hugo
             else
@@ -39,9 +40,9 @@ jobs:
           command: |
             ssh-keyscan -t "ecdsa" ssh.phx.nearlyfreespeech.net >> ~/.ssh/known_hosts
             if [ "${CIRCLE_BRANCH}" == "master" ]; then
-               rsync -avz --delete public/ noamross_noamross@ssh.phx.nearlyfreespeech.net:/home/public/ --exclude=/branch --exclude=/img --exclude=/old-blog-stuff --exclude=/fontawesome
+               rsync -avz --delete public/ noamross_noamross@ssh.phx.nearlyfreespeech.net:/home/public/ --exclude=/branch --exclude=/assets
             else
-               rsync -avz --delete public/ noamross_noamross@ssh.phx.nearlyfreespeech.net:/home/public/branch/${CIRCLE_BRANCH} --exclude=/img --exclude=/old-blog-stuff --exclude=/fontawesome --exclude=.htaccess
+               rsync -avz --delete public/ noamross_noamross@ssh.phx.nearlyfreespeech.net:/home/public/branch/${CIRCLE_BRANCH} --exclude=/img --exclude=/assets --exclude=.htaccess
             fi
       - save_cache:
           key: deps1-$R_VERSION-{{ .Branch }}-{{ checksum "DESCRIPTION" }}-{{ checksum ".circleci/config.yml" }}

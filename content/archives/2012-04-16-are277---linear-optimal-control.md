@@ -57,13 +57,13 @@ $$\text{Sustained revenues} = pF(x)$$
 
 $$\text{Sustained costs} = c(x)dF(x)$$
 
-![]({{< baseurl >}}/old-blog-stuff/rent3.png)
+![]({{% asseturl %}}assets/old-blog-stuff/rent3.png)
 
-![]({{< baseurl >}}/old-blog-stuff/rent2.png)
+![]({{% asseturl %}}assets/old-blog-stuff/rent2.png)
 
 ![Graphical demonstration of the relationship between $x^\text{MSY}$,
 $x^*$, and $\hat{x}$
-(incomplete)]({{< baseurl >}}/old-blog-stuff/rent1.png)
+(incomplete)]({{% asseturl %}}assets/old-blog-stuff/rent1.png)
 
 $\hat{x}$ is where rents are maximum. Note that $x^* < \hat{x}$
 
@@ -72,7 +72,7 @@ $\hat{x}$ is where rents are maximum. Note that $x^* < \hat{x}$
 $$\int_0^T e^{-rt} (p-c(x))h(t) dt$$ $$\dot{x} = F(x) - h$$
 $$x(0), x(T)$$ $$0 \leq h \leq h^\max$$
 
-![]({{< baseurl >}}/old-blog-stuff/linconlessinft.png)
+![]({{% asseturl %}}assets/old-blog-stuff/linconlessinft.png)
 
 Suppose that $x(T)$ is free. Then $\lambda(T)$ = 0. Thus,
 $p-c(x_T) = 0$.
@@ -153,11 +153,11 @@ $$\tilde{h}_t = [ax^* - bx^*] + \frac{\dot{p}}{p} \left[ \frac{a}{2b} - x^*\righ
 There is a single path of $\tilde{h}_t$ if we have $p$, $\dot{p}$, and
 $\ddot{p}$.
 
-![]({{< baseurl >}}/old-blog-stuff/p1.png)
-![]({{< baseurl >}}/old-blog-stuff/p2.png)
-![]({{< baseurl >}}/old-blog-stuff/p3.png) ![Trajectories
+![]({{% asseturl %}}assets/old-blog-stuff/p1.png)
+![]({{% asseturl %}}assets/old-blog-stuff/p2.png)
+![]({{% asseturl %}}assets/old-blog-stuff/p3.png) ![Trajectories
 through time under a temporary rise in
-prices]({{< baseurl >}}/old-blog-stuff/p4.png)
+prices]({{% asseturl %}}assets/old-blog-stuff/p4.png)
 
 Note how, with a temporary rise in prices, we get a a period of
 investment, followed by a period of disinvestment. This is because at
@@ -187,7 +187,7 @@ $$I_t \geq 0$$
 
 We have a period of time where price rises:
 
-![]({{< baseurl >}}/old-blog-stuff/steppedprice.png)
+![]({{% asseturl %}}assets/old-blog-stuff/steppedprice.png)
 
 $$F'(\tilde{x}_t) = r - \frac{\dot{p}}{p}$$
 
@@ -195,7 +195,7 @@ $$P(t) \bigg|_{\tau_1 \leq t \leq \tau_2} = P_0 e^{\beta(t-\tau_1)}$$
 
 $$P(t) = \int_{\tau_1}^{\tau_2} p(s) \, ds$$
 
-![]({{< baseurl >}}/old-blog-stuff/steppedprice2.png)
+![]({{% asseturl %}}assets/old-blog-stuff/steppedprice2.png)
 
 The optimal solution would be to cause the stock to jump to optimal
 levels as price changes. However, typically our harvest rates are

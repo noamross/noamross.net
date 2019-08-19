@@ -834,7 +834,7 @@ mtext(side = 2, line = 2.5, col = "blue", "Sleep efficiency")
 ```
 
 ![plot of chunk
-unnamed-chunk-50]({{< baseurl >}}/old-blog-stuff/dixondates.png)
+unnamed-chunk-50]({{% asseturl %}}assets/old-blog-stuff/dixondates.png)
 
 More resources on times and dates
 ---------------------------------

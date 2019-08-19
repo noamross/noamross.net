@@ -172,7 +172,7 @@ $$h(t) = F(X_t)$$
 
 For $\dot{h} = 0$, $r = \frac{dF}{dX_t}$
 
-![image]({{< baseurl >}}/old-blog-stuff/optphase.png)
+![image]({{% asseturl %}}assets/old-blog-stuff/optphase.png)
 
 Now, with $X_0$, you need $X_T$ to determine what that harvest path and
 $h_0$ are. For $T=\infty$, we want to get onto one of the saddle paths
@@ -188,7 +188,7 @@ Note that stability is determined by the determinant *and* the trace of
 the Jacobian matrix:
 
 ![Relationship between the Jacobian and stability, from
-]({{< baseurl >}}/old-blog-stuff/QuickShot%202012-04-09%20at%2013.43.08.jpg)
+]({{% asseturl %}}assets/old-blog-stuff/QuickShot%202012-04-09%20at%2013.43.08.jpg)
 
 As the time horizon increases, the longer one spends near the
 equilibrium. (Known as the Catenery Turnpike theorem - Paul Samuelson

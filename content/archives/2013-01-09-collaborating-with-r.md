@@ -135,7 +135,7 @@ To post your code as a gist, go to <http://gist.github.com>, and paste
 your code, and put in a brief description. You'll get an easily sharable
 web page like this:
 
-![]({{< baseurl >}}/old-blog-stuff/gistexample.png)
+![]({{% asseturl %}}assets/old-blog-stuff/gistexample.png)
 
 Signing up for the website is not neccessary, but it is needed if you
 want to revise your gist in the future.
@@ -193,7 +193,7 @@ If you save this file as `example.Rmd` (R-markdown), and run
 You get an HTML file called `example.HTML`. Open it in a browser and it
 looks like this:
 
-![]({{< baseurl >}}/old-blog-stuff/knitexample.png)
+![]({{% asseturl %}}assets/old-blog-stuff/knitexample.png)
 
 As you can see, your document has both your writing, code, and results,
 formatted in an easy-to-read way. You can e-mail these documents or post
@@ -216,7 +216,7 @@ computers. Importantly, Dropbox keeps previous versions of files and
 lets you revert to past versions, so you can go back if something in
 your code breaks:
 
-![]({{< baseurl >}}/old-blog-stuff/dropboxexample.png)
+![]({{% asseturl %}}assets/old-blog-stuff/dropboxexample.png)
 
 ### [Git and Github](#TOC)
 
@@ -273,20 +273,20 @@ other tools together into a cohesive interface. RStudio also integrates
 many of the collaborative tools described above. It is available for
 Mac, Windows, and Linux.
 
-![]({{< baseurl >}}/old-blog-stuff/rstudio-windows.png)
+![]({{% asseturl %}}assets/old-blog-stuff/rstudio-windows.png)
 
 If you use Rstudio, `knitr` is automated for you. Just hit the "Knit
 HTML" button once you have written your R-markdown document, and it will
 generate the web page and show a preview:
 
-![]({{< baseurl >}}/old-blog-stuff/knitbutton.png)
+![]({{% asseturl %}}assets/old-blog-stuff/knitbutton.png)
 
 An additional benefit of using `knitr` from Rstudio is that it will give
 you the option of automatically uploading the HTML document to their
 server at <http://rpubs.com/> so you can share it with anyone. Just hit
 the "Publish" in the preview window:
 
-![]({{< baseurl >}}/old-blog-stuff/publish.png)
+![]({{% asseturl %}}assets/old-blog-stuff/publish.png)
 
 Like gists, documents at <http://rpubs.com/> can be updated and easily
 shared and accept comments.
@@ -295,14 +295,14 @@ Git is also built into the Rstudio interface. Saving a version of your
 software is as easy as clicking a button. This makes the git learning
 curve a little easier:
 
-![]({{< baseurl >}}/old-blog-stuff/gitexample.png)
+![]({{% asseturl %}}assets/old-blog-stuff/gitexample.png)
 
 Finally, the latest version of Rstudio has package creation tools based
 on the `devtools` package, including tools for testing and documenting
 packages. Like its Git interface, RStudio's package development tools
 make the process of package creation more intuitive:
 
-![]({{< baseurl >}}/old-blog-stuff/buildexample.png)
+![]({{% asseturl %}}assets/old-blog-stuff/buildexample.png)
 
 [Interactive R with Shiny](#TOC)
 --------------------------------
@@ -313,7 +313,7 @@ you create *interactive* web pages that let users explore your data and
 analysis. Here's an example. Click on it to go to the interactive
 version:
 
-[![]({{< baseurl >}}/old-blog-stuff/shinyexample.png)](http://www.rstudio.com/shiny/)
+[![]({{% asseturl %}}assets/old-blog-stuff/shinyexample.png)](http://www.rstudio.com/shiny/)
 
 [Upcoming tools for real-time, interactive and collaborative programming](#TOC)
 -------------------------------------------------------------------------------

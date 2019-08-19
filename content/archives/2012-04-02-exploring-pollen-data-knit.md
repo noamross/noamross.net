@@ -22,7 +22,7 @@ Database](http://www.ncdc.noaa.gov/paleo/gpd.html):
     ## Number of levels:  77 
 
 ![Arboreal Pollen over time at Billy's
-Lake]({{< baseurl >}}/old-blog-stuff/a.png)
+Lake]({{% asseturl %}}assets/old-blog-stuff/a.png)
 
 Clearly, there's are trends at different time scales. The trouble with
 using S-Maps on this is that there are uneven sampling intervals. One
@@ -37,7 +37,7 @@ option is to use linear interpolation to approximate even intervals:
         pch = 16)
 
 ![With linearly interpolated evenly spaced
-samples]({{< baseurl >}}/old-blog-stuff/b.png)
+samples]({{% asseturl %}}assets/old-blog-stuff/b.png)
 
 This means introducing a new source of error into whatever model is
 ultimately used. What interval should be used to generate this? Here I

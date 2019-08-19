@@ -119,7 +119,7 @@ p2 <- ggplot(subset(mdf, Class %in% c("pctJ", "pctA")),
 grid.arrange(p1, p2, nrow=2)
 ~~~~
 
-![]({{< baseurl >}}/old-blog-stuff/multi-infection-overdispersed-unnamed-chunk-2.png)
+![]({{% asseturl %}}assets/old-blog-stuff/multi-infection-overdispersed-unnamed-chunk-2.png)
 
 In general, overdispersion appears to reduce the decline of the
 population. This is because fewer, more heavily infected individuals
@@ -137,7 +137,7 @@ p4 <- ggplot(subset(mdf, Class %in% c("nJ", "nA")),
 grid.arrange(p3, p4, nrow=2)
 ~~~~
 
-![]({{< baseurl >}}/old-blog-stuff/multi-infection-overdispersed-unnamed-chunk-3.png)
+![]({{% asseturl %}}assets/old-blog-stuff/multi-infection-overdispersed-unnamed-chunk-3.png)
 
 As you can see, the overall infections rate are lower in the case of
 overdispersion.
@@ -148,7 +148,7 @@ ggplot(subset(mdf, Class %in% c("J.inf", "A.inf")),
 geom_line(lwd=1) + theme_nr + ylab("Fraction infected") + JAlab
 ~~~~
 
-![]({{< baseurl >}}/old-blog-stuff/multi-infection-overdispersed-unnamed-chunk-4.png)
+![]({{% asseturl %}}assets/old-blog-stuff/multi-infection-overdispersed-unnamed-chunk-4.png)
 
 The fraction of the population infected when there is some
 overdispersion is more in line with what is seen in the field in many
@@ -161,7 +161,7 @@ ggplot(subset(mdf, Class %in% c("J.yrs", "A.yrs") ),
   ylab("Years to death of infected individuals") + JAlab
 ~~~~
 
-![]({{< baseurl >}}/old-blog-stuff/multi-infection-overdispersed-unnamed-chunk-5.png)
+![]({{% asseturl %}}assets/old-blog-stuff/multi-infection-overdispersed-unnamed-chunk-5.png)
 
 With less infection, there's less of a dramatic difference between the
 upswing and downswing of the disease, but the relationship between

@@ -226,7 +226,7 @@ dynamic.plot
 
 ![Population dynamics broken up by species (left to right, Tanoak, Bay,
 Redwood), and Size
-Class]({{< baseurl >}}/old-blog-stuff/tanoakdyn1/initrun.png)
+Class]({{% asseturl %}}assets/old-blog-stuff/tanoakdyn1/initrun.png)
 
 The plot shows that this isn't quite steady-state, I suspect because of some
 rounding errors in copying parameters from the paper.
@@ -247,7 +247,7 @@ paper.plot
 ~~~~
 
 ![Tanoak as a fraction of total population over time, no
-disease]({{< baseurl >}}/old-blog-stuff/tanoakdyn1/papeplot.png)
+disease]({{% asseturl %}}assets/old-blog-stuff/tanoakdyn1/papeplot.png)
 
 Now, let's change the initial conditions to include disease and see what
 happens. I change the populations of tanoak and bay in one pixel to
@@ -274,12 +274,12 @@ paper2.plot
 
 ![Tanoak as a fraction of total population, using baseline initial
 conditions and introducing
-disease]({{< baseurl >}}/old-blog-stuff/tanoakdyn1/disease1.png)
+disease]({{% asseturl %}}assets/old-blog-stuff/tanoakdyn1/disease1.png)
 
 Qualitatively, this looks a lot like the original result:
 
 ![Figure 4a from Cobb et al.
-(2012)]({{< baseurl >}}/old-blog-stuff/cobb20124a.png)
+(2012)]({{% asseturl %}}assets/old-blog-stuff/cobb20124a.png)
 
 The main difference is the overall rate of change, which is expected
 because I haven't corrected any parameters for the change from
@@ -347,12 +347,12 @@ paper3.plot
     ## Warning: Removed 5 rows containing missing values (geom_path).
 
 ![Tanoak dynamics under the "Mostly Tanoak"
-scenario]({{< baseurl >}}/old-blog-stuff/tanoakdyn1/disease2.png)
+scenario]({{% asseturl %}}assets/old-blog-stuff/tanoakdyn1/disease2.png)
 
 Again, qualitatively similar to the original results:
 
 ![Fig 4b from Cobb et al.
-(2012)]({{< baseurl >}}/old-blog-stuff/cobb2012fig4b.png)
+(2012)]({{% asseturl %}}assets/old-blog-stuff/cobb2012fig4b.png)
 
 Finally, I simulate the "Mostly Redwood" scenario:
 
@@ -412,12 +412,12 @@ paper4.plot
 ~~~~
 
 ![Tanoak dynamics under the "mostly redwood"
-scenario]({{< baseurl >}}/old-blog-stuff/tanoakdyn1/disease3.png)
+scenario]({{% asseturl %}}assets/old-blog-stuff/tanoakdyn1/disease3.png)
 
 Success! Same results as the original:
 
 ![Figure 4c from Cobb et al.
-(2012)]({{< baseurl >}}/old-blog-stuff/cobb2012fig4c.png)
+(2012)]({{% asseturl %}}assets/old-blog-stuff/cobb2012fig4c.png)
 
 Now, for fun, let's make an animation of how the disease progresses
 through the stand. I will use the "Mostly Tanoak" scenario", and plot
@@ -452,7 +452,7 @@ for (time in time.steps) {
 }
 ~~~~
 
-<video   controls="controls" loop="loop"><source src="blogstuff/tanoakdyn1/tanoak-anim.mp4" type="video/mp4" />video
+<video   controls="controls" loop="loop"><source src="{{% asseturl %}}assets/old-blog-stuff/tanoakdyn1/tanoak-anim.mp4" type="video/mp4" />video
 of chunk tanoak-anim</video>
 
 References

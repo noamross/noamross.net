@@ -32,7 +32,7 @@ data(ReedfrogFuncresp)
 plot(ReedfrogFuncresp, xlim = c(0, 100), xaxs = "i")
 ~~~~
 
-![]({{< baseurl >}}/old-blog-stuff/h1.png)
+![]({{% asseturl %}}assets/old-blog-stuff/h1.png)
 
 Statistical models are stories about how the data came to be. The
 deterministic part of the story is a (slightly mangled) version of what
@@ -62,7 +62,7 @@ curve(disk(x, 2, 0.02), add = TRUE, from = 0, to = 100, col = 2)
 curve(disk(x, 0.5, 0.02), add = TRUE, from = 0, to = 100, col = 4)
 ~~~~
 
-![]({{< baseurl >}}/old-blog-stuff/h3.png)
+![]({{% asseturl %}}assets/old-blog-stuff/h3.png)
 
 The blue curve looks plausible, but is it optimal? Does it tell the best
 possible story about how the data could have been generated?
@@ -167,7 +167,7 @@ curve(disk(x, a = coef(fit)["a"], h = coef(fit)["h"]), add = TRUE, lwd = 4,
     from = 0, to = 100)
 ~~~~
 
-![]({{< baseurl >}}/old-blog-stuff/h7.png)
+![]({{% asseturl %}}assets/old-blog-stuff/h7.png)
 
 The rethinking package has a few convenient functions for summarizing
 and visualizing the output of an mle2 object. It's not on CRAN, but you
@@ -206,7 +206,7 @@ points(as.data.frame(as.list(coef(fit))), col = 2, pch = 20)
 points(0.5, 0.02, col = 4, pch = 20)
 ~~~~
 
-![]({{< baseurl >}}/old-blog-stuff/h9.png)
+![]({{% asseturl %}}assets/old-blog-stuff/h9.png)
 
 * * * * *
 
@@ -245,7 +245,7 @@ curve(dnorm(x, sd = 1/2), from = -5, to = 5, ylab = "likelihood", xlab = "estima
 curve(dnorm(x, sd = 3), add = TRUE, col = 2)
 ~~~~
 
-![]({{< baseurl >}}/old-blog-stuff/h11.png)
+![]({{% asseturl %}}assets/old-blog-stuff/h11.png)
 
 The black curve shows a model with low variance for its estimate. This
 means that the likelihood would fall off quickly if we tried a bad
@@ -261,7 +261,7 @@ away from the best estimate:
 plot(profile(fit))
 ~~~~
 
-![]({{< baseurl >}}/old-blog-stuff/h12.png)
+![]({{% asseturl %}}assets/old-blog-stuff/h12.png)
 
 Keep in mind that all of this is based on a Gaussian approximation. It
 works well when you have lots of data and you aren't estimating

@@ -167,4 +167,4 @@ RUB <- ggplot(Day, aes(x = datetime)) + geom_line(aes(y = NFA_baro.avg, color = 
 RUB
 ~~~~
 
-![]({{< baseurl >}}/old-blog-stuff/unnamed-chunk-1.png)
+![]({{% asseturl %}}assets/old-blog-stuff/unnamed-chunk-1.png)

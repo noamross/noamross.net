@@ -1,5 +1,7 @@
-{{ $baseurl := .Site.BaseURL }}
-
+{{ $asset_base := .Site.BaseURL }}
+{{ if ne (getenv "HUGO_ASSET_BASEURL") "" }}
+  {{ $asset_base = (getenv "HUGO_ASSET_BASEURL") }}
+{{ end }}
 <!DOCTYPE html>
 <html>
 {{ partial "head.html" . }}
@@ -29,7 +31,7 @@
       {{ if .PrevInSection }}
       <a href="{{.PrevInSection.Permalink}}"><span class="pointer">2</span>&nbsp;{{.PrevInSection.Title}}</a> |
       {{ end }}
-      <a href="{{ $baseurl }}musings">All posts</a>
+      <a href="{{ .Site.BaseURL }}musings">All posts</a>
       {{ if .NextInSection }}
       | <a href="{{.NextInSection.Permalink}}">{{.NextInSection.Title}}&nbsp;<span class="pointer">1</span></a>
       {{ end }}

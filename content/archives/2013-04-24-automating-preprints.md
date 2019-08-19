@@ -49,7 +49,7 @@ meant for Gmail. Here's how to do it:
 
 Here it is on my site:
 
-![]({{< baseurl >}}/old-blog-stuff/emaillink.png)
+![]({{% asseturl %}}assets/old-blog-stuff/emaillink.png)
 
 3.  **Put the PDF in your Dropbox and get a link to the file**
 
@@ -57,21 +57,21 @@ Unfortunately Gmail won't created automated responses with file
 attachments[^1], so you still need to create a link where the file can
 be downloaded, even if it's not public. I use Dropbox:
 
-![]({{< baseurl >}}/old-blog-stuff/sharelink.png)
+![]({{% asseturl %}}assets/old-blog-stuff/sharelink.png)
 
 3.  **Create a Gmail template**
 
 a.  Gmail has an experimental feature in "labs" that creates templates.
     Turn it on:
 
-![]({{< baseurl >}}/old-blog-stuff/canned.png)
+![]({{% asseturl %}}assets/old-blog-stuff/canned.png)
 
 b.  Then write an email without a recipient and save it as a canned
     response:
 
-![]({{< baseurl >}}/old-blog-stuff/cannedtxt.png)
+![]({{% asseturl %}}assets/old-blog-stuff/cannedtxt.png)
 
-![]({{< baseurl >}}/old-blog-stuff/cannedresp.png)
+![]({{% asseturl %}}assets/old-blog-stuff/cannedresp.png)
 
 4.  **Create an email filter**
 
@@ -81,7 +81,7 @@ the same subject line). With canned responses enabled, you can choose
 response you saved. I also add a tag so I can track these requests
 easily.
 
-![]({{< baseurl >}}/old-blog-stuff/openaccessfilter.png)
+![]({{% asseturl %}}assets/old-blog-stuff/openaccessfilter.png)
 
 That's it! Thanks to Michael McCarthy for the idea.
 

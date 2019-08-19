@@ -1,4 +1,9 @@
+{{ $asset_base := .Site.BaseURL }}
+{{ if ne (getenv "HUGO_ASSET_BASEURL") "" }}
+  {{ $asset_base = (getenv "HUGO_ASSET_BASEURL") }}
+{{ end }}
 <head>
+
   <link href="https://gmpg.org/xfn/11" rel="profile">
   <meta http-equiv="content-type" content="text/html; charset=utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
@@ -6,29 +11,29 @@
   <link rel="canonical" href="{{ .Permalink }}" />
 
   <!-- CSS -->
-  <link rel="stylesheet" href="{{ .Site.BaseURL }}css/kube.css" />
-  <link rel="stylesheet" href="{{ .Site.BaseURL }}css/custom.css" />
-  <link rel="stylesheet" href="{{ .Site.BaseURL }}css/tufte.css" />
+  <link rel="stylesheet" href="{{ $asset_base }}assets/css/kube.css" />
+  <link rel="stylesheet" href="{{ $asset_base }}assets/css/custom.css" />
+  <link rel="stylesheet" href="{{ $asset_base }}assets/css/tufte.css" />
 
   <!-- Fonts -->
   <link href='https://fonts.googleapis.com/css?family=Alegreya:400italic,400,700,700italic&subset=latin,latin-ext' rel='stylesheet' type='text/css'>
   <link href='https://fonts.googleapis.com/css?family=Alegreya+SC:400&subset=latin,latin-ext' rel='stylesheet' type='text/css'>
   <link href="https://fonts.googleapis.com/css?family=IM+Fell+English:400,400i&display=swap" rel="stylesheet">
   <link href="https://fonts.googleapis.com/css?family=IM+Fell+English+SC&display=swap" rel="stylesheet">
-  <link href="{{ .Site.BaseURL }}fonts/fell-flowers/style.css" rel="stylesheet" type="text/css" />
+  <link href="{{ $asset_base }}assets/fonts/fell-flowers/style.css" rel="stylesheet" type="text/css" />
   <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/hack-font@3/build/web/hack-subset.css">
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/academicons/1.8.0/css/academicons.min.css">
-  <link href="{{ .Site.BaseURL }}fonts/fontawesome/css/all.css" rel="stylesheet">
+  <link href="{{ $asset_base }}assets/fonts/fontawesome/css/all.css" rel="stylesheet">
   <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
 
   <!-- Icons -->
-  <link rel="apple-touch-icon" sizes="180x180" href="{{ .Site.BaseURL }}apple-touch-icon.png">
-  <link rel="icon" type="image/png" sizes="32x32" href="{{ .Site.BaseURL }}favicon-32x32.png">
-  <link rel="icon" type="image/png" sizes="16x16" href="{{ .Site.BaseURL }}favicon-16x16.png">
-  <link rel="shortcut icon" type="image/png" sizes="32x32" href="{{ .Site.BaseURL }}favicon-32x32.png">
-  <link rel="shortcut icon" type="image/png" sizes="16x16" href="{{ .Site.BaseURL }}favicon-16x16.png">
-  <link rel="manifest" href="{{ .Site.BaseURL }}site.webmanifest">
-  <link rel="mask-icon" href="{{ .Site.BaseURL }}safari-pinned-tab.svg" color="#5bbad5">
+  <link rel="apple-touch-icon" sizes="180x180" href="{{ $asset_base }}assets/apple-touch-icon.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="{{ $asset_base }}assets/favicon-32x32.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="{{ $asset_base }}assets/favicon-16x16.png">
+  <link rel="shortcut icon" type="image/png" sizes="32x32" href="{{ $asset_base }}assets/favicon-32x32.png">
+  <link rel="shortcut icon" type="image/png" sizes="16x16" href="{{ $asset_base }}assets/favicon-16x16.png">
+  <link rel="manifest" href="{{ $asset_base }}assets/site.webmanifest">
+  <link rel="mask-icon" href="{{ $asset_base }}assets/safari-pinned-tab.svg" color="#5bbad5">
   <meta name="msapplication-TileColor" content="#2b5797">
   <meta name="theme-color" content="#ffffff">
 
@@ -54,7 +59,7 @@
     {{ if .Params.image }}
         <meta name="twitter:image" content="{{ .Site.BaseURL }}{{ .Params.image }} ">
     {{ else }}
-       <meta name="twitter:image" content="{{ .Site.BaseURL }}img/nr.png">
+       <meta name="twitter:image" content="{{ $asset_base }}assets/img/nr.png">
     {{ end }}
   {{ end }}
 

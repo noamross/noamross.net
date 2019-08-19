@@ -222,7 +222,7 @@ SSTest <- sapply(muTest, SS, xPoints)
 plot(muTest, SSTest)
 ~~~~
 
-![]({{< baseurl >}}/old-blog-stuff/exerciseSS.png)
+![]({{% asseturl %}}assets/old-blog-stuff/exerciseSS.png)
 
 Now suppose we want to examine in detail the behavior of the SS
 function. First, we flag the function for debugging:

@@ -10,7 +10,7 @@ date: 2012-10-01T15:08:48
 ![Panelists at the floodplains workshop. Left to right: Ron Unger, Dave
 Shpak, Richard Howitt, Petrea Marchand, Elizabeth Andrews, Paul Brunner,
 and J. D. Wikert. See below for affiliations and
-titles]({{< baseurl >}}/old-blog-stuff/igertpanel.jpg)
+titles]({{% asseturl %}}assets/old-blog-stuff/igertpanel.jpg)
 
 We had a fantastic workshop on Floodplain Restoration on September 14 as
 part of our work with UC Davis’ REACH IGERT program. Here are my notes:
@@ -181,4 +181,4 @@ ecosystem restorations, because they can often only get support from the
 state for up-front costs.
 
 ![Some of the workshop
-participants]({{< baseurl >}}/old-blog-stuff/igertgroup.jpg)
+participants]({{% asseturl %}}assets/old-blog-stuff/igertgroup.jpg)

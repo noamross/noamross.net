@@ -209,25 +209,25 @@ broken up into the two largest and two smallest size classes.
 First, here's the model at steady state without any disease:
 
 ![Tanoak as a fraction of total population over time, no
-disease]({{< baseurl >}}/old-blog-stuff/tanoakdyn1/papeplot.png)
+disease]({{% asseturl %}}assets/old-blog-stuff/tanoakdyn1/papeplot.png)
 
 Here I introduce disease to one cell:
 
 ![Tanoak as a fraction of total population, using baseline initial
 conditions and introducing
-disease]({{< baseurl >}}/old-blog-stuff/tanoakdyn1/disease1.png)
+disease]({{% asseturl %}}assets/old-blog-stuff/tanoakdyn1/disease1.png)
 
 Here, the initial population is only tanoaks and redwoods, with mostly
 tanoaks, and disease is introduced.
 
 ![Tanoak dynamics under the "Mostly Tanoak, Some Redwood"
-scenario]({{< baseurl >}}/old-blog-stuff/tanoakdyn1/disease2.png)
+scenario]({{% asseturl %}}assets/old-blog-stuff/tanoakdyn1/disease2.png)
 
 Here, the initial population is mostly redwoods, with some tanoak, and
 disease is introduced. No outbreak occurs:
 
 ![Tanoak dynamics under the "Some Tanoak, Mostly Redwood"
-scenario]({{< baseurl >}}/old-blog-stuff/tanoakdyn1/disease3.png)
+scenario]({{% asseturl %}}assets/old-blog-stuff/tanoakdyn1/disease3.png)
 
 These are pretty similar to the outputs from the Cobb et al. (2012)
 model. The main difference are the overall rates, which makes sense
@@ -235,7 +235,7 @@ becauase I didn't adjust the parameters for the change from continuous
 to discrete time:
 
 ![Figure 4 from Cobb et al.
-(2012)]({{< baseurl >}}/old-blog-stuff/cobb2012plots.png)
+(2012)]({{% asseturl %}}assets/old-blog-stuff/cobb2012plots.png)
 
 Next steps
 ----------

@@ -241,7 +241,7 @@ library(ggplot2)
 autoplot(compare)
 ~~~~
 
-![]({{< baseurl >}}/old-blog-stuff/unnamed-chunk-1.png)
+![]({{% asseturl %}}assets/old-blog-stuff/unnamed-chunk-1.png)
 
 ~~~~ {.r}
 
@@ -271,7 +271,7 @@ compare <- microbenchmark(f(1000), g(1000), times = 1000)
 autoplot(compare)
 ~~~~
 
-![]({{< baseurl >}}/old-blog-stuff/unnamed-chunk-2.png)
+![]({{% asseturl %}}assets/old-blog-stuff/unnamed-chunk-2.png)
 
 ~~~~ {.r}
 compare
@@ -328,7 +328,7 @@ library(ggplot2)
 autoplot(compare)
 ~~~~
 
-![]({{< baseurl >}}/old-blog-stuff/unnamed-chunk-3.png)
+![]({{% asseturl %}}assets/old-blog-stuff/unnamed-chunk-3.png)
 
 ~~~~ {.r}
 compare
@@ -500,7 +500,7 @@ are some performance benchmarks (though they are a bit out of date):
 
 ![Comparison of functions on xts time series objects against time series from
 other packages. From [this
-presentation](http://www.quantmod.com/Columbia2008/ColumbiaDec4.pdf)]({{< baseurl >}}/old-blog-stuff/xtsperformance.png)
+presentation](http://www.quantmod.com/Columbia2008/ColumbiaDec4.pdf)]({{% asseturl %}}assets/old-blog-stuff/xtsperformance.png)
 
 Other packages are specifically designed to speed up certain operations. Some
 creative googling (e.g., *r package CRAN fast "something"*) will help you find
@@ -646,7 +646,7 @@ comp
 autoplot(comp)
 ~~~~
 
-![]({{< baseurl >}}/old-blog-stuff/unnamed-chunk-6.png)
+![]({{% asseturl %}}assets/old-blog-stuff/unnamed-chunk-6.png)
 
 The difference is modest, but each layer of parentheses adds a bit to
 performance time. Note that, amazingly, r speeds up when you use curly braces
@@ -688,7 +688,7 @@ comp
 autoplot(comp)
 ~~~~
 
-![]({{< baseurl >}}/old-blog-stuff/unnamed-chunk-7.png)
+![]({{% asseturl %}}assets/old-blog-stuff/unnamed-chunk-7.png)
 
 You can sometimes get away with using the internal functions like
 `.Internal(mean(x))`. However, this is considered poor practice because (a)

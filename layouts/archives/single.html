@@ -1,4 +1,3 @@
-{{ $baseurl := .Site.BaseURL }}
 
 <!DOCTYPE html>
 <html>
@@ -29,7 +28,7 @@
       {{ if .PrevInSection }}
       <a href="{{.PrevInSection.Permalink}}"> &larr;&nbsp;{{.PrevInSection.Title}}</a> |
       {{ end }}
-      <a href="{{ $baseurl }}/musings/#{{ .Date.Format "2006" }}">All posts</a>
+      <a href="{{ .Site.BaseURL }}/musings/#{{ .Date.Format "2006" }}">All posts</a>
       {{ if .NextInSection }}
       | <a href="{{.NextInSection.Permalink}}">{{.NextInSection.Title}}&nbsp;&rarr;</a>
       {{ end }}

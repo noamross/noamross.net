@@ -68,7 +68,7 @@ Plot of time series with all 5 age classes
 matplot(1:tf, Nt_F, type = "l", xlab = "Time", ylab = "Population size", main = "Age-structured model with fishing")
 ~~~~
 
-![]({{< baseurl >}}/old-blog-stuff/ageclassplot.png)
+![]({{% asseturl %}}assets/old-blog-stuff/ageclassplot.png)
 
 Export text file for plot with age classes
 
@@ -86,7 +86,7 @@ plot(c(1:tf), Nt_F_totals, type = "l", xlab = "Time", ylab = "Population size",
     col = "blue")
 ~~~~
 
-![]({{< baseurl >}}/old-blog-stuff/totalpopplot.png)
+![]({{% asseturl %}}assets/old-blog-stuff/totalpopplot.png)
 
 Export text file for plot with total population
 
@@ -229,4 +229,4 @@ points(4.5, 3.5, pch = 6, cex = 1.3)
 points(4.5, 1.5, pch = 5, cex = 1.3)
 ~~~~
 
-![]({{< baseurl >}}/old-blog-stuff/ploteigenvalues.png)
+![]({{% asseturl %}}assets/old-blog-stuff/ploteigenvalues.png)

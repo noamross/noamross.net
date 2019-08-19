@@ -101,18 +101,18 @@ gam.check(fishlakes.logr) ## It seems to think my ks are too low, but raising th
     ## s(weighted.dist)  5.000 2.237   1.064    0.63
     ## s(bank.slope)     5.000 2.219   0.965    0.42
 
-![]({{< baseurl >}}/old-blog-stuff/gamfigs/gams-for-DRUG-Rmdauto-report1.png)
+![]({{% asseturl %}}assets/old-blog-stuff/gamfigs/gams-for-DRUG-Rmdauto-report1.png)
 
 ~~~~ {.r}
 ## gives huge overspecification. I'm not sure what to do about this.
 plot(fishlakes.logr) ## diagnostic plots for the smooths
 ~~~~
 
-![]({{< baseurl >}}/old-blog-stuff/gamfigs/gams-for-DRUG-Rmdauto-report2.png)
-![]({{< baseurl >}}/old-blog-stuff/gamfigs/gams-for-DRUG-Rmdauto-report3.png)
-![]({{< baseurl >}}/old-blog-stuff/gamfigs/gams-for-DRUG-Rmdauto-report4.png)
-![]({{< baseurl >}}/old-blog-stuff/gamfigs/gams-for-DRUG-Rmdauto-report5.png)
-![]({{< baseurl >}}/old-blog-stuff/gamfigs/gams-for-DRUG-Rmdauto-report6.png)
+![]({{% asseturl %}}assets/old-blog-stuff/gamfigs/gams-for-DRUG-Rmdauto-report2.png)
+![]({{% asseturl %}}assets/old-blog-stuff/gamfigs/gams-for-DRUG-Rmdauto-report3.png)
+![]({{% asseturl %}}assets/old-blog-stuff/gamfigs/gams-for-DRUG-Rmdauto-report4.png)
+![]({{% asseturl %}}assets/old-blog-stuff/gamfigs/gams-for-DRUG-Rmdauto-report5.png)
+![]({{% asseturl %}}assets/old-blog-stuff/gamfigs/gams-for-DRUG-Rmdauto-report6.png)
 
 ~~~~ {.r}
 

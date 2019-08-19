@@ -53,7 +53,7 @@ legend("bottomright", legend = c("Type1", "Type2", "Type3"), pch = 20, col = col
 ~~~~
 
 ![plot of chunk
-unnamed-chunk-4]({{< baseurl >}}/old-blog-stuff/ggplotfigs/unnamed-chunk-4.png)
+unnamed-chunk-4]({{% asseturl %}}assets/old-blog-stuff/ggplotfigs/unnamed-chunk-4.png)
 
 With `ggplot`, you just do this:
 
@@ -62,7 +62,7 @@ ggplot(data.df, aes(x = Axis1, y = Axis2, shape = Plant, color = Type)) + geom_p
 ~~~~
 
 ![plot of chunk
-unnamed-chunk-5]({{< baseurl >}}/old-blog-stuff/ggplotfigs/unnamed-chunk-5.png)
+unnamed-chunk-5]({{% asseturl %}}assets/old-blog-stuff/ggplotfigs/unnamed-chunk-5.png)
 
 And it looks much better!
 
@@ -71,7 +71,7 @@ example of some fish survey data that I produced with it:
 
 ![Sacramento splittail surveyed in Suisun Marsh, 1979-2011, data from
 Peter Moyle and Teejay
-O'Rear]({{< baseurl >}}/old-blog-stuff/cohortplot.png)
+O'Rear]({{% asseturl %}}assets/old-blog-stuff/cohortplot.png)
 
 ### Tutorial
 
@@ -109,7 +109,7 @@ a
 ~~~~
 
 ![plot of chunk
-unnamed-chunk-7]({{< baseurl >}}/old-blog-stuff/ggplotfigs/unnamed-chunk-7.png)
+unnamed-chunk-7]({{% asseturl %}}assets/old-blog-stuff/ggplotfigs/unnamed-chunk-7.png)
 
 Let's parse what we just did. The `ggplot()` command creates a plot
 object. In it we assigned a data set. `aes()` creates what Hadley
@@ -137,7 +137,7 @@ a
 ~~~~
 
 ![plot of chunk
-unnamed-chunk-9]({{< baseurl >}}/old-blog-stuff/ggplotfigs/unnamed-chunk-9.png)
+unnamed-chunk-9]({{% asseturl %}}assets/old-blog-stuff/ggplotfigs/unnamed-chunk-9.png)
 
 You can also use map *size* and *alpha* (transparency) to variables.
 
@@ -152,7 +152,7 @@ a
 ~~~~
 
 ![plot of chunk
-unnamed-chunk-10]({{< baseurl >}}/old-blog-stuff/ggplotfigs/unnamed-chunk-10.png)
+unnamed-chunk-10]({{% asseturl %}}assets/old-blog-stuff/ggplotfigs/unnamed-chunk-10.png)
 
 Within the `geom` calls, we can change plotting options
 
@@ -165,7 +165,7 @@ a
 ~~~~
 
 ![plot of chunk
-unnamed-chunk-11]({{< baseurl >}}/old-blog-stuff/ggplotfigs/unnamed-chunk-11.png)
+unnamed-chunk-11]({{% asseturl %}}assets/old-blog-stuff/ggplotfigs/unnamed-chunk-11.png)
 
 Another way to split up the way we look at data is with *facets*. These
 break up the plot into multiple plots. If you are splitting the plot up
@@ -181,7 +181,7 @@ a
 ~~~~
 
 ![plot of chunk
-unnamed-chunk-12]({{< baseurl >}}/old-blog-stuff/ggplotfigs/unnamed-chunk-12.png)
+unnamed-chunk-12]({{% asseturl %}}assets/old-blog-stuff/ggplotfigs/unnamed-chunk-12.png)
 
 ~~~~ {.r}
 a <- ggplot(data = msleep, aes(x = log(bodywt), y = sleep_rem/sleep_total))
@@ -192,7 +192,7 @@ a
 ~~~~
 
 ![plot of chunk
-unnamed-chunk-13]({{< baseurl >}}/old-blog-stuff/ggplotfigs/unnamed-chunk-13.png)
+unnamed-chunk-13]({{% asseturl %}}assets/old-blog-stuff/ggplotfigs/unnamed-chunk-13.png)
 
 Let's use a different data set to so line plots:
 
@@ -215,7 +215,7 @@ a
 ~~~~
 
 ![plot of chunk
-unnamed-chunk-14]({{< baseurl >}}/old-blog-stuff/ggplotfigs/unnamed-chunk-14.png)
+unnamed-chunk-14]({{% asseturl %}}assets/old-blog-stuff/ggplotfigs/unnamed-chunk-14.png)
 
 We can add statistical transformations to this series, for instance:
 
@@ -230,7 +230,7 @@ a
     ## loess. Use 'method = x' to change the smoothing method.
 
 ![plot of chunk
-unnamed-chunk-15]({{< baseurl >}}/old-blog-stuff/ggplotfigs/unnamed-chunk-15.png)
+unnamed-chunk-15]({{% asseturl %}}assets/old-blog-stuff/ggplotfigs/unnamed-chunk-15.png)
 
 ### Some resources:
 

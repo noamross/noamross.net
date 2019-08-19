@@ -15,7 +15,7 @@ apps with R. Here are his slides. Ryan includes a bunch of links to
 examples and tutorials, as well as his own [thermohydrographs
 app](http://aquapeek.shinyapps.io/thermohydrographs/):
 
-<div class="rpres" style="padding-bottom: 88%;"><iframe src="blogstuff/DRUG_shiny_2014-01-27_presentation.html"
+<div class="rpres" style="padding-bottom: 88%;"><iframe src="{{% asseturl %}}assets/old-blog-stuff/DRUG_shiny_2014-01-27_presentation.html"
 frameborder="0" marginwidth="0" marginheight="0"></iframe></div>
 
 [^1]: Thanks to [Revolution

@@ -30,7 +30,7 @@ portion of the figure below, you'll see that the rate of mortality is
 strongly influenced by the number of infected hosts.
 
 ![Parts of Figure 1 from Cobb et al.
-(2012)]({{< baseurl >}}/old-blog-stuff/Cobb2012Fig2f.svg)
+(2012)]({{% asseturl %}}assets/old-blog-stuff/Cobb2012Fig2f.svg)
 
 [Richard](https://sites.google.com/a/ucdavis.edu/richard-cobb/) and I
 discussed what might be driving this pattern, and think it might be due
@@ -200,7 +200,7 @@ p2 <- ggplot(subset(mdf, Class %in% c("pctJ", "pctA")),
 grid.arrange(p1, p2, nrow=2)
 ~~~~
 
-![]({{< baseurl >}}/old-blog-stuff/multi-infection-tests-unnamed-chunk-4.png)
+![]({{% asseturl %}}assets/old-blog-stuff/multi-infection-tests-unnamed-chunk-4.png)
 
 As in the $SI$ model, the population drops, but the relative proportion
 of juvenile trees goes up. This occurs even though the mortality effect
@@ -219,7 +219,7 @@ p4 <- ggplot(subset(mdf, Class %in% c("nJ", "nA")),
 grid.arrange(p3, p4, nrow=2)
 ~~~~
 
-![]({{< baseurl >}}/old-blog-stuff/multi-infection-tests-unnamed-chunk-5.png)
+![]({{% asseturl %}}assets/old-blog-stuff/multi-infection-tests-unnamed-chunk-5.png)
 
 Infection is considerably greater in the adult trees than the juveniles
 over the course of the epidemic. Since, for the most part, observqtions
@@ -238,7 +238,7 @@ ggplot(subset(mdf, Class %in% c("J.inf", "A.inf")),
 geom_line(lwd=1) + theme_nr + ylab("Fraction infected") + JAlab
 ~~~~
 
-![]({{< baseurl >}}/old-blog-stuff/multi-infection-tests-unnamed-chunk-6.png)
+![]({{% asseturl %}}assets/old-blog-stuff/multi-infection-tests-unnamed-chunk-6.png)
 
 Note that these curves are somewhat closer to each other. Without
 observing multiple infections per tree, we might think distributions of
@@ -263,7 +263,7 @@ ggplot(subset(mdf, Class %in% c("J.yrs", "A.yrs") ),
   ylab("Years to death of infected individuals") + JAlab
 ~~~~
 
-![]({{< baseurl >}}/old-blog-stuff/multi-infection-tests-unnamed-chunk-7.png)
+![]({{% asseturl %}}assets/old-blog-stuff/multi-infection-tests-unnamed-chunk-7.png)
 
 This plot is not quite equivalent to the lower-right panel in the figure
 from Cobb et al. (2012), because that shows a snapshot in time of many
@@ -293,7 +293,7 @@ ggplot(subset(mdf, Class %in% c("J.infyrs", "A.infyrs") ),
   ylab("Years to infection of uninfected individuals") + JAlab + ylim(0,200)
 ~~~~
 
-![]({{< baseurl >}}/old-blog-stuff/multi-infection-tests-unnamed-chunk-8.png)
+![]({{% asseturl %}}assets/old-blog-stuff/multi-infection-tests-unnamed-chunk-8.png)
 
 This is the rough equivalent to the bottom-left panel above from the
 Cobb et al. (2012). I've cut it off above 200 because years-to-infection

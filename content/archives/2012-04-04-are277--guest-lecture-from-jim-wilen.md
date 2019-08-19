@@ -33,9 +33,9 @@ $$TR_{ss} = pqX_{ss}K_{ss} = \frac{apqK_{ss}}{b qK_{ss}}$$
 
 $$TC_{ss} = wK_{ss}$$
 
-![image]({{< baseurl >}}/old-blog-stuff/fisheq.png)
+![image]({{% asseturl %}}assets/old-blog-stuff/fisheq.png)
 
-![image]({{< baseurl >}}/old-blog-stuff/openrent.png)
+![image]({{% asseturl %}}assets/old-blog-stuff/openrent.png)
 
 Consequences of open access (no owner of resource)
 
@@ -92,7 +92,7 @@ discretizing the system), or analytical solutions in some cases.
 
     $$\dot{K} = 0\, \text{ when }\, \frac{1}{q}[a-bX] = 0$$
 
-    ![image]({{< baseurl >}}/old-blog-stuff/smithphasediagram.png)
+    ![image]({{% asseturl %}}assets/old-blog-stuff/smithphasediagram.png)
 
 2.  Determine motion of the system in each section of the phase diagram.
     This can be done by simple intuition in some case.

@@ -203,7 +203,7 @@ level, the optimum is to harvest at the maximum rate until you hit the
 target stock level.
 
 ![The singular path, or *most rapid approach path*
-(MRAP)]({{< baseurl >}}/old-blog-stuff/singpath.png)
+(MRAP)]({{% asseturl %}}assets/old-blog-stuff/singpath.png)
 
 Showing that the singular path/MRAP was the economic optimum was shown
 by Spence and Starrett (1975). This approach means that all you need to

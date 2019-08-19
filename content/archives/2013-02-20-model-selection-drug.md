@@ -77,7 +77,7 @@ fish.model <- glmulti(global.model, # use the model with built as a starting poi
     ## Crit= 201.820969266156
     ## Mean crit= 355.848076682524
 
-![]({{< baseurl >}}/old-blog-stuff/unnamed-chunk-4.png)
+![]({{% asseturl %}}assets/old-blog-stuff/unnamed-chunk-4.png)
 
     ## Completed.
 
@@ -316,10 +316,10 @@ library(visreg)
 visreg(f)
 ~~~~
 
-![]({{< baseurl >}}/old-blog-stuff/unnamed-chunk-71.png)
-![]({{< baseurl >}}/old-blog-stuff/unnamed-chunk-72.png)
-![]({{< baseurl >}}/old-blog-stuff/unnamed-chunk-73.png)
-![]({{< baseurl >}}/old-blog-stuff/unnamed-chunk-74.png)
+![]({{% asseturl %}}assets/old-blog-stuff/unnamed-chunk-71.png)
+![]({{% asseturl %}}assets/old-blog-stuff/unnamed-chunk-72.png)
+![]({{% asseturl %}}assets/old-blog-stuff/unnamed-chunk-73.png)
+![]({{% asseturl %}}assets/old-blog-stuff/unnamed-chunk-74.png)
 
 But according to theory, models with AIC within two points of each other
 are basically equal. So what about the other models? Should we totally
@@ -600,7 +600,7 @@ m.roc <- roc(fishlakes$treatment, predict(m.ave, backtransform = TRUE))
 plot(m.roc)
 ~~~~
 
-![]({{< baseurl >}}/old-blog-stuff/unnamed-chunk-22.png)
+![]({{% asseturl %}}assets/old-blog-stuff/unnamed-chunk-22.png)
 
     ##
     ## Call:

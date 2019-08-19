@@ -5,7 +5,7 @@ published: false
 tags: [ARE277, class, fisheries, economics, papers]
 date: 2012-04-03 13:48:12
 
---- 
+---
 
 
 Reading
@@ -51,14 +51,14 @@ $E = r/2q$. This function produces the *yield-effort curve* ($Y(E)$).
 Under a weak Allee effect (depensation), there are multiple equilibria:
 
 ![From @Clark1990:
-Depensation]({{< baseurl >}}/old-blog-stuff/Screen%20Shot%202012-04-03%20at%201.43.44%20PM.png)
+Depensation]({{% asseturl %}}assets/old-blog-stuff/Screen%20Shot%202012-04-03%20at%201.43.44%20PM.png)
 
 A bifurcation occurs at $E^*$. With a strong Allee effect (critical
 depensation), we have the same phenomenon but the collapse is
 irreversible:
 
 ![From @Clark1990: Critical
-Depensation]({{< baseurl >}}/old-blog-stuff/Screen%20Shot%202012-04-03%20at%201.49.23%20PM.png)
+Depensation]({{% asseturl %}}assets/old-blog-stuff/Screen%20Shot%202012-04-03%20at%201.49.23%20PM.png)
 
 These models lack stochasticity, delays and periodicity, age structure,
 species interactions or spatial structure.
@@ -148,7 +148,7 @@ $$X_t^* = \frac{a-mAK_T}{b} = \frac{C + \pi}{PA} $$
 The dynamics are represented in phase space and can result in extinction
 or equilibrium, which can be approached directly or via oscillations:
 
-![image]({{< baseurl >}}/old-blog-stuff/Screen%20Shot%202012-04-03%20at%204.10.39%20PM.png)
+![image]({{% asseturl %}}assets/old-blog-stuff/Screen%20Shot%202012-04-03%20at%204.10.39%20PM.png)
 
 #### Empirical estimation
 
@@ -171,7 +171,7 @@ fur seal was heading towards extinction. This is supported by looking at
 the actual data in phase-space, which resembles the spiral shape of an
 oscillating approach to equilibrium:
 
-![image]({{< baseurl >}}/old-blog-stuff/Screen%20Shot%202012-04-03%20at%204.32.26%20PM.png)
+![image]({{% asseturl %}}assets/old-blog-stuff/Screen%20Shot%202012-04-03%20at%204.32.26%20PM.png)
 
 (*I'm skipping discussion of shadow prices here.*)
 

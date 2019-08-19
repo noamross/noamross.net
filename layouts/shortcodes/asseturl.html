@@ -1,0 +1,1 @@
+{{ $asset_base := .Site.BaseURL }}{{ if ne (getenv "HUGO_ASSET_BASEURL") "" }}{{ $asset_base = (getenv "HUGO_ASSET_BASEURL") }}{{ end }}{{ $asset_base }}

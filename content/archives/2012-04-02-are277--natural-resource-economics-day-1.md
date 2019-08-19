@@ -98,10 +98,10 @@ Many organisms (e.g., trees) don't fit this paradigm.)*
   : Characteristics of r- and K-selected species
 
 ![Relationships between generation time and rates of
-increase]({{< baseurl >}}/old-blog-stuff/ARE277Day1Fig1.jpg)
+increase]({{% asseturl %}}assets/old-blog-stuff/ARE277Day1Fig1.jpg)
 
 ![Relationships between size and generation
-time]({{< baseurl >}}/old-blog-stuff/ARE277Day1Fig2.jpg)
+time]({{% asseturl %}}assets/old-blog-stuff/ARE277Day1Fig2.jpg)
 
 ### Models of growth
 

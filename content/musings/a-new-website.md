@@ -29,7 +29,7 @@ Here are some of the pieces that I used to build it:
     [Font Awesome](https://fontawesome.com).
 -   My [CV](/vitae/) is generated from data on [ORCiD](https://orcid.org) using the [*rorcid*](https://github.com/ropensci/rorcid) package.
 -   The site is hosted at [nearlyfreespeech.net](http://nearlyfreespeech.net)
-    and deployed using [Circle CI](https://circleci.com).
+    and deployed using [Circle CI](https://circleci.com). Assets are delivered via the [jsDeliver](https://www.jsdelivr.com/) CDN.{{%sn%}}If you're curious about this check out the [CI config](https://github.com/noamross/noamross.net/blob/hugo/.circleci/config.yml#L26-L35) in the source where I set CDN variables which are then [used in the site header](https://github.com/noamross/noamross.net/blob/master/layouts/partials/head.html#L1-L4).
 
 You can find source code for the site on [GitHub](https://github.com/noamross/noamross.net/).
 

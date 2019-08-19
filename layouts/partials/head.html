@@ -50,7 +50,7 @@
   <meta name="twitter:url" content="{{ .Permalink }}">
   <meta name="twitter:title" content="{{ .Title }}">
   <meta name="twitter:description" content="{{ if .Description }}{{ .Description }}{{ else }}{{ .Summary }}{{ end }}">
-  <meta name="twitter:image" content="{{ if .Params.largeimage }}{{ .Params.largeimage }}}{{ else if .Params.image }}{{.Params.image }}{{ else }}{{ $asset_base }}assets/img/nr.png{{ end }}">
+  <meta name="twitter:image" content="{{ $asset_base }}assets/{{ if .Params.largeimage }}{{ .Params.largeimage }}}{{ else if .Params.image }}{{.Params.image }}{{ else }}{{ $asset_base }}img/nr.png{{ end }}">
   <meta name="twitter:site" content="noamross.net">
   <meta name="twitter:creator" content="@noamross">
 

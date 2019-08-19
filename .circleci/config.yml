@@ -68,30 +68,27 @@ jobs:
             ssh noamross_noamross@ssh.phx.nearlyfreespeech.net /usr/local/www/awstats/tools/awstats_buildstaticpages.pl -config=nfsn -update -dir=/home/public/awstats
 
 workflows:
-   version: 2
-   commit:
-     jobs:
-       - build
-
-   nightly:
-     triggers:
-       - schedule:
-           cron: "0 10 * * *"
-           filters:
-             branches:
-               only:
-                 - master
-     jobs:
-       - build
-
-    hourly:
-      triggers:
-         - schedule:
-             cron: "0 31 * * *"
-             filters:
-               branches:
-                 only:
-                   - master
-      jobs:
-        - calc_stats
-
+  version: 2
+  commit:
+    jobs:
+      - build
+  nightly:
+    triggers:
+      - schedule:
+          cron: "0 10 * * *"
+          filters:
+            branches:
+              only:
+                - master
+    jobs:
+      - build
+  hourly:
+    triggers:
+      - schedule:
+          cron: "45 * * * *"
+          filters:
+              branches:
+                only:
+                  - master
+    jobs:
+       - calc_stats

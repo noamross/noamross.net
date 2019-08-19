@@ -41,9 +41,9 @@ jobs:
           command: |
             ssh-keyscan -t "ecdsa" ssh.phx.nearlyfreespeech.net >> ~/.ssh/known_hosts
             if [ "${CIRCLE_BRANCH}" == "master" ]; then
-               rsync -avz --delete public/ noamross_noamross@ssh.phx.nearlyfreespeech.net:/home/public/ --exclude=/branch --exclude=/assets
+               rsync -avz --delete public/ noamross_noamross@ssh.phx.nearlyfreespeech.net:/home/public/ --exclude=/branch --exclude=/assets --exclude=/awstats
             else
-               rsync -avz --delete public/ noamross_noamross@ssh.phx.nearlyfreespeech.net:/home/public/branch/${CIRCLE_BRANCH} --exclude=/img --exclude=/assets --exclude=.htaccess --exclude=awstats
+               rsync -avz --delete public/ noamross_noamross@ssh.phx.nearlyfreespeech.net:/home/public/branch/${CIRCLE_BRANCH} --exclude=/img --exclude=/assets --exclude=.htaccess --exclude=/awstats
             fi
       - run:
           name: "Calculate Stats"

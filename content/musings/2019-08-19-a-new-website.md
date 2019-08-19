@@ -3,6 +3,7 @@ date: "2019-08-09"
 title: "A New Website"
 slug: a-new-website
 draft: true
+categories: ["R"]
 ---
 
 For me, the task of building a personal website is fraught with so many of my technical, aesthetic,

@@ -2,7 +2,6 @@
 date: "2019-08-09"
 title: "A New Website"
 slug: a-new-website
-draft: true
 categories: ["R"]
 ---
 

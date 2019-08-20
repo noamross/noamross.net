@@ -29,9 +29,9 @@ jobs:
             export HUGO_ASSET_BASEURL=https://cdn.jsdelivr.net/gh/noamross/noamross.net@${CIRCLE_SHA1}/static/
             echo $HUGO_ASSET_BASEURL
             if [ "${CIRCLE_BRANCH}" == "master" ]; then
-              hugo
+              hugo --cacheDir `pwd`/hugo_cache
             else
-              hugo --baseURL https://www.noamross.net/branch/${CIRCLE_BRANCH}/
+              hugo --baseURL https://www.noamross.net/branch/${CIRCLE_BRANCH}/ --cacheDir `pwd`/hugo_cache
             fi
       - add_ssh_keys:
           fingerprints:
@@ -54,6 +54,7 @@ jobs:
           paths:
             - "/usr/local/lib/R/site-library"
             - "blogdown"
+            - "hugo_cache"
   calc_stats:
     working_directory: ~/main
     docker:

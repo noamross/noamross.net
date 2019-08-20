@@ -7,6 +7,8 @@
 /public/
 /resources/_gen/
 
+/hugo_cache/
+
 # Executable may be added to repository
 hugo.exe
 hugo.darwin

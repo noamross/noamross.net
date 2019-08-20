@@ -2,14 +2,13 @@ ErrorDocument 404 /404.html
 
 RewriteEngine on
 
-RewriteRule ^blog/(\d+)/(\d)/(\d)/([^\.]*)\.html /archives/$1-0$2-0$3-$4/ [L,R=301]
-RewriteRule ^blog/(\d+)/(\d)/(\d+)/([^\.]*)\.html /archives/$1-0$2-$3-$4/ [L,R=301]
-RewriteRule ^blog/(\d+)/(\d+)/(\d)/([^\.]*)\.html /archives/$1-$2-0$3-$4/ [L,R=301]
-RewriteRule ^blog/(\d+)/(\d+)/(\d+)/([^\.]*)\.html /archives/$1-$2-$3-$4/ [L,R=301]
-
 RewriteRule ^about\.html / [L,R=301]
 RewriteRule ^publications.html /vitae/ [L,R=301]
 RewriteRule ^connect.html  /#connect [L,R=301]
 RewriteRule ^tags.html  /musings/ [L,R=301]
 
-
+RewriteRule ^blog/(.*)--(.*)$ /blog/$1-$2 [N]
+RewriteRule ^blog/(\d+)/(\d)/(\d)/([^\.]*)\.html /archives/$1-0$2-0$3-$4/ [L,R=301]
+RewriteRule ^blog/(\d+)/(\d)/(\d+)/([^\.]*)\.html /archives/$1-0$2-$3-$4/ [L,R=301]
+RewriteRule ^blog/(\d+)/(\d+)/(\d)/([^\.]*)\.html /archives/$1-$2-0$3-$4/ [L,R=301]
+RewriteRule ^blog/(\d+)/(\d+)/(\d+)/([^\.]*)\.html /archives/$1-$2-$3-$4/ [L,R=301]

@@ -42,10 +42,10 @@ jobs:
             cd public && find . -exec touch {} \; && cd ..
             ssh-keyscan -t "ecdsa" ssh.phx.nearlyfreespeech.net >> ~/.ssh/known_hosts
             if [ "${CIRCLE_BRANCH}" == "master" ]; then
-               rsync -avz --delete public/ noamross_noamross@ssh.phx.nearlyfreespeech.net:/home/public/ --exclude=/branch --exclude=/assets --exclude=/awstats
+               rsync -avz --delete public/ noamross_noamross@ssh.phx.nearlyfreespeech.net:/home/public/ --exclude=branch --exclude=assets --exclude=awstats
                scp public/robots.txt noamross_noamross@ssh.phx.nearlyfreespeech.net:/home/public/robots.txt
             else
-               rsync -avz --delete public/ noamross_noamross@ssh.phx.nearlyfreespeech.net:/home/public/branch/${CIRCLE_BRANCH} --exclude=/img --exclude=/assets --exclude=.htaccess -exclude=robots.txt --exclude=/awstats
+               rsync -avz --delete public/ noamross_noamross@ssh.phx.nearlyfreespeech.net:/home/public/branch/${CIRCLE_BRANCH} --exclude=assets --exclude=.htaccess -exclude=robots.txt --exclude=awstats
             fi
             scp
       - run:

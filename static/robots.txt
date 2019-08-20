@@ -1,4 +1,7 @@
-User-agent: *
+User-Agent: *
 Disallow: /awstats/
 Disallow: /branch/
 Crawl-Delay: 10
+
+User-agent: MJ12bot
+Disallow: /

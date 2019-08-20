@@ -9,8 +9,8 @@ This is the repository for my personal website, <https://www.noamross.net>.
 -   Design inspiration is taken from Greg Restall's
     [consequently.org](https://consequently.org/) and the lovely but defunct
     [Gentle Reader](https://web.archive.org/web/20160313103811/http://thegentlereader.net/).  
--   Some design elements are inspired by Edward Tufte's handout designs{{%mn%}}Especially margin notes{{%/mn%}}, as
-    implemented in the [tufte-css](https://github.com/edwardtufte/tufte-css) framework.{{%sn%}}Numbered and unnumbered, of course{{%/sn%}}
+-   Some design elements are inspired by Edward Tufte's handout designs, as
+    implemented in the [tufte-css](https://github.com/edwardtufte/tufte-css) framework.
 -   The site uses the fonts [Alegreya](https://huertatipografica.com/en/fonts/alegreya-ht-pro) by [Huerta Tipográfica](https://huertatipografica.com/).
     and [IM Fell English](https://iginomarini.com/fell/), extracted from John Fell's historic types by [Igino Marini](https://iginomarini.com). Fonts are served by
     [Google Fonts](https://fonts.google.com/). Icons are provided by

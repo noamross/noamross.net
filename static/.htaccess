@@ -1,8 +1,8 @@
+BrowserMatchNoCase "mj12bot" bots  Order Allow,Deny Allow from ALL Deny from env=bots
+
 ErrorDocument 404 /404.html
 
 RewriteEngine on
-
-
 
 RewriteRule ^about\.html / [L,R=301]
 RewriteRule ^publications.html /vitae/ [L,R=301]

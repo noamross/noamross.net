@@ -17,7 +17,7 @@ Here are some of the pieces that I used to build it:
 
 -   The site is generated using the [Hugo](https://gohugo.io/) static site
     generator, with the R package [blogdown](https://bookdown.org/yihui/blogdown/)
-    generating [R Markdown](https://rmarkdown.rstudio.com/ss) posts.
+    generating [R Markdown](https://rmarkdown.rstudio.com/) posts.
 -   The [Kube](https://imperavi.com/kube/) framework by Imperavi provides basic layout and user-interaction.
 -   Design inspiration is taken from Greg Restall's
     [consequently.org](https://consequently.org/) and the lovely but defunct

@@ -31,15 +31,15 @@ place.
 First, let's acknowledge that vectorization can seem like voodoo.
 Consider a two math problems, one vectorized, and one not:
 
-$$\begin{bmatrix} 1 \\ 2 \\ 3 \end{bmatrix} + 
+<div>$$\begin{bmatrix} 1 \\ 2 \\ 3 \end{bmatrix} + 
 \begin{bmatrix} 1 \\ 2 \\ 3 \end{bmatrix} =
-\begin{bmatrix} 2 \\ 4 \\ 6 \end{bmatrix}$$
+\begin{bmatrix} 2 \\ 4 \\ 6 \end{bmatrix}$$</div>
 
-$$\begin{aligned}
+<div>$$\begin{aligned}
 1 + 1 = 2 \\
 2 + 2 = 4 \\
 3 + 3 = 6
-\end{aligned}$$
+\end{aligned}$$</div>
 
 Why on earth should these take a different amount of time to calculate?
 Linear algebra isn't magic. In both cases there are three addition

@@ -2,7 +2,6 @@ baseurl: "https://www.noamross.net/"
 languageCode: "en-us"
 title: "noamross.net"
 enableEmoji: true
-enableRobotsTXT: true
 pygmentsCodefences: true
 pygmentsStyle: "lovelace"
 ignoreFiles: ["\\.Rmd$", "\\.Rmarkdown$", "_files$", "_cache$"]

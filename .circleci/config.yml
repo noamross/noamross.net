@@ -39,6 +39,7 @@ jobs:
       - deploy:
           name: "Rsync to site"
           command: |
+            cd public && find . -exec touch {} \; && cd ..
             ssh-keyscan -t "ecdsa" ssh.phx.nearlyfreespeech.net >> ~/.ssh/known_hosts
             if [ "${CIRCLE_BRANCH}" == "master" ]; then
                rsync -avz --delete public/ noamross_noamross@ssh.phx.nearlyfreespeech.net:/home/public/ --exclude=/branch --exclude=/assets --exclude=/awstats

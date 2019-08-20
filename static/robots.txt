@@ -4,5 +4,7 @@ Disallow: /branch/
 Crawl-Delay: 10
 
 User-agent: MJ21bot
+Disallow: /
+
 User-agent: MJ12bot
 Disallow: /

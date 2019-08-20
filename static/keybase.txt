@@ -1,0 +1,56 @@
+==================================================================
+https://keybase.io/noamross
+--------------------------------------------------------------------
+
+I hereby claim:
+
+  * I am an admin of https://www.noamross.net
+  * I am noamross (https://keybase.io/noamross) on keybase.
+  * I have a public key ASB-BxfY2ry-bqcNtfdHGtsrS2Xwb0kBX2i_fgE1znBsSQo
+
+To do so, I am signing this object:
+
+{
+  "body": {
+    "key": {
+      "eldest_kid": "0120366fd326beb788fd3d35315415c1dbf54385b0c2588fcc863aa50c89dac43baa0a",
+      "host": "keybase.io",
+      "kid": "01207e0717d8dabcbe6ea70db5f7471adb2b4b65f06f49015f68bf7e0135ce706c490a",
+      "uid": "863bc6bda635c7274c8c382a8294f419",
+      "username": "noamross"
+    },
+    "merkle_root": {
+      "ctime": 1566311022,
+      "hash": "55518b352e2061affc5dedef7a06530f900cc3513452febb76415ce3f03961934b5760e5a8a09c4e24765438f39f1deb59e92fe05d04a3d7d1245766c6a508c2",
+      "hash_meta": "37c1c03b826394d3c62a8b28d280423a2a54a8abcd0773ca339a57411b5b7c85",
+      "seqno": 6056829
+    },
+    "service": {
+      "entropy": "PyJUQgQb4JVoo+t7jRg/BdzE",
+      "hostname": "www.noamross.net",
+      "protocol": "https:"
+    },
+    "type": "web_service_binding",
+    "version": 2
+  },
+  "client": {
+    "name": "keybase.io go client",
+    "version": "4.3.2"
+  },
+  "ctime": 1566311077,
+  "expire_in": 504576000,
+  "prev": "c2ce4a7a31f45809f2332650fbff8bd96a7cd703840927401a22ed5624d68a11",
+  "seqno": 19,
+  "tag": "signature"
+}
+
+which yields the signature:
+
+hKRib2R5hqhkZXRhY2hlZMOpaGFzaF90eXBlCqNrZXnEIwEgfgcX2Nq8vm6nDbX3RxrbK0tl8G9JAV9ov34BNc5wbEkKp3BheWxvYWTESpcCE8Qgws5KejH0WAnyMyZQ+/+L2Wp81wOECSdAGiLtViTWihHEILnPsM8t3aX9gckc8E4vnxEWJwNLkcVT7y5JMQ0jRnIEAgHCo3NpZ8RADOC8gK66pLNvs5RLXLAHIqfQE9y8ZMeW85Vwtck0OU11ur7ZLqrZw1t+X9f3KegAx4Dk5szWwwFbh1Fztd9NCahzaWdfdHlwZSCkaGFzaIKkdHlwZQildmFsdWXEIIcYocXvjypPZg1WAxNSFBXkNNc7f5kPN6nqx2cGRow4o3RhZ80CAqd2ZXJzaW9uAQ==
+
+And finally, I am proving ownership of this host by posting or
+appending to this document.
+
+View my publicly-auditable identity here: https://keybase.io/noamross
+
+==================================================================

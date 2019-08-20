@@ -13,5 +13,5 @@ and in using models that mix mechanistic and non-parametric components to do so.
 I am a practitioner and advocate of reproducible research, open science, and
 justice and inclusion in my fields. I am a founding editor for software
 peer-review at [rOpenSci](http://ropensci.org), and have a variety of projects
-related reproducibility using [R statistical computer
+related to reproducibility using [R statistical computer
 language](https://www.r-project.org/).

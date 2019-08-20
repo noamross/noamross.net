@@ -18,7 +18,7 @@ jobs:
       - run:
           name: "Get ORCiD Records"
           command: |
-            Rscript assets/get-orcid-data.R || true
+            Rscript scripts/get-orcid-data.R || true
       - run:
           name: "Render R Markdown"
           command: |

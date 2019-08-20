@@ -48,7 +48,7 @@ jobs:
       - run:
           name: "Calculate Stats"
           command: |
-            ssh noamross_noamross@ssh.phx.nearlyfreespeech.net /usr/local/www/awstats/tools/awstats_buildstaticpages.pl -config=nfsn -update -dir=/home/public/awstats
+            ssh noamross_noamross@ssh.phx.nearlyfreespeech.net "/usr/local/www/awstats/tools/awstats_buildstaticpages.pl -config=nfsn -update -dir=/home/public/awstats && cd /home/public/awstats && ln -sf awstats.nfsn.html index.html && cp -rf /usr/local/www/awstats/icon /home/public/.nfsn-awicons"
       - save_cache:
           key: deps2-$R_VERSION-{{ .Branch }}-{{ checksum "DESCRIPTION" }}-{{ checksum ".circleci/config.yml" }}
           paths:
@@ -66,8 +66,7 @@ jobs:
           name: "Calculate Stats"
           command: |
             ssh-keyscan -t "ecdsa" ssh.phx.nearlyfreespeech.net >> ~/.ssh/known_hosts
-            ssh noamross_noamross@ssh.phx.nearlyfreespeech.net /usr/local/www/awstats/tools/awstats_buildstaticpages.pl -config=nfsn -update -dir=/home/public/awstats
-
+            ssh noamross_noamross@ssh.phx.nearlyfreespeech.net "/usr/local/www/awstats/tools/awstats_buildstaticpages.pl -config=nfsn -update -dir=/home/public/awstats && cd /home/public/awstats && ln -sf awstats.nfsn.html index.html && cp -rf /usr/local/www/awstats/icon /home/public/.nfsn-awicons"
 workflows:
   version: 2
   commit:

@@ -65,6 +65,7 @@ jobs:
       - run:
           name: "Calculate Stats"
           command: |
+            ssh-keyscan -t "ecdsa" ssh.phx.nearlyfreespeech.net >> ~/.ssh/known_hosts
             ssh noamross_noamross@ssh.phx.nearlyfreespeech.net /usr/local/www/awstats/tools/awstats_buildstaticpages.pl -config=nfsn -update -dir=/home/public/awstats
 
 workflows:

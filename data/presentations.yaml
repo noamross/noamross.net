@@ -90,4 +90,11 @@ nyr-2019-redoc:
   venue: New York R Conference
   date: 2019-05-11
   description: "Reproducibility in an Office world: tools for crossing the abyss"
+dhs-biosurv-2019:
+  type: presentation
+  name: nyr-biosurv-2019
+  venue: Department of Homeland Security Biosurveillance Presentation Series
+  date: 2019-06-19
+  description: "Epidemiological Modeling: From Basics to Artificial Intelligence"
+  slides: https://doi.org/10.6084/m9.figshare.9699323.v1
 

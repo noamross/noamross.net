@@ -219,6 +219,41 @@ Ram_2018:
   - Stefanie Butland
   date: '2018-11-30'
   exurl: https://dx.doi.org/10.1109/mcse.2018.2882753
+Carlson_2019:
+  name: Carlson_2019
+  doi: 10.1038/s41564-019-0435-4
+  type: paper
+  title: The global distribution of Bacillus anthracis and associated anthrax risk
+    to humans, livestock and wildlife
+  authors:
+  - Colin J. Carlson
+  - Ian T. Kracalik
+  - Noam Ross
+  - Kathleen A. Alexander
+  - Martin E. Hugh-Jones
+  - Mark Fegan
+  - Brett T. Elkin
+  - Tasha Epp
+  - Todd K. Shury
+  - Wenyi Zhang
+  - Mehriban Bagirova
+  - Wayne M. Getz
+  - Jason K. Blackburn
+  date: '2019-05-13'
+  exurl: https://dx.doi.org/10.1038/s41564-019-0435-4
+Eskew_2019:
+  name: Eskew_2019
+  doi: 10.1016/j.gecco.2019.e00631
+  type: paper
+  title: 'The CITES Trade Database is not a “global snapshot” of legal wildlife trade:
+    Response to Can et al., 2019'
+  authors:
+  - Evan A. Eskew
+  - Noam Ross
+  - Carlos Zambrana-Torrelio
+  - William B. Karesh
+  date: '2019-04-24'
+  exurl: https://dx.doi.org/10.1016/j.gecco.2019.e00631
 Pedersen_2019:
   name: Pedersen_2019
   doi: 10.7717/peerj.6876
@@ -233,7 +268,7 @@ Pedersen_2019:
   date: '2019-05-27'
   exurl: https://dx.doi.org/10.7717/peerj.6876
   long_description: |
-    This is my first and only paper that [actually started on a bar napkin](https://twitter.com/noamross/status/684231556777443328)
+    This is my first and only paper that [actually started on a bar napkin](https://twitter.com/noamross/status/684231556777443328).
 Ross_2019:
   name: Ross_2019
   doi: 10.21105/joss.01483
@@ -260,4 +295,4 @@ Albery_2019:
   exurl: https://dx.doi.org/10.1101/732255
   preprint: yes
   long_description: |
-    [Greg Albery](https://www.gregalbery.me/) interned at EcoHealth Alliance for the end of his Ph.D. and did this excellent work using GAMs to understand basic patterns in what mammals carry common viruses.
+    [Greg Albery](https://www.gregalbery.me/) interned at EcoHealth Alliance for the end of his Ph.D. and did this excellent work using GAMs to understand patterns in what mammals carry common viruses.

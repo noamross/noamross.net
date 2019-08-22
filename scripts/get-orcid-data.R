@@ -13,7 +13,6 @@ library(snakecase)
 
 ## ----------------------------------------------------------
 my_orcid <- "0000-0002-2136-0000"
-works <- orcid_works(my_orcid)
 cites <- orcid_citations(my_orcid, cr_format = "citeproc-json")
 jobs <- orcid_employments(my_orcid)
 edu <- orcid_educations(my_orcid)
@@ -24,9 +23,8 @@ set_class <- function(x, new_class) {
 }
 
 ## ------------------------------------------------------------------------
-works2 <- works[[my_orcid]]$works %>% filter(`display-index` != 1)
-cites2 <- filter(cites, put %in% works2[["put-code"]]) %>%
-  distinct(ids, .keep_all = TRUE) %>%
+cites2 <- cites %>%
+  dplyr::distinct(ids, .keep_all = TRUE) %>%
   mutate(citation = purrr::map(citation, jsonlite::fromJSON))
 publist <-
   purrr::map(cites2$citation, function(x) {

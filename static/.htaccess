@@ -8,7 +8,9 @@ RewriteRule ^about\.html / [L,R=301]
 RewriteRule ^publications.html /vitae/ [L,R=301]
 RewriteRule ^connect.html  /#connect [L,R=301]
 RewriteRule ^tags.html  /musings/ [L,R=301]
+RewriteRule ^davis-r-users-group.html https://d-rug.github.io [L,R=301]
 
+RewriteRule ^blog/rss.xml	 /index.xml [L,R=301]
 RewriteRule ^blog/R\.xml /categories/r/index.xml [L,R=301]
 RewriteRule ^blog/(\w+)\.xml /tags/$1/index.xml [L,R=301]
 

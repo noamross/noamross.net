@@ -43,7 +43,7 @@ jobs:
             if [ "${CIRCLE_BRANCH}" == "master" ]; then
                rsync -avz --delete public/ noamross_noamross@ssh.phx.nearlyfreespeech.net:/home/public/ --exclude=branch --exclude=assets --exclude=awstats
             else
-               rsync -avz --delete public/ noamross_noamross@ssh.phx.nearlyfreespeech.net:/home/public/branch/${CIRCLE_BRANCH} --exclude=assets --exclude=.htaccess -exclude=robots.txt --exclude=awstats
+               rsync -avz --delete public/ noamross_noamross@ssh.phx.nearlyfreespeech.net:/home/public/branch/${CIRCLE_BRANCH} --exclude=assets --exclude=.htaccess --exclude=robots.txt --exclude=awstats
             fi
       - run:
           name: "Calculate Stats"

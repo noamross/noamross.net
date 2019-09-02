@@ -1,16 +1,39 @@
 viral-dynamics:
   title: Understanding Dynamics of Disease in Wildlife Reservoirs
   description: >
+    My work with colleagues at EcoHealth in identifying potenial human pathogens
+    in wildlife hosts and understanding the dynamics of their circulation and
+    spillover.
+    This work is and has been funded by a variety of sources including USAID,
+    NIH, and DTRA.
   index: 1
 disease-forecasting:
   title: Forecasting Global Veterinary Disease
   description: >
+    Predictive approaches to understand and predict how veterinary diseases
+    spread through the variety of travel and trade pathways, and determining
+    how much.  Applying Bayesian approaches such as partial pooling to improve
+    predictions by learning across diseases, species, and geographies. This work
+    is supported by the DHS Science and Technology Directorate.
   index: 2
 software-review:
   title: Peer Review of Scientific Software
   description: >
+    Software is a key enabler and output of scientific research, yet academic
+    software rarely recieves robust scrutiny and validation. Drawing on best
+    practices from both scientific peer review and software engineering,
+    rOpenSci has developed a peer-review process for scientific software.
+    Now we are expanding this initiative to support other groups in launching
+    their own review process, and develop shared community standards and testing
+    approaches for statistical algorithms.  This work is supported by the Sloan
+    foundation.
   index: 3
 reproducible-workflows:
   title: Practical Reproducible Workflows for Scientists
   description: >
+    One project I work on in this area are contributing to the Rocker Project
+    which aims to make it easier for R users to define and store their working
+    environments in containers.  Another is the development of projects such as
+    `redoc` and `rchie`, which aim to ease the ability of collaborators with
+    both programmatic and non-programmatic workflows to
   index: 4

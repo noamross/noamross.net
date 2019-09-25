@@ -9,7 +9,7 @@ tags:
   - R
 ---
 
-For a number of reasons I've been trying out [GitLab](gitlab.com) as a replacement
+For a number of reasons I've been trying out [GitLab](https://gitlab.com) as a replacement
 for for both GitHub and various continuous integration systems, and have
 been exploring configurations useful for model-fitting pipelines.  I turned
 one of these into an [example repository](https://gitlab.com/ecohealthalliance/drake-gitlab-docker-example) that shows how to use GitLab together

@@ -6,6 +6,7 @@ RewriteEngine on
 
 RewriteRule ^/assets/themes/noamblog/atom\.ico$ /favicon.ico [L,R=301]
 
+RewriteRule ^index\.html / [L,R=301]
 RewriteRule ^about\.html / [L,R=301]
 RewriteRule ^publications.html /vitae/ [L,R=301]
 RewriteRule ^connect.html  /#connect [L,R=301]

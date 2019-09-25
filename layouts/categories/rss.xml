@@ -2,7 +2,7 @@
 <rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
   <channel>
     <title>{{ if eq  .Title  .Site.Title }}{{ .Site.Title }}{{ else }}{{ .Site.Title }}: {{ with .Title }}{{.}} posts  {{ end }}{{ end }}</title>
-    <link>{{ .Permalink }}</link>
+    <link>{{ .Site.BaseURL }}</link>
     <description>{{ .Site.Params.Description }}</description>
     <generator>Hugo -- gohugo.io</generator>{{ with .Site.LanguageCode }}
     <language>{{.}}</language>{{end}}{{ with .Site.Author.email }}

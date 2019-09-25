@@ -13,7 +13,7 @@ description: >
 
 <p></p>
 
-<em>Please note there are MANY updates below, and a <a href="questions-for-datacamp">separate post</a> following DataCamp's <a href="https://www.datacamp.com/community/blog/board-update">April 24th announcement</a></em>.
+<em>Please note there are MANY updates below, and a <a href="https://www.noamross.net/2019/04/30/questions-for-datacamp/">separate post</a> following DataCamp's <a href="https://www.datacamp.com/community/blog/board-update">April 24th announcement</a></em>.
 
 {{% drop %}}
 Last week (April 4, 2019) DataCamp [published a blog post](https://www.datacamp.com/community/blog/note-to-our-community) stating that "one of DataCamp's executives danced inappropriately and made uninvited physical contact with another employee," an action meeting many [definitions of sexual assault](https://www.rainn.org/articles/sexual-assault). While the post makes the claim that DataCamp does not condone this behavior, it also makes clear that the disciplinary actions against the executive were limited to "sensitivity training, personal coaching, and a strong warning."
@@ -216,7 +216,7 @@ both give more elaborate explanations. DataCamp doesn't do this for any of their
 posts.
 
 <blockquote class="twitter-tweet tw-align-center" data-lang="en"><p lang="en" dir="ltr">If you think <a href="https://twitter.com/DataCamp?ref_src=twsrc%5Etfw">@DataCamp</a> deserves credit for a public post that they did not discipline an executive for sexual misconduct, consider that they put this code in the HTML, so no search engines would index it. I don&#39;t see it anywhere else on their blog. <a href="https://twitter.com/hashtag/rstats?src=hash&amp;ref_src=twsrc%5Etfw">#rstats</a> <a href="https://twitter.com/hashtag/python?src=hash&amp;ref_src=twsrc%5Etfw">#python</a> <a href="https://twitter.com/hashtag/datasci?src=hash&amp;ref_src=twsrc%5Etfw">#datasci</a> <a href="https://twitter.com/hashtag/metoo?src=hash&amp;ref_src=twsrc%5Etfw">#metoo</a> <a href="https://t.co/xbQoSaQl5J">pic.twitter.com/xbQoSaQl5J</a>
-<img src="datacamp-screenshot.png">
+<img src="datacamp-screenshot.jpg">
 </p>&mdash; Noam Ross (@noamross) <a href="https://twitter.com/noamross/status/1116709899159916544?ref_src=twsrc%5Etfw">April 12, 2019</a></blockquote>
 
 _(Edit 2019-04-17: On April 17th the `noindex` tag was removed.  Here is the page archived

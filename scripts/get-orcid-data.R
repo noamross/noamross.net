@@ -30,7 +30,7 @@ publist <-
   purrr::map(cites2$citation, function(x) {
     date <-
       list(
-        name = paste0(x$author$family[1], "_", x$created$`date-parts`[1]),
+        name = snakecase::to_snake_case(x$DOI),
         doi = x$DOI,
         type = "paper",
         title = x$title,

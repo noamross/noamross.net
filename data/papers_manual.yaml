@@ -1,13 +1,14 @@
-Hartman_2014:
+10_1101_004226:
   preprint: yes
-Albery_2019:
+10_1101_732255:
   preprint: yes
   long_description: >
     [Greg Albery](https://www.gregalbery.me/) interned at EcoHealth Alliance for the end of his Ph.D. and
     did this excellent work using GAMs to understand patterns in what
     mammals carry common viruses.
-Pedersen_2019:
+10_7717_peerj_6876:
   long_description: >
     This is my first and only paper that
     [actually started on a bar napkin](https://twitter.com/noamross/status/684231556777443328).
-
+10_1101_780197:
+  preprint: yes

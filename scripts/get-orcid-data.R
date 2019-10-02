@@ -28,7 +28,7 @@ cites2 <- cites %>%
   mutate(citation = purrr::map(citation, jsonlite::fromJSON))
 publist <-
   purrr::map(cites2$citation, function(x) {
-    date <-
+    out <-
       list(
         name = snakecase::to_snake_case(x$DOI),
         doi = x$DOI,
@@ -37,6 +37,10 @@ publist <-
         authors = as.list(paste(x$author$given, x$author$family)),
         date = as.character(as.Date(paste(x$created$`date-parts`, collapse="-"))),
         exurl = paste0("https://dx.doi.org/", x$DOI))
+    if (!is.null(out$doi) && stringi::stri_detect_regex(out$doi, "^10\\.1101\\/")) {
+      out[["preprint"]] <- structure("yes", class="verbatim")
+    }
+    out
   })
 names(publist) <- map_chr(publist, "name")
 write_yaml(publist, here("data", "papers_orcid.yaml"))

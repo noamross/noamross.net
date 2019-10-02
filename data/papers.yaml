@@ -267,8 +267,8 @@
   - Noam Ross
   date: '2019-05-27'
   exurl: https://dx.doi.org/10.7717/peerj.6876
-  long_description: |
-    This is my first and only paper that [actually started on a bar napkin](https://twitter.com/noamross/status/684231556777443328).
+  long_description: This is my first and only paper that [actually started on a bar
+    napkin](https://twitter.com/noamross/status/684231556777443328).
 10_21105_joss_01483:
   name: 10_21105_joss_01483
   doi: 10.21105/joss.01483

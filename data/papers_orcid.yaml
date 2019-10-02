@@ -44,6 +44,7 @@
   - Noam Ross
   date: '2014-04-16'
   exurl: https://dx.doi.org/10.1101/004226
+  preprint: yes
 10_5399_osu_fp_7_1_4021:
   name: 10_5399_osu_fp_7_1_4021
   doi: 10.5399/osu/fp.7.1.4021
@@ -290,6 +291,7 @@
   - Kevin J Olival
   date: '2019-08-12'
   exurl: https://dx.doi.org/10.1101/732255
+  preprint: yes
 10_1101_780197:
   name: 10_1101_780197
   doi: 10.1101/780197
@@ -307,3 +309,4 @@
   - Peter Daszak
   date: '2019-09-25'
   exurl: https://dx.doi.org/10.1101/780197
+  preprint: yes

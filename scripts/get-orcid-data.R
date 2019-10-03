@@ -12,6 +12,8 @@ library(snakecase)
 
 
 ## ----------------------------------------------------------
+x <- orcid_auth()
+
 my_orcid <- "0000-0002-2136-0000"
 cites <- orcid_citations(my_orcid, cr_format = "citeproc-json")
 jobs <- orcid_employments(my_orcid)

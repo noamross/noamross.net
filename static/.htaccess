@@ -4,6 +4,7 @@ ErrorDocument 404 /404.html
 
 RewriteEngine on
 
+RewriteCond %{REQUEST_URI} !^/favicon\.ico$ [NC]
 RewriteRule ^(.*)(atom|favicon)\.ico /favicon.ico [L,R=301,NC]
 
 RewriteRule ^index\.html / [L,R=301]

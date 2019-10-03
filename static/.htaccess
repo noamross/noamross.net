@@ -4,7 +4,7 @@ ErrorDocument 404 /404.html
 
 RewriteEngine on
 
-RewriteRule ^/assets/themes/noamblog/atom\.ico /favicon.ico [L,R=301]
+RewriteRule ^(.*)(atom|favicon)\.ico /favicon.ico [L,R=301,NC]
 
 RewriteRule ^index\.html / [L,R=301]
 RewriteRule ^about\.html / [L,R=301]

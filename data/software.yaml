@@ -41,6 +41,6 @@ citesdb:
   description: A high-performance database of shipment-level CITES trade data
   date: 2019-05-19
   version: 1.0.2
-  exurl: https://ropensci.github.io/citesdb
+  exurl: https://docs.ropensci.org/citesdb/
 
 

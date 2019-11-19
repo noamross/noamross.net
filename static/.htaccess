@@ -4,6 +4,8 @@ ErrorDocument 404 /404.html
 
 RewriteEngine on
 
+
+
 RewriteCond %{REQUEST_URI} !^/favicon\.ico$ [NC]
 RewriteRule ^(.*)(atom|favicon)\.ico /favicon.ico [L,R=301,NC]
 
@@ -24,3 +26,7 @@ RewriteRule ^blog/(\d+)/(\d)/(\d)/([^\.]*)(\/|\.html)? /archives/$1-0$2-0$3-$4/ 
 RewriteRule ^blog/(\d+)/(\d)/(\d+)/([^\.]*)(\/|\.html)? /archives/$1-0$2-$3-$4/ [L,R=301]
 RewriteRule ^blog/(\d+)/(\d+)/(\d)/([^\.]*)(\/|\.html)? /archives/$1-$2-0$3-$4/ [L,R=301]
 RewriteRule ^blog/(\d+)/(\d+)/(\d+)/([^\.]*)(\/|\.html)? /archives/$1-$2-$3-$4/ [L,R=301]
+
+RewriteRule wp-login /404.txt [L,R=404]
+RewriteRule wp-content /404.txt [L,R=404]
+RewriteRule ^admin /404.txt [L,R=404]

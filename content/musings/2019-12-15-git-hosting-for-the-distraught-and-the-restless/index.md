@@ -47,7 +47,11 @@ web hosting service that's optimized for tinkerers - it requires some Linux know
 give you a great deal of control, including SSH access. Using NFSN is
 pretty close to self-hosting in terms of setup, but you don't run your own hardware and it's probably
 cheaper (though not free), and a bit less hassle than running on some other cloud service, like EC2 (that you
-might avoid for other reasons anyway). NFSN has a fairly libertarian philosophy 
+might avoid for other reasons anyway).  NFSN's biggest limitation for me may be that it does
+not support Docker; one has to configure more oneself, but this probably keeps
+websites lean.
+
+NFSN has a fairly libertarian philosophy 
 to hosting - they have strong security and privacy controls, and will unlikely
 ever do business with a Big Tech company or government.
 Yet they also will let anything legal on their site, opting to [donate any profits

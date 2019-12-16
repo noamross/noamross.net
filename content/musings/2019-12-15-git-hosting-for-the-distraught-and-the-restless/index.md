@@ -75,7 +75,7 @@ we'll return to it later.
 ### Build and install Gitea
 
 Gitea has pre-built binaries and packages but for NFSN's environment I found
-it slightly easier to build it Gitea from  source.  Thankfully everything needed to do so
+it slightly easier to build Gitea from source.  Thankfully everything needed to do so
 is pre-installed on NFSN's servers.  Once you're logged in, run the following
 from the SSH console to build the Gitea binary for use.
 

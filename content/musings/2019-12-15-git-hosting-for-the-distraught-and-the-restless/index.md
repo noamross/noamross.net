@@ -37,13 +37,13 @@ There are a number of git hosting alternatives to GitHub, including BitBucket
 and the partially open-source GitLab (which can be self-hosted). [Gitea](https://gitea.io) 
 is an open-source, non-commercial, and community managed self-hosted git hosting web server, written in Go.
 Forked from a one-person project called [gogs](https://gogs.io/), it is funded by both
-crowd funding and some corporate in-kind services. It's smaller and simpler than
+crowd funding and some corporate contributions. It's smaller and simpler than
 GitLab, and as a non-commercial service, less likely to be entangled to similar
 controversies.
 
 I've opted to set up a Gitea service on  [nearlyfreespeech.net](https://nearlyfreespeech.net) (NFSN),
 which I also use to host this blog.  NFSN is a small private
-web hosting service that's optimized for tinkerers - support isn't great but they
+web hosting service that's optimized for tinkerers - it requires some Linux knowledge but they
 give you a great deal of control, including SSH access. Using NFSN is
 pretty close to self-hosting in terms of setup, but you don't run your own hardware and it's probably
 cheaper (though not free), and a bit less hassle than running on some other cloud service, like EC2 (that you

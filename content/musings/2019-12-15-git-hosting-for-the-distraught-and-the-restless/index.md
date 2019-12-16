@@ -35,7 +35,7 @@ using [Gitea](https://gitea.io) and [nearlyfreespeech.net](https://nearlyfreespe
 
 There are a number of git hosting alternatives to GitHub, including BitBucket
 and the partially open-source GitLab (which can be self-hosted). [Gitea](https://gitea.io) 
-is an open-source, non-commercial, and community managed self-hosted git hosting web server, written in Go.
+is an open-source, non-commercial, and community managed self-hosted git web service, written in Go.
 Forked from a one-person project called [gogs](https://gogs.io/), it is funded by both
 crowd funding and some corporate contributions. It's smaller and simpler than
 GitLab, and as a non-commercial service, less likely to be entangled to similar

@@ -4,7 +4,14 @@ ErrorDocument 404 /404.html
 
 RewriteEngine on
 
+RewriteCond %{HTTP_HOST} ^gitea.noamross.net$ [NC]
+RewriteRule ^(.*)$ https://www.noamross.net/gitea%{REQUEST_URI} [R=301,NC,L,QSA]
 
+RewriteCond %{HTTP_HOST} ^noamross.net$ [NC]
+RewriteRule ^(.*)$ https://www.noamross.net%{REQUEST_URI} [R=301,NC,L,QSA]
+
+RewriteCond %{HTTP_HOST} ^noamross.nfshost.com$ [NC]
+RewriteRule ^(.*)$ https://www.noamross.net%{REQUEST_URI} [R=301,NC,L,QSA]
 
 RewriteCond %{REQUEST_URI} !^/favicon\.ico$ [NC]
 RewriteRule ^(.*)(atom|favicon)\.ico /favicon.ico [L,R=301,NC]

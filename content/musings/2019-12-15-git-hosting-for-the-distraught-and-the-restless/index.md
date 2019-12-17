@@ -170,7 +170,7 @@ can register (`DISABLE REGISTRATION`), whether you want to use a Captcha to
 prevent spam (`ENABLE_CAPTCHA`), both under the `[service]` section, or `MAX_CREATION_LIMIT` to limit repositories per user, under `[repository]`.{{%/sn%}}
 
 When you change configurations in `app.ini`, you'll need to restart the Gitea
-server.  Do this in you NFSN site console by hitting "Stop" on your Gitea
+server.  Do this in your NFSN site console by hitting "Stop" on your Gitea
 daemon, than "Start" again.
 
 Finally, so that users are always directed to the HTTPS site, go to "Config

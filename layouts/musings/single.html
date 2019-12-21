@@ -33,7 +33,11 @@
       <script async src="https://comments.noamross.net/embed.js"
     data-schnack-slug="{{ strings.TrimRight "-" (replace ( replace .Permalink .Site.BaseURL "" ) "/" "-")  }}"
     data-schnack-target=".comments-go-here"
-    data-schnack-partials-sign-in-via="Sign in with"></script>
+    data-schnack-partials-reply="Reply"
+    data-schnack-partials-sign-in-via="Sign in via"
+    data-schnack-partials-send-comment="Post Comment"
+    data-schnack-partials-or=" "
+    data-schnack-partials-post-comment="Write your comment here. Markdown is supported, as is kindness and respect."></script>
       {{ end }}
       <hr>
       {{ if .PrevInSection }}

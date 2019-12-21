@@ -1,0 +1,97 @@
+
+.schnack-signin {
+  text-align: right;
+  font-family: 'IM Fell English';
+  font-style: italic;
+  color: #b24;
+   
+}
+
+ul.schnack-comments {
+  list-style-type: none;
+}
+
+li.schnack-comment {
+  margin-top: 12px;
+  margin-bottom: 12px;
+}
+
+.schnack-form > br {
+  display: none;
+}
+
+.schnack-form {
+  padding-bottom: 10px;
+
+  
+}
+
+
+blockquote.schnack-body {
+  border: none;
+  font-style: normal;
+  color: #111113;
+  margin-bottom: 0px;
+  padding-top: 0px;
+  font-size: 1em;
+}
+
+
+div.schnack-comment-inner {
+  border-left: 1px solid #ecc;
+  padding-left: 8px;
+}
+
+.comments-go-here button {
+  -webkit-appearance: none;
+  background: none;
+  color: #b24;
+	border: none;
+	padding: 0;
+	font: inherit;
+	cursor: pointer;
+	outline: inherit;
+  font-family: 'IM Fell English';
+  font-style: italic;
+}
+
+.comments-go-here button:hover {
+  text-decoration: underline;
+}
+
+button.schnack-reply {
+  width: 100%; text-align: left;
+}
+
+.schnack-signin > br {
+  display: none;
+}
+
+button.schnack-signin-twitter {
+    font-size: 0;
+    font-style: normal;
+}
+
+button.schnack-signin-twitter:after {
+    display: inline-block;
+    font-family: 'Font Awesome 5 Brands';
+    content: '\f099';
+    font-size: 20pt;
+    transition: font-size 0.2s;
+
+}
+
+button.schnack-signin-twitter:hover:after {
+    font-size: 30pt;
+    transition: font-size 0.2s;
+}
+
+.schnack-dateline a {
+  color: #AFAFB0;
+  font-family: 'IM Fell English';
+  font-style: italic;
+}
+
+.schnack-date {
+  float: right;
+}

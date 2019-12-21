@@ -29,10 +29,12 @@
       </div>
       <hr>
       {{ if .Params.comments | default false }}
+      <h2>Comments</h2>
       <div class="comments-go-here"></div>
       <script async src="https://comments.noamross.net/embed.js"
     data-schnack-slug="{{ strings.TrimRight "-" (replace ( replace .Permalink .Site.BaseURL "" ) "/" "-")  }}"
-    data-schnack-target=".comments-go-here"></script>
+    data-schnack-target=".comments-go-here"
+    data-schnack-partials-sign-in-via="Sign in with"></script>
       <hr>
       {{ end }}
       {{ if .PrevInSection }}

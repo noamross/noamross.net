@@ -14,7 +14,9 @@
   <link rel="stylesheet" href="{{ $asset_base }}assets/css/kube.css" />
   <link rel="stylesheet" href="{{ $asset_base }}assets/css/custom.css" />
   <link rel="stylesheet" href="{{ $asset_base }}assets/css/tufte.css" />
-
+  {{ if .Params.comments | default false }}
+  <link rel="stylesheet" href="{{ $asset_base }}assets/css/comments.css" />
+  {{ end }}
   <!-- Fonts -->
   <link href='https://fonts.googleapis.com/css?family=Alegreya:400italic,400,700,700italic&subset=latin,latin-ext' rel='stylesheet' type='text/css'>
   <link href='https://fonts.googleapis.com/css?family=Alegreya+SC:400&subset=latin,latin-ext' rel='stylesheet' type='text/css'>

@@ -30,8 +30,8 @@
       <hr>
       {{ if .Params.comments | default false }}
       <div class="comments-go-here"></div>
-      <script src="https://comments.noamross.net/embed.js"
-    data-schnack-slug="post-slug"
+      <script async src="https://comments.noamross.net/embed.js"
+    data-schnack-slug="{{ replace .Permalink .Site.BaseURL "" }}"
     data-schnack-target=".comments-go-here"></script>
       <hr>
       {{ end }}

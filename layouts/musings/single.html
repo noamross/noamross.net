@@ -28,6 +28,13 @@
       {{ .Content }}
       </div>
       <hr>
+      {{ if .Params.comments | default false }}
+      <div class="comments-go-here"></div>
+      <script src="https://comments.noamross.net/embed.js"
+    data-schnack-slug="post-slug"
+    data-schnack-target=".comments-go-here"></script>
+      <hr>
+      {{ end }}
       {{ if .PrevInSection }}
       <a href="{{.PrevInSection.Permalink}}"><span class="pointer">2</span>&nbsp;{{.PrevInSection.Title}}</a> |
       {{ end }}
@@ -41,7 +48,10 @@
   </div>
 </div>
 
+
 {{ partial "footer.html" . }}
 
 </body>
+
+</script>
 </html>

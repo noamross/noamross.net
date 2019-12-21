@@ -31,7 +31,7 @@
       {{ if .Params.comments | default false }}
       <div class="comments-go-here"></div>
       <script async src="https://comments.noamross.net/embed.js"
-    data-schnack-slug="{{ replace .Permalink .Site.BaseURL "" }}"
+    data-schnack-slug="{{ strings.TrimRight "-" (replace ( replace .Permalink .Site.BaseURL "" ) "/" "-")  }}"
     data-schnack-target=".comments-go-here"></script>
       <hr>
       {{ end }}

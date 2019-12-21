@@ -5,6 +5,7 @@ date: 2018-03-19
 description: >
     Stringing together R, C++, WebAssembly, and Javacript with Rcpp, htmlwidgets, and emscripten
 tags: "R"
+comments: true
 ---
 
 I made a little demo package to experiment with the use of WebAssembly to

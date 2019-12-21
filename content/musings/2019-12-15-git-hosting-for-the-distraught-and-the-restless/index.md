@@ -11,6 +11,7 @@ tags:
   - git
   - GitHub
   - Gitea
+comments: true
 ---
 
 It's generally impossible to only use services, private or government, that

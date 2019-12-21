@@ -27,7 +27,6 @@
       <div class="story">
       {{ .Content }}
       </div>
-      <hr>
       {{ if .Params.comments | default false }}
       <h2>Comments</h2>
       <div class="comments-go-here"></div>
@@ -35,8 +34,8 @@
     data-schnack-slug="{{ strings.TrimRight "-" (replace ( replace .Permalink .Site.BaseURL "" ) "/" "-")  }}"
     data-schnack-target=".comments-go-here"
     data-schnack-partials-sign-in-via="Sign in with"></script>
-      <hr>
       {{ end }}
+      <hr>
       {{ if .PrevInSection }}
       <a href="{{.PrevInSection.Permalink}}"><span class="pointer">2</span>&nbsp;{{.PrevInSection.Title}}</a> |
       {{ end }}

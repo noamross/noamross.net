@@ -1,12 +1,12 @@
 ---
 title: Testing Schnack Comments
 author: Noam Ross
-date: '2020-12-21'
+date: '2019-12-21'
 slug: testing-schnack-comments
 categories: []
 tags: []
 comments: true
-draft: false
+draft: true
 ---
 
 Some text

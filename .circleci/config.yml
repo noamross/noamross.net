@@ -31,7 +31,7 @@ jobs:
             if [ "${CIRCLE_BRANCH}" == "master" ]; then
               hugo --cacheDir `pwd`/hugo_cache
             else
-              hugo --buildDrafts --buildFuture --baseURL https://www.noamross.net/branch/${CIRCLE_BRANCH}/ --cacheDir `pwd`/hugo_cache
+              hugo --buildDrafts --baseURL https://www.noamross.net/branch/${CIRCLE_BRANCH}/ --cacheDir `pwd`/hugo_cache
             fi
       - add_ssh_keys:
           fingerprints:

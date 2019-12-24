@@ -9,9 +9,6 @@ canonifyURLs: true
 permalinks:
   musings: "/:year/:month/:day/:slug/"
   archives: "/archives/:filename/"
-disableKinds:
-  - "taxonomy"
-  - "taxonomyTerm"
 
 author:
   name: "Noam Ross"

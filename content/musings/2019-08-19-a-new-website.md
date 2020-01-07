@@ -32,7 +32,7 @@ Here are some of the pieces that I used to build it:
 -   My [CV](/vitae/) is generated from data on [ORCiD](https://orcid.org) using the [**rorcid**](https://github.com/ropensci/rorcid) package.
 -   The site is hosted at [nearlyfreespeech.net](http://nearlyfreespeech.net)
     and deployed using [Circle CI](https://circleci.com). Assets are delivered via the [jsDeliver](https://www.jsdelivr.com/) CDN.
--   *[Update, 2019-12-21]*: Comments are served via a self-hosted [schnack](schnack.cool) installation.
+-   *[Update, 2019-12-21]*: Comments are served via a self-hosted [schnack](https://schnack.cool/) installation.
 
 ---
 

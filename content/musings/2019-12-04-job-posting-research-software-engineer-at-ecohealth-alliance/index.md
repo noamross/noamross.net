@@ -2,7 +2,7 @@
 title: 'Job Posting: Research Software Engineer at EcoHealth Alliance'
 author: Noam Ross
 date: '2019-12-04'
-slug: jon-posting-research-software-engineer
+slug: job-posting-research-software-engineer
 categories:
   - R
   - python

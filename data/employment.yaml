@@ -1,10 +1,17 @@
+eco_health_alliance_2019:
+  name: eco_health_alliance_2019
+  title: Principal Scientist, Computational Research
+  organization: EcoHealth Alliance
+  location: New York, NY
+  start_date: '2019-12-01'
+  end_date: []
 eco_health_alliance_2017:
   name: eco_health_alliance_2017
   title: Senior Research Scientist
   organization: EcoHealth Alliance
   location: New York, NY
   start_date: '2017-06-01'
-  end_date: []
+  end_date: '2019-11-30'
 eco_health_alliance_2015:
   name: eco_health_alliance_2015
   title: Disease Ecologist

@@ -39,7 +39,7 @@ publist <-
         authors = as.list(paste(x$author$given, x$author$family)),
         date = as.character(as.Date(paste(x$created$`date-parts`, collapse="-"))),
         exurl = paste0("https://dx.doi.org/", x$DOI))
-    if (!is.null(out$doi) && stringi::stri_detect_regex(out$doi, "^10\\.1101\\/")) {
+    if (!is.null(x$subtype) && x$subtype == "preprint") {
       out[["preprint"]] <- structure("yes", class="verbatim")
     }
     out

@@ -106,4 +106,13 @@ pydata-review-2019:
   slides: https://dx.doi.org/10.5281/zenodo.3530836
   exurl: https://pydata.org/nyc2019/schedule/presentation/73/building-software-and-communities-with-peer-review/
   video: https://www.youtube.com/watch?v=o_WEhg6sSSQ
+nyhackr-coronavius-2020:
+  type: presentation
+  name: nyhackr-coronavius-2020
+  venue: New York Open Statistical Programming Meetup
+  date: 2020-04-20
+  description: "R, Coronavirus, and Pandemic Prevention"
+  slides: https://doi.org/10.5281/zenodo.3764123
+  exurl: https://nyhackr.org/presentations.html
+  video: https://www.youtube.com/watch?v=5UXbfs5xIq0
 

@@ -115,4 +115,8 @@ nyhackr-coronavius-2020:
   slides: https://doi.org/10.5281/zenodo.3764123
   exurl: https://nyhackr.org/presentations.html
   video: https://www.youtube.com/watch?v=5UXbfs5xIq0
+  long_description: >
+    For the New York R Meetup, I spoke about the types of models and software
+    virus hunters and epidemiologists use to understand emerging diseases, and
+    how they relate to problems and models familiar to data scientists.
 

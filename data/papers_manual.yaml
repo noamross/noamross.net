@@ -7,3 +7,36 @@
   long_description: >
     This is my first and only paper that
     [actually started on a bar napkin](https://twitter.com/noamross/status/684231556777443328).
+2001_10641:
+  name: 2001_10641
+  type: paper
+  title: 'The Rockerverse: Packages and Applications for Containerization with R'
+  authors:
+  - Daniel Nüst
+  - Dirk Eddelbuettel
+  - Dom Bennett
+  - Robrecht Cannoodt
+  - Dav Clark
+  - Gergely Daroczi
+  - Mark Edmondson
+  - Colin Fay
+  - Ellis Hughes
+  - Lars Kjeldgaard
+  - Sean Lopp
+  - Ben Marwick
+  - Heather Nolis
+  - Jacqueline Nolis
+  - Hong Ooi
+  - Karthik Ram
+  - Noam Ross
+  - Lori Shepherd
+  - Péter Sólymos
+  - Tyson Lee Swetnam
+  - Nitesh Turaga
+  - Charlotte Van Petegem
+  - Jason Williams
+  - Craig Willis
+  - Nan Xiao
+  preprint: yes
+  date: '2020-03-13'
+  exurl: https://arxiv.org/abs/2001.10641
